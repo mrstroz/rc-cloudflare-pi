@@ -108,6 +108,8 @@ Skrypt diagnostyczny w `apps/pi-agent/` działa bez panelu i Cloudflare:
 - dopuszcza duty do 1,0 dopiero po sprawdzeniu zasilania,
 - wyłącza oba enable po zakończeniu próby i po obsłużonym błędzie.
 
+Składnia: README aplikacji i `rc-diagnostics --help`. Limity: próba trwa najwyżej 3 s (domyślnie 1 s), duty powyżej 0,9 wymaga flagi `--power-checked`. Skrypt kończy każdą pracę zwolnieniem pinów, a potem helperem GPIO ([06 §2](06-nadzor-procesu-i-systemu.md#2-helper-gpio)), także po błędzie, Ctrl-C, SIGTERM i SIGHUP (zerwana sesja SSH). Kody wyjścia: 0 koniec, 1 błąd próby lub helpera (błąd helpera wygrywa z kodem sygnału: enable mogą być w górze), 2 odmowa argumentów lub konfiguracji, 128 + numer sygnału (130 dla Ctrl-C).
+
 Przy 100% mierzymy napięcie pakietu i napięcie między wyjściami silnika. Przy PWM odczyt zwykłego miernika nie opisuje pełnego przebiegu, a iloczyn duty × napięcie nie przewiduje rozruchu. Silnika, który nie rusza, nie zostawiamy pod prądem.
 
 ## 7. Dane katalogowe silnika

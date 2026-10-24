@@ -6,7 +6,7 @@
 |---|---|
 | **Etap** | E1. Pi lokalnie: w toku, 2 z 9. E2 → E4 mogą iść równolegle |
 | **Ostatnio ukończone** | RC-03 adapter L298N `apps/pi-agent/src/rc_agent/l298n.py` (2026-10-24) |
-| **Następne** | [RC-05](01-pi-test-lokalny.md) skrypt diagnostyczny (kod bez sprzętu; kryteria wymagają Pi). RC-04: kod helpera gotowy, otwarty do pomiaru na Pi. Równolegle: RC-02 dokończenie inwentaryzacji (oznaczenia silników, ogniwa, powerbank) i [RC-10](02-protokol-v1.md) schematy protokołu |
+| **Następne** | Zadania E1 bez sprzętu są zrobione. Czekają na Pi: RC-02 (oznaczenia silników, ogniwa, powerbank), RC-04 i RC-05 (kod gotowy; pomiar helpera po `kill -9` i próba P01), potem RC-06, RC-07. Bez sprzętu: [RC-10](02-protokol-v1.md) schematy protokołu (E2 → E4) |
 
 Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego trzeba zajrzeć na początku sesji.
 

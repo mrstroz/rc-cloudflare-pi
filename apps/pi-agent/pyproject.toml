@@ -15,6 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
+rc-diagnostics = "rc_agent.diagnostics:main"
 rc-gpio-helper = "rc_agent.gpio_helper:main"
 
 [project.optional-dependencies]

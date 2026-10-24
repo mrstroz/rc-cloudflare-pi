@@ -30,6 +30,7 @@
 - [ ] (^) **RC-05** Skrypt diagnostyczny kanałów A i B z limitem czasu każdej próby
       Spec: [07 §6](../spec/07-sprzet-i-naped.md#6-diagnostyka-lokalna) · Zależy od: RC-03
       Gotowe, gdy: próba P01 zaliczona na uniesionych kołach.
+      Kod i testy offline gotowe (`rc-diagnostics`, 2026-10-24); P01 na kołach nie wykonana.
 
 - [ ] (=) **RC-06** Próba startu, resetu i odłączenia Pi bez ruchu kół
       Spec: [08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp), [07 §2](../spec/07-sprzet-i-naped.md#2-połączenia-i-gpio) · Zależy od: RC-04, RC-05
