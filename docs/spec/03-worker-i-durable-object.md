@@ -36,11 +36,11 @@ DO sprawdza każdą wiadomość:
 | Wersja i schemat z `protocol/` | Brak `v`, nieznany `type` |
 | Rola nadawcy | `drive` od urządzenia, `armed` od panelu |
 | Zakresy i liczby skończone | `left: 1.5`, `right: NaN` |
-| Rozmiar wiadomości | Powyżej limitu ze schematu |
-| Częstotliwość | Powyżej limitu dla danego typu |
+| Rozmiar wiadomości | Powyżej `max_frame_bytes` z `limits.json` |
+| Częstotliwość | Powyżej limitu dla danego typu z `limits.json` |
 | Dzierżawa | `drive`, `arm` lub `stop` spoza aktualnej dzierżawy |
 
-Limity rozmiaru i częstotliwości ustalają schematy ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 13). Przyjęcie `session_id`, `seq` i tokenu sprawdza dopiero Pi.
+Limity rozmiaru i częstotliwości stoją w `protocol/limits.json`, reguły w [02 §10](02-protokol-v1.md#10-pliki-w-protocol) ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 13). Przyjęcie `session_id`, `seq` i tokenu sprawdza dopiero Pi.
 
 ## 5. Dzierżawa kierowcy
 

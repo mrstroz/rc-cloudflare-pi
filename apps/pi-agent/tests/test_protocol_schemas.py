@@ -15,13 +15,13 @@ from typing import Any
 import pytest
 from jsonschema import Draft202012Validator
 from protocol_support import (
-    CASE_SCHEMA,
     PROTOCOL_DIR,
     SCHEMAS_DIR,
     ParseError,
+    case_validator,
+    hop_for,
     hops,
     load_json,
-    load_registry,
     parse_strict,
     schema_errors,
     schema_files,
@@ -41,7 +41,7 @@ def spec_types() -> list[str]:
 
 
 def spec_dialect() -> set[str]:
-    """Keywords listed in the dialect point of 02 §10; Ajv in Workers compiles nothing else."""
+    """Keywords listed in the dialect point of 02 §10, the subset Ajv and jsonschema share."""
     text = SPEC_02.read_text(encoding="utf-8")
     point = text.split("- **Dialekt.**", 1)[1].split("\n", 1)[0]
     listed = point.split(": ", 1)[1].split("Bez `format`", 1)[0]
@@ -210,11 +210,10 @@ def test_every_agent_state_has_a_status_example(state: str) -> None:
 
 
 def test_valid_cases_are_well_formed_and_accepted() -> None:
-    case_validator = Draft202012Validator(load_json(CASE_SCHEMA), registry=load_registry())
     names = set()
     for path in sorted(VALID_DIR.glob("*.case.json")):
         case = load_json(path)
-        assert not list(case_validator.iter_errors(case)), path.name
+        assert not list(case_validator().iter_errors(case)), path.name
         assert path.name == f"{case['case']}.case.json"
         assert case["covers"] == "ok", path.name
         assert case["expect"]["reason"] is None, path.name
@@ -283,13 +282,9 @@ def test_every_nullable_field_has_an_example_with_null_and_with_a_value() -> Non
     messages: dict[str, list[dict[str, Any]]] = {}
     for case in valid_cases():
         message = first_frame(case)
-        for hop in hops():
-            if (hop.type, hop.sender, hop.receiver) == (
-                message["type"],
-                case["hop"]["from"],
-                case["hop"]["to"],
-            ):
-                messages.setdefault(hop.schema, []).append(message)
+        hop = hop_for(message["type"], case["hop"]["from"], case["hop"]["to"])
+        assert hop is not None, case["case"]
+        messages.setdefault(hop.schema, []).append(message)
     checked = 0
     for schema in sorted({h.schema for h in hops()}):
         for field in nullable_fields(load_json(SCHEMAS_DIR / schema)):

@@ -22,7 +22,7 @@
 
 - [ ] (=) **RC-26** Walidacja wiadomości w DO według `protocol/`
       Spec: [03 §4](../spec/03-worker-i-durable-object.md#4-walidacja) · Zależy od: RC-12, RC-24
-      Gotowe, gdy: wszystkie przykłady z `protocol/` dają w teście Workera oczekiwany wynik.
+      Gotowe, gdy: wszystkie przykłady z `protocol/` dają w teście Workera oczekiwany wynik, także dla wektorów tokenu, a walidatory są kompilowane przy buildzie (Ajv standalone).
 
 - [ ] (^) **RC-27** Dzierżawa kierowcy: nadanie z komunikatem `lease`, termin 3 s, heartbeat
       Spec: [03 §5](../spec/03-worker-i-durable-object.md#5-dzierżawa-kierowcy) · ADR: [0005](../adr/0005-dzierzawa-kierowcy-i-jawne-przejecie.md) · Zależy od: RC-26

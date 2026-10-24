@@ -99,11 +99,11 @@ def build() -> dict[str, object]:
     add_invalid("issued-minus-one", f"4199.{mac}", "mac", False)
     add_invalid("other-session", token(k1, other, 4200), "mac", False)
     add_invalid("other-version", token(k1, sid, 4200, version="v2"), "mac", False)
-    flipped = mac[0].swapcase() if mac[0].isalpha() else mac[1].swapcase()
-    index = 0 if mac[0].isalpha() else 1
+    # Not the last character: its low bits are fixed, so changing it would make a format error.
+    index = next(i for i, c in enumerate(mac[:-1]) if c.isalpha())
     add_invalid(
         "mac-one-letter-case-changed",
-        f"{issued_part}.{mac[:index]}{flipped}{mac[index + 1 :]}",
+        f"{issued_part}.{mac[:index]}{mac[index].swapcase()}{mac[index + 1 :]}",
         "mac",
         False,
     )

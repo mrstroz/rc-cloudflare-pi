@@ -108,8 +108,16 @@ def test_vectors_cover_the_edges_of_02_s5() -> None:
     assert any(not v["token"].endswith("A") for v in VECTORS["valid"])
     reasons = {v["reason"] for v in VECTORS["invalid"]}
     assert reasons == {"format", "mac"}
-    # Format errors the schema misses must still be caught by the Pi (2^53 is above the range).
-    assert any(v["reason"] == "format" and not v["pattern_rejects"] for v in VECTORS["invalid"])
+
+
+def test_only_the_range_step_rejects_a_token_the_pattern_accepts() -> None:
+    """02 §5: issued_pi_ms above 2^53 - 1 passes the pattern and is a format error."""
+    names = [
+        v["name"]
+        for v in VECTORS["invalid"]
+        if v["reason"] == "format" and not v["pattern_rejects"]
+    ]
+    assert names == ["issued-above-max-safe-integer"]
 
 
 def test_names_are_unique() -> None:

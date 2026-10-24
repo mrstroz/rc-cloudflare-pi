@@ -91,12 +91,25 @@ def hops() -> tuple[Hop, ...]:
     return tuple(Hop(h["type"], h["from"], h["to"], h["schema"]) for h in index["hops"])
 
 
+def hop_for(kind: str, sender: str, receiver: str) -> Hop | None:
+    """The entry of message-types.json keyed by (type, from, to), if there is one."""
+    for hop in hops():
+        if (hop.type, hop.sender, hop.receiver) == (kind, sender, receiver):
+            return hop
+    return None
+
+
 @cache
 def validator(schema_name: str) -> Draft202012Validator:
     return Draft202012Validator(
         load_json(SCHEMAS_DIR / schema_name),
         registry=load_registry(),
     )
+
+
+@cache
+def case_validator() -> Draft202012Validator:
+    return Draft202012Validator(load_json(CASE_SCHEMA), registry=load_registry())
 
 
 def schema_errors(frame: str, sender: str, receiver: str) -> list[str]:
@@ -107,7 +120,7 @@ def schema_errors(frame: str, sender: str, receiver: str) -> list[str]:
         return [str(error)]
     if not isinstance(message, dict) or not isinstance(message.get("type"), str):
         return ["frame has no string 'type'"]
-    for hop in hops():
-        if (hop.type, hop.sender, hop.receiver) == (message["type"], sender, receiver):
-            return [e.message for e in validator(hop.schema).iter_errors(message)]
-    return [f"no hop {sender} -> {receiver} for type {message['type']!r}"]
+    hop = hop_for(message["type"], sender, receiver)
+    if hop is None:
+        return [f"no hop {sender} -> {receiver} for type {message['type']!r}"]
+    return [e.message for e in validator(hop.schema).iter_errors(message)]

@@ -14,15 +14,16 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from jsonschema import Draft202012Validator
 from protocol_support import (
-    CASE_SCHEMA,
     PROTOCOL_DIR,
+    SCHEMAS_DIR,
+    case_validator,
+    hop_for,
     hops,
     load_json,
-    load_registry,
     parse_strict,
     schema_errors,
+    validator,
 )
 
 SPEC_03 = PROTOCOL_DIR.parent / "docs" / "spec" / "03-worker-i-durable-object.md"
@@ -31,6 +32,13 @@ INVALID_DIR = PROTOCOL_DIR / "examples" / "invalid"
 LIMITS = load_json(PROTOCOL_DIR / "limits.json")
 MAX_FRAME_BYTES: int = LIMITS["max_frame_bytes"]
 
+# Longest text of a wheel value in [-1, 1]. JSON.stringify writes |x| >= 1e-6 without an exponent,
+# so 17 digits with 1e-6 <= |x| < 1e-5 take 25 characters (checked with node 22); json.dumps
+# switches to an exponent below 1e-4, so its longest takes 24.
+LONGEST_WHEEL_TEXTS = (
+    "-0.0000012345678901234567",  # JSON.stringify
+    "-2.2250738585072014e-308",  # json.dumps
+)
 # 02 §10, table of receiver rules.
 REASON_OF = {
     "schema": "invalid_message",
@@ -132,19 +140,12 @@ def test_every_row_of_03_s4_has_a_rejected_example(row: str, covers: str, names:
 
 
 def test_invalid_cases_are_well_formed() -> None:
-    validator = Draft202012Validator(load_json(CASE_SCHEMA), registry=load_registry())
     assert INVALID
     for file_name, case in INVALID.items():
-        assert not list(validator.iter_errors(case)), file_name
+        assert not list(case_validator().iter_errors(case)), file_name
         assert file_name == f"{case['case']}.case.json"
         assert case["covers"] != "ok", file_name
         assert case["expect"]["reason"] == REASON_OF[case["covers"]], file_name
-
-
-def test_valid_cases_are_marked_ok() -> None:
-    for name, case in VALID.items():
-        assert case["covers"] == "ok", name
-        assert case["expect"]["reason"] is None, name
 
 
 def test_case_names_are_unique_across_valid_and_invalid() -> None:
@@ -184,13 +185,9 @@ def test_cases_only_the_strict_parser_rejects_are_addressed_to_the_pi(case: dict
     except ValueError:
         return
     if isinstance(message, dict) and isinstance(message.get("type"), str):
-        for hop in hops():
-            if (hop.type, hop.sender, hop.receiver) == (message["type"], *hop_of(case)):
-                validator = Draft202012Validator(
-                    load_json(PROTOCOL_DIR / "schemas" / hop.schema), registry=load_registry()
-                )
-                if validator.is_valid(message):
-                    assert hop.receiver == "device", case["case"]
+        hop = hop_for(message["type"], *hop_of(case))
+        if hop is not None and validator(hop.schema).is_valid(message):
+            assert hop.receiver == "device", case["case"]
 
 
 @pytest.mark.parametrize("case", cases("range"))
@@ -308,6 +305,23 @@ def test_rate_limits_are_positive_integers() -> None:
         assert isinstance(limit["window_ms"], int) and limit["window_ms"] > 0, kind
 
 
+def test_stopped_limit_is_above_the_stop_limit() -> None:
+    """02 §10: the Pi answers every stop with stopped, also those the DO sends on its own."""
+    assert LIMITS["rate"]["stopped"]["max"] > LIMITS["rate"]["stop"]["max"]
+
+
+def test_error_limit_is_above_everything_the_pi_may_reject() -> None:
+    """02 §10: the Pi answers error to any message from the DO it rejects, but not to an error."""
+    received = {h.type for h in hops() if (h.sender, h.receiver) == ("server", "device")}
+    inbound = sum(LIMITS["rate"][kind]["max"] for kind in received - {"error"})
+    assert LIMITS["rate"]["error"]["max"] > inbound
+
+
+def test_armed_limit_is_above_the_arm_limit() -> None:
+    """02 §10: armed answers an arm, at most one per arm received."""
+    assert LIMITS["rate"]["armed"]["max"] > LIMITS["rate"]["arm"]["max"]
+
+
 def test_every_valid_frame_fits_the_size_limit() -> None:
     for name, case in VALID.items():
         for frame in case["frames"]:
@@ -316,25 +330,28 @@ def test_every_valid_frame_fits_the_size_limit() -> None:
 
 def test_largest_possible_status_fits_the_size_limit() -> None:
     """Every field at its longest: a schema change that outgrows the limit shows up here."""
+    common = load_json(SCHEMAS_DIR / "common.schema.json")["$defs"]
     longest_id = "A" * 22
-    longest_counter = 2**53 - 1
-    longest_wheel = -1.2345678901234567e-05
+    longest_counter = common["counter"]["maximum"]
+    longest_duration = common["duration_ms"]["maximum"]
     status = {
         "v": 1,
         "type": "status",
-        "state": "disarmed",
+        "state": max(common["agent_state"]["enum"], key=len),
         "session_id": longest_id,
         "last_seq": longest_counter,
-        "seq_age_ms": longest_counter,
-        "command_left": longest_wheel,
-        "command_right": longest_wheel,
-        "output_left": longest_wheel,
-        "output_right": longest_wheel,
-        "stop_cause": "watchdog_timeout",
+        "seq_age_ms": longest_duration,
+        "command_left": "WHEEL",
+        "command_right": "WHEEL",
+        "output_left": "WHEEL",
+        "output_right": "WHEEL",
+        "stop_cause": max(common["stop_cause"]["enum"], key=len),
         "lease_id": longest_id,
         "last_heartbeat_seq": longest_counter,
-        "heartbeat_age_ms": longest_counter,
+        "heartbeat_age_ms": longest_duration,
     }
-    text = json.dumps(status, indent=1)  # generous: whitespace a sender might add
+    wheel = max(LONGEST_WHEEL_TEXTS, key=len)
+    # indent=1 is generous: whitespace a sender might add.
+    text = json.dumps(status, indent=1).replace('"WHEEL"', wheel)
     assert schema_errors(text, "device", "server") == []
     assert len(text.encode("utf-8")) <= MAX_FRAME_BYTES
