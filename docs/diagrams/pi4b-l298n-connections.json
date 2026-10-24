@@ -1,0 +1,91 @@
+{
+  "orientation": "Pi: USB/Ethernet bottom, GPIO right; pin1 upper inner, pin2 upper outer. L298N: heatsink top; OUT1/2 left, OUT4/3 right; power +12V GND +5V left-to-right.",
+  "connections": [
+    {
+      "id": 1,
+      "terminal": "ENA",
+      "bcm": 12,
+      "pin": 32,
+      "color": "#148450",
+      "cable": "zielony",
+      "role": "PWM — lewe koło"
+    },
+    {
+      "id": 2,
+      "terminal": "IN1",
+      "bcm": 17,
+      "pin": 11,
+      "color": "#1764bb",
+      "cable": "niebieski",
+      "role": "kierunek A"
+    },
+    {
+      "id": 3,
+      "terminal": "IN2",
+      "bcm": 27,
+      "pin": 13,
+      "color": "#7842bb",
+      "cable": "fioletowy A",
+      "role": "kierunek A"
+    },
+    {
+      "id": 4,
+      "terminal": "IN3",
+      "bcm": 22,
+      "pin": 15,
+      "color": "#f5f7fa",
+      "cable": "biały / jasny",
+      "role": "kierunek B"
+    },
+    {
+      "id": 5,
+      "terminal": "IN4",
+      "bcm": 23,
+      "pin": 16,
+      "color": "#aab3bc",
+      "cable": "szary / jasny",
+      "role": "kierunek B"
+    },
+    {
+      "id": 6,
+      "terminal": "ENB",
+      "bcm": 13,
+      "pin": 33,
+      "color": "#7842bb",
+      "cable": "fioletowy B",
+      "role": "PWM — prawe koło"
+    },
+    {
+      "id": 7,
+      "terminal": "+5V",
+      "bcm": null,
+      "pin": 2,
+      "color": "#c22d3c",
+      "cable": "dodatkowy czerwony",
+      "role": "5 V z Pi → logika L298N"
+    },
+    {
+      "id": 8,
+      "terminal": "GND",
+      "bcm": null,
+      "pin": 6,
+      "color": "#172b3b",
+      "cable": "dodatkowy czarny",
+      "role": "wspólna masa"
+    }
+  ],
+  "jumper_caps_removed": [
+    "ENA",
+    "ENB",
+    "5V-EN / CON5"
+  ],
+  "power": {
+    "pi": "separate USB-C 5 V / 3 A",
+    "motor_supply": "4xAAA positive through switch to +12V; negative to GND",
+    "logic": "Pi pin2 to +5V with regulator jumper removed"
+  },
+  "pulldowns_ohm": {
+    "ENA_to_GND": 10000,
+    "ENB_to_GND": 10000
+  }
+}

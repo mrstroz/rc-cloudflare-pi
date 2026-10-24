@@ -1,0 +1,28 @@
+Use case: scientific-educational / infographic-diagram.
+Create a large, crisp Polish-language physical wiring diagram, landscape, for a beginner wiring a Raspberry Pi 4 Model B, their actual L298N board, two yellow TT geared DC motors (3–6 V), and a 4×AAA battery holder. Use the two supplied local photographs as hardware references, not as an edit target. Reference 1 is the actual L298N, reference 2 the battery holder. This is an instructional technical illustration: accurate electrical connections and physical pin positions take priority over decoration.
+
+Title: "Raspberry Pi 4B → L298N → 2 silniki". Subtitle: "Widok z góry • numery fizyczne pinów + GPIO (BCM)".
+White background, restrained colors, large readable text, neat orthogonal colored wires with visibly separate endpoints, clear connector labels and generous space. Realistic illustrated boards with simplified components. Never mirror the boards. This is physical connector layout accuracy, not a claim of 1:1 print scale.
+
+Raspberry Pi 4B at left, portrait orientation, USB and Ethernet sockets at BOTTOM, GPIO header running vertically along the RIGHT edge, USB-C power on upper LEFT edge. In this orientation the 40-pin header has exactly 20 pairs: pin 1 is the upper LEFT/inner pin, pin 2 upper RIGHT/outer; row 2 is 3/4, row 3 is 5/6, … row 20 is 39/40. Clearly mark pin 1 with a square and label. Show physical numbers legibly. Highlight only used contacts; unused contacts remain unconnected. USB-C comes from a separate source labelled "Osobne zasilanie Pi: USB-C 5 V / 3 A".
+
+L298N at center-right with exactly the same orientation and terminal arrangement as user's photograph: black heatsink TOP; left blue 2-way motor terminal at LEFT (upper OUT1, lower OUT2); right blue 2-way motor terminal at RIGHT (upper OUT4, lower OUT3, as silkscreen OUT4 above right block); 3-way blue power terminal at BOTTOM LEFT with LEFT-TO-RIGHT "+12V", "GND", "+5V"; six control signal contacts at BOTTOM RIGHT left-to-right "ENA", "IN1", "IN2", "IN3", "IN4", "ENB". ENA and ENB each have an additional supply post behind/above the front signal post: do not connect these spare +5V posts. All three jumper caps must be REMOVED in the illustrated desired wiring (ENA, ENB, and regulator 5V-EN/CON5). Show the regulator jumper CON5, located just above the 3-way power block, as two BARE posts, not bridged. Label "Zdejmij zworkę 5V-EN / CON5" with a precise leader. Also label "Zworki ENA i ENB zdjęte".
+
+Exact proposed pin mapping, to be shown with both colored wires and an accurate small table:
+ENA → GPIO12 → physical pin 32; green wire; left wheel PWM.
+IN1 → GPIO17 → physical pin 11; blue wire.
+IN2 → GPIO27 → physical pin 13; purple wire, mark cable tag A.
+IN3 → GPIO22 → physical pin 15; white wire outlined dark for visibility.
+IN4 → GPIO23 → physical pin 16; light grey wire outlined dark for visibility.
+ENB → GPIO13 → physical pin 33; purple wire, mark cable tag B; right wheel PWM.
++5V logic terminal on L298N → Pi physical pin 2 (5V power pin), RED wire. This is Pi feeding logic only; never depict L298N feeding Pi.
+GND terminal on L298N → Pi physical pin 6 (GND), BLACK wire.
+Table columns "L298N | GPIO BCM | PIN fizyczny". Table rows ENA/12/32, IN1/17/11, IN2/27/13, IN3/22/15, IN4/23/16, ENB/13/33, +5V/5V/2, GND/GND/6. Table must match actual highlighted header contacts and wire endpoints exactly. Pin 32 is on RIGHT at pair 16. Pin 33 LEFT at pair 17. Pin 11 LEFT pair 6, 13 LEFT pair 7, 15 LEFT pair 8, 16 RIGHT pair 8, 2 RIGHT pair 1, 6 RIGHT pair 3.
+
+Battery holder below driver with four AAA cells, labelled "4×AAA — tylko napęd" and "Zmierz napięcie pakietu". Red POSITIVE from battery via an accessible physical switch labelled "Wyłącznik napędu" to leftmost +12V motor supply terminal. Black NEGATIVE to middle GND terminal, sharing ground with Pi pin 6. Label this ground junction "Wspólna masa: Pi + L298N + baterie". Label motor supply terminal clearly "Napis +12V = wejście napędu; tu pakiet 4×AAA". There must be NO battery positive connection to Pi or to logic +5V. Pi and motor battery positives are separate.
+
+Two individual yellow TT motors outside the driver, labelled "Silnik A / lewe koło / 3–6 V" and "Silnik B / prawe koło / 3–6 V". Left motor leads yellow to OUT1 (upper left), orange to OUT2 (lower left). Right motor brown to OUT4 (upper right), red to OUT3 (lower right), matching photograph. Do not attach either motor lead to GND. Reverse rotation is configured in software as needed; no asserted fixed physical forward direction.
+
+Show TWO external pull-down resistors, each 10 kΩ: one from ENA SIGNAL net to common GND and one from ENB SIGNAL net to common GND. Clearly show these are resistor branches, never a direct short to ground. Label "2×10 kΩ: ENA→GND i ENB→GND".
+
+Small footer: "Proponowane połączenie — sprawdź oznaczenia na płytce. Podłączaj przy wyłączonym zasilaniu." and "AAA nie zasilają Pi. Przy L298N i niskim PWM silniki mogą nie ruszyć." Do not show a battery directly powering Pi, do not leave regulator jumper installed with external +5V, do not connect GPIO to a 5V jumper supply post, do not invent extra pins, do not use breadboards or unrelated modules. All wires must terminate at the stated exact contacts. No wire junctions except the explicitly shared GND net and resistor branches. Avoid needless wire crossings.

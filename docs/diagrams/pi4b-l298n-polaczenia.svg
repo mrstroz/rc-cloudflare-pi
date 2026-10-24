@@ -1,0 +1,492 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="2000" viewBox="0 0 2800 2000">
+<title>Sprawdzony plan połączeń Raspberry Pi 4B, L298N i dwóch silników</title>
+<desc>Oznaczenia 1–8 to identyfikatory tych samych przewodów przy obu płytkach. Numery fizyczne złącza Pi są pokazane oddzielnie. Pi zasilane osobno przez USB-C, bateria tylko do napędu. Wszystkie zworki ENA, ENB i regulatora CON5 zdjęte.</desc>
+<rect x="0" y="0" width="2800" height="2000" rx="0" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<text x="90" y="94" font-family="DejaVu Sans, sans-serif" font-size="66" font-weight="700" fill="#172b3b" text-anchor="start">Pi 4B → L298N → dwa silniki</text>
+<text x="94" y="149" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="400" fill="#526779" text-anchor="start">Plan fizycznych złączy • widok z góry • połącz identyczne znaczniki 1–8</text>
+<rect x="90" y="181" width="2620" height="100" rx="17" fill="#fff1cb" stroke="#e4bc4d" stroke-width="2"/>
+<text x="120" y="224" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="start">Wariant stanowiskowy: Pi ma osobne zasilanie USB-C 5 V / 3 A. Pakiet 4×AAA zasila wyłącznie napęd.</text>
+<text x="120" y="262" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="400" fill="#172b3b" text-anchor="start">Przed podłączeniem zdejmij ENA, ENB i zworkę regulatora 5V-EN / CON5. Nie podawaj 5 V na GPIO.</text>
+<text x="100" y="341" font-family="DejaVu Sans, sans-serif" font-size="33" font-weight="700" fill="#172b3b" text-anchor="start">RASPBERRY PI 4 MODEL B</text>
+<text x="100" y="378" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" fill="#526779" text-anchor="start">USB / Ethernet na dole • GPIO po prawej</text>
+<rect x="100" y="408" width="645" height="865" rx="24" fill="#178361" stroke="#0e5c45" stroke-width="4"/>
+<circle cx="132" cy="442" r="20" fill="#e5c264" stroke="#a98f44" stroke-width="2"/>
+<circle cx="132" cy="442" r="10" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<circle cx="714" cy="442" r="20" fill="#e5c264" stroke="#a98f44" stroke-width="2"/>
+<circle cx="714" cy="442" r="10" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<circle cx="132" cy="1235" r="20" fill="#e5c264" stroke="#a98f44" stroke-width="2"/>
+<circle cx="132" cy="1235" r="10" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<circle cx="714" cy="1235" r="20" fill="#e5c264" stroke="#a98f44" stroke-width="2"/>
+<circle cx="714" cy="1235" r="10" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<rect x="262" y="632" width="228" height="223" rx="12" fill="#aebcc0" stroke="#596a73" stroke-width="4"/>
+<rect x="260" y="940" width="130" height="105" rx="8" fill="#172c34" stroke="#06181f" stroke-width="2"/>
+<rect x="200" y="485" width="130" height="9" rx="3" fill="#86aa94" stroke="none" stroke-width="2"/>
+<rect x="200" y="505" width="130" height="9" rx="3" fill="#86aa94" stroke="none" stroke-width="2"/>
+<rect x="200" y="525" width="130" height="9" rx="3" fill="#86aa94" stroke="none" stroke-width="2"/>
+<rect x="200" y="545" width="130" height="9" rx="3" fill="#86aa94" stroke="none" stroke-width="2"/>
+<rect x="200" y="565" width="130" height="9" rx="3" fill="#86aa94" stroke="none" stroke-width="2"/>
+<rect x="251" y="424" width="240" height="26" rx="3" fill="#dce3e6" stroke="#597382" stroke-width="2"/>
+<polyline points="264,428 264,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="276,428 276,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="288,428 288,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="300,428 300,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="312,428 312,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="324,428 324,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="336,428 336,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="348,428 348,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="360,428 360,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="372,428 372,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="384,428 384,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="396,428 396,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="408,428 408,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="420,428 420,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="432,428 432,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="444,428 444,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="456,428 456,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="468,428 468,447" fill="none" stroke="#6b757d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="144" y="1176" width="164" height="120" rx="10" fill="#c6d0d6" stroke="#61717b" stroke-width="3"/>
+<rect x="158" y="1211" width="136" height="48" rx="4" fill="#273846" stroke="#90a0a9" stroke-width="2"/>
+<text x="226" y="1334" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="middle">USB 2.0</text>
+<rect x="330" y="1176" width="164" height="120" rx="10" fill="#c6d0d6" stroke="#61717b" stroke-width="3"/>
+<rect x="344" y="1211" width="136" height="48" rx="4" fill="#273846" stroke="#90a0a9" stroke-width="2"/>
+<rect x="352" y="1227" width="120" height="12" rx="0" fill="#3b87bb" stroke="none" stroke-width="2"/>
+<text x="412" y="1334" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="middle">USB 3.0</text>
+<rect x="516" y="1176" width="164" height="120" rx="10" fill="#c6d0d6" stroke="#61717b" stroke-width="3"/>
+<rect x="530" y="1211" width="136" height="48" rx="4" fill="#273846" stroke="#90a0a9" stroke-width="2"/>
+<text x="598" y="1334" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="middle">Ethernet</text>
+<rect x="81" y="480" width="43" height="75" rx="8" fill="#c6d0d6" stroke="#61717b" stroke-width="3"/>
+<rect x="83" y="663" width="39" height="67" rx="5" fill="#c6d0d6" stroke="#61717b" stroke-width="2"/>
+<rect x="83" y="760" width="39" height="67" rx="5" fill="#c6d0d6" stroke="#61717b" stroke-width="2"/>
+<text x="137" y="522" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="700" fill="#ffffff" text-anchor="start">USB-C</text>
+<text x="137" y="555" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#ffffff" text-anchor="start">5 V / 3 A</text>
+<rect x="604" y="450" width="102" height="752" rx="8" fill="#192f37" stroke="#9fafa9" stroke-width="3"/>
+<rect x="616" y="464" width="22" height="22" rx="2" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="484" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">1</text>
+<circle cx="682" cy="475" r="10" fill="#c22d3c" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="484" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">2</text>
+<polyline points="682,475 817,475" fill="none" stroke="#c22d3c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="841" cy="475" r="24" fill="#c22d3c" stroke="#172b3b" stroke-width="2"/>
+<text x="841" y="485" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
+<text x="878" y="484" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">5 V → logika</text>
+<circle cx="627" cy="512" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="521" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">3</text>
+<circle cx="682" cy="512" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="521" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">4</text>
+<circle cx="627" cy="549" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="558" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">5</text>
+<circle cx="682" cy="549" r="10" fill="#172b3b" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="558" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">6</text>
+<polyline points="682,549 817,549" fill="none" stroke="#172b3b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="841" cy="549" r="24" fill="#172b3b" stroke="#172b3b" stroke-width="2"/>
+<text x="841" y="559" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">8</text>
+<text x="878" y="558" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">GND</text>
+<circle cx="627" cy="586" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="595" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">7</text>
+<circle cx="682" cy="586" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="595" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">8</text>
+<circle cx="627" cy="623" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="632" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">9</text>
+<circle cx="682" cy="623" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="632" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">10</text>
+<circle cx="627" cy="660" r="10" fill="#1764bb" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="669" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">11</text>
+<polyline points="627,660 506,660" fill="none" stroke="#1764bb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="482" cy="660" r="24" fill="#1764bb" stroke="#172b3b" stroke-width="2"/>
+<text x="482" y="670" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+<text x="446" y="669" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="end">GPIO17</text>
+<circle cx="682" cy="660" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="669" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">12</text>
+<circle cx="627" cy="697" r="10" fill="#7842bb" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="706" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">13</text>
+<polyline points="627,697 506,697" fill="none" stroke="#7842bb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="482" cy="697" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="482" y="707" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+<text x="446" y="706" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="end">GPIO27</text>
+<circle cx="682" cy="697" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="706" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">14</text>
+<circle cx="627" cy="734" r="10" fill="#f5f7fa" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="743" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">15</text>
+<polyline points="627,734 506,734" fill="none" stroke="#f5f7fa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="627,734 506,734" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="627,734 506,734" fill="none" stroke="#273846" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="627,734 506,734" fill="none" stroke="#f5f7fa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="482" cy="734" r="24" fill="#f5f7fa" stroke="#172b3b" stroke-width="2"/>
+<text x="482" y="744" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">4</text>
+<text x="446" y="743" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="end">GPIO22</text>
+<circle cx="682" cy="734" r="10" fill="#aab3bc" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="743" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">16</text>
+<polyline points="682,734 817,734" fill="none" stroke="#aab3bc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="682,734 817,734" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="682,734 817,734" fill="none" stroke="#273846" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="682,734 817,734" fill="none" stroke="#aab3bc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="841" cy="734" r="24" fill="#aab3bc" stroke="#172b3b" stroke-width="2"/>
+<text x="841" y="744" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">5</text>
+<text x="878" y="743" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">GPIO23</text>
+<circle cx="627" cy="771" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="780" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">17</text>
+<circle cx="682" cy="771" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="780" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">18</text>
+<circle cx="627" cy="808" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="817" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">19</text>
+<circle cx="682" cy="808" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="817" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">20</text>
+<circle cx="627" cy="845" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="854" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">21</text>
+<circle cx="682" cy="845" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="854" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">22</text>
+<circle cx="627" cy="882" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="891" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">23</text>
+<circle cx="682" cy="882" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="891" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">24</text>
+<circle cx="627" cy="919" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="928" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">25</text>
+<circle cx="682" cy="919" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="928" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">26</text>
+<circle cx="627" cy="956" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="965" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">27</text>
+<circle cx="682" cy="956" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="965" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">28</text>
+<circle cx="627" cy="993" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="1002" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">29</text>
+<circle cx="682" cy="993" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="1002" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">30</text>
+<circle cx="627" cy="1030" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="1039" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">31</text>
+<circle cx="682" cy="1030" r="10" fill="#148450" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="1039" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">32</text>
+<polyline points="682,1030 817,1030" fill="none" stroke="#148450" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="841" cy="1030" r="24" fill="#148450" stroke="#172b3b" stroke-width="2"/>
+<text x="841" y="1040" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="878" y="1039" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">GPIO12</text>
+<circle cx="627" cy="1067" r="10" fill="#7842bb" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="1076" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">33</text>
+<polyline points="627,1067 506,1067" fill="none" stroke="#7842bb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="482" cy="1067" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="482" y="1077" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
+<text x="446" y="1076" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="end">GPIO13</text>
+<circle cx="682" cy="1067" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="1076" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">34</text>
+<circle cx="627" cy="1104" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="1113" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">35</text>
+<circle cx="682" cy="1104" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="1113" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">36</text>
+<circle cx="627" cy="1141" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="1150" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">37</text>
+<circle cx="682" cy="1141" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="1150" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">38</text>
+<circle cx="627" cy="1178" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="592" y="1187" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="end">39</text>
+<circle cx="682" cy="1178" r="10" fill="#dcbf65" stroke="#081c24" stroke-width="2"/>
+<text x="717" y="1187" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="start">40</text>
+<polyline points="627,475 570,431 510,431" fill="none" stroke="#fae796" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="510" y="424" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="700" fill="#ffffff" text-anchor="end">PIN 1 = kwadrat</text>
+<text x="779" y="1274" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#526779" text-anchor="start">Małe białe liczby przy złączu = PIN fizyczny.</text>
+<text x="779" y="1306" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#526779" text-anchor="start">Kolorowy znacznik = numer przewodu z tabeli.</text>
+<text x="1460" y="341" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#172b3b" text-anchor="start">TWÓJ L298N — TA SAMA ORIENTACJA</text>
+<text x="1460" y="378" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" fill="#526779" text-anchor="start">Radiator u góry • zasilanie na dole po lewej</text>
+<rect x="1470" y="418" width="650" height="650" rx="15" fill="#bd3b44" stroke="#892936" stroke-width="4"/>
+<circle cx="1509" cy="455" r="22" fill="#dfc79e" stroke="#eddcca" stroke-width="3"/>
+<circle cx="1509" cy="455" r="13" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<circle cx="2081" cy="455" r="22" fill="#dfc79e" stroke="#eddcca" stroke-width="3"/>
+<circle cx="2081" cy="455" r="13" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<circle cx="1509" cy="1028" r="22" fill="#dfc79e" stroke="#eddcca" stroke-width="3"/>
+<circle cx="1509" cy="1028" r="13" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<circle cx="2081" cy="1028" r="22" fill="#dfc79e" stroke="#eddcca" stroke-width="3"/>
+<circle cx="2081" cy="1028" r="13" fill="#f5f8fb" stroke="none" stroke-width="2"/>
+<rect x="1580" y="452" width="430" height="210" rx="8" fill="#202e35" stroke="#0c1c24" stroke-width="4"/>
+<rect x="1590" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1647" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1704" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1761" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1818" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1875" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1932" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1989" y="437" width="19" height="183" rx="1" fill="#101c22" stroke="#3a464d" stroke-width="2"/>
+<rect x="1596" y="597" width="397" height="36" rx="3" fill="#b6bcc1" stroke="#5b6870" stroke-width="2"/>
+<circle cx="1795" cy="615" r="12" fill="#77858b" stroke="#37454c" stroke-width="2"/>
+<text x="1795" y="692" font-family="DejaVu Sans, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">L298N</text>
+<rect x="1495" y="520" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="1498" y="520" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="1495" y="575" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="1498" y="575" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="1495" y="630" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="1498" y="630" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="1495" y="685" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="1498" y="685" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="2035" y="520" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="2038" y="520" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="2035" y="575" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="2038" y="575" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="2035" y="630" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="2038" y="630" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<rect x="2035" y="685" width="44" height="24" rx="3" fill="#232d33" stroke="#e8cfcd" stroke-width="2"/>
+<rect x="2038" y="685" width="6" height="24" rx="0" fill="#b8c1c4" stroke="none" stroke-width="2"/>
+<circle cx="1687" cy="797" r="65" fill="#323d43" stroke="#081c24" stroke-width="4"/>
+<circle cx="1687" cy="797" r="53" fill="#d9dfe1" stroke="#a3afb5" stroke-width="2"/>
+<text x="1687" y="799" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#374854" text-anchor="middle">220 µF</text>
+<text x="1687" y="828" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#374854" text-anchor="middle">35 V</text>
+<circle cx="1920" cy="890" r="65" fill="#323d43" stroke="#081c24" stroke-width="4"/>
+<circle cx="1920" cy="890" r="53" fill="#d9dfe1" stroke="#a3afb5" stroke-width="2"/>
+<text x="1920" y="892" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#374854" text-anchor="middle">220 µF</text>
+<text x="1920" y="921" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#374854" text-anchor="middle">35 V</text>
+<rect x="1830" y="739" width="90" height="85" rx="4" fill="#22313a" stroke="#0f222c" stroke-width="2"/>
+<text x="1875" y="789" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#ffffff" text-anchor="middle">5 V</text>
+<rect x="1441" y="750" width="80" height="158" rx="8" fill="#267cb4" stroke="#154a72" stroke-width="3"/>
+<rect x="2069" y="750" width="80" height="158" rx="8" fill="#267cb4" stroke="#154a72" stroke-width="3"/>
+<circle cx="1481" cy="789" r="22" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="1471,798 1491,780" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1481" cy="869" r="22" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="1471,878 1491,860" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="2109" cy="789" r="22" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="2099,798 2119,780" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="2109" cy="869" r="22" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="2099,878 2119,860" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1481" y="737" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#172b3b" text-anchor="middle">OUT1</text>
+<text x="1481" y="950" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#172b3b" text-anchor="middle">OUT2</text>
+<text x="2109" y="737" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#172b3b" text-anchor="middle">OUT4</text>
+<text x="2109" y="950" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#172b3b" text-anchor="middle">OUT3</text>
+<rect x="1521" y="930" width="85" height="30" rx="4" fill="#1c2d35" stroke="#e9d8cd" stroke-width="2"/>
+<circle cx="1541" cy="945" r="7" fill="#ddb95b" stroke="#8d712f" stroke-width="1"/>
+<circle cx="1584" cy="945" r="7" fill="#ddb95b" stroke="#8d712f" stroke-width="1"/>
+<polyline points="1520,944 1388,944 1388,1009" fill="none" stroke="#b02935" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1366" y="1046" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#9f2939" text-anchor="end">CON5 / 5V-EN</text>
+<text x="1366" y="1078" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#9f2939" text-anchor="end">ZDEJMIJ ZWORKĘ</text>
+<rect x="1504" y="972" width="210" height="83" rx="8" fill="#267cb4" stroke="#154a72" stroke-width="3"/>
+<circle cx="1539" cy="1013" r="21" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="1529,1022 1549,1004" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1539" y="1096" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">+12V</text>
+<circle cx="1609" cy="1013" r="21" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="1599,1022 1619,1004" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1609" y="1096" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">GND</text>
+<circle cx="1679" cy="1013" r="21" fill="#c4d0d9" stroke="#536875" stroke-width="3"/>
+<polyline points="1669,1022 1689,1004" fill="none" stroke="#42525c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1679" y="1096" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">+5V</text>
+<rect x="1747" y="1013" width="40" height="38" rx="5" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="1767" cy="1032" r="7" fill="#148450" stroke="#d4b76b" stroke-width="1"/>
+<polyline points="1767,1052 1767,1118" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1767,1052 1767,1118" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1767,1052 1767,1118" fill="none" stroke="#148450" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1767" cy="1145" r="24" fill="#148450" stroke="#172b3b" stroke-width="2"/>
+<text x="1767" y="1155" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="1767" y="1196" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">ENA</text>
+<rect x="1748" y="962" width="38" height="31" rx="3" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="1767" cy="977" r="6" fill="#d4b76b" stroke="none" stroke-width="2"/>
+<polyline points="1759,969 1775,985" fill="none" stroke="#ffafb5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1759,985 1775,969" fill="none" stroke="#ffafb5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1802" y="1013" width="40" height="38" rx="5" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="1822" cy="1032" r="7" fill="#1764bb" stroke="#d4b76b" stroke-width="1"/>
+<polyline points="1822,1052 1822,1118" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1822,1052 1822,1118" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1822,1052 1822,1118" fill="none" stroke="#1764bb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1822" cy="1145" r="24" fill="#1764bb" stroke="#172b3b" stroke-width="2"/>
+<text x="1822" y="1155" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+<text x="1822" y="1196" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">IN1</text>
+<rect x="1857" y="1013" width="40" height="38" rx="5" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="1877" cy="1032" r="7" fill="#7842bb" stroke="#d4b76b" stroke-width="1"/>
+<polyline points="1877,1052 1877,1118" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1877,1052 1877,1118" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1877,1052 1877,1118" fill="none" stroke="#7842bb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1877" cy="1145" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="1877" y="1155" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+<text x="1877" y="1196" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">IN2</text>
+<rect x="1912" y="1013" width="40" height="38" rx="5" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="1932" cy="1032" r="7" fill="#f5f7fa" stroke="#d4b76b" stroke-width="1"/>
+<polyline points="1932,1052 1932,1118" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1932,1052 1932,1118" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1932,1052 1932,1118" fill="none" stroke="#f5f7fa" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1932" cy="1145" r="24" fill="#f5f7fa" stroke="#172b3b" stroke-width="2"/>
+<text x="1932" y="1155" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">4</text>
+<text x="1932" y="1196" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">IN3</text>
+<rect x="1967" y="1013" width="40" height="38" rx="5" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="1987" cy="1032" r="7" fill="#aab3bc" stroke="#d4b76b" stroke-width="1"/>
+<polyline points="1987,1052 1987,1118" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1987,1052 1987,1118" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1987,1052 1987,1118" fill="none" stroke="#aab3bc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1987" cy="1145" r="24" fill="#aab3bc" stroke="#172b3b" stroke-width="2"/>
+<text x="1987" y="1155" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">5</text>
+<text x="1987" y="1196" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">IN4</text>
+<rect x="2022" y="1013" width="40" height="38" rx="5" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="2042" cy="1032" r="7" fill="#7842bb" stroke="#d4b76b" stroke-width="1"/>
+<polyline points="2042,1052 2042,1118" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2042,1052 2042,1118" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2042,1052 2042,1118" fill="none" stroke="#7842bb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="2042" cy="1145" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="2042" y="1155" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
+<text x="2042" y="1196" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">ENB</text>
+<rect x="2023" y="962" width="38" height="31" rx="3" fill="#172c35" stroke="#0a1921" stroke-width="2"/>
+<circle cx="2042" cy="977" r="6" fill="#d4b76b" stroke="none" stroke-width="2"/>
+<polyline points="2034,969 2050,985" fill="none" stroke="#ffafb5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2034,985 2050,969" fill="none" stroke="#ffafb5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1305" y="469" width="68" height="100" rx="10" fill="#cbd3d8" stroke="#667982" stroke-width="3"/>
+<rect x="1136" y="448" width="180" height="142" rx="18" fill="#f6d33b" stroke="#aa8b16" stroke-width="3"/>
+<rect x="1167" y="461" width="105" height="116" rx="9" fill="#ffe35e" stroke="#cfad2b" stroke-width="2"/>
+<rect x="1096" y="499" width="41" height="32" rx="4" fill="#d4dde2" stroke="#6a7b84" stroke-width="2"/>
+<rect x="1372" y="504" width="30" height="27" rx="4" fill="#d4dde2" stroke="#6a7b84" stroke-width="2"/>
+<circle cx="1212" cy="515" r="15" fill="#c3a62d" stroke="none" stroke-width="2"/>
+<text x="1245" y="396" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#172b3b" text-anchor="middle">SILNIK A</text>
+<text x="1245" y="432" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="middle">Lewe koło • 3–6 V</text>
+<polyline points="1373,493 1415,493 1415,789 1441,789" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1373,493 1415,493 1415,789 1441,789" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1373,493 1415,493 1415,789 1441,789" fill="none" stroke="#dbad19" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1373,547 1393,547 1393,869 1441,869" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1373,547 1393,547 1393,869 1441,869" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1373,547 1393,547 1393,869 1441,869" fill="none" stroke="#eb7931" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2575" y="970" width="68" height="100" rx="10" fill="#cbd3d8" stroke="#667982" stroke-width="3"/>
+<rect x="2406" y="949" width="180" height="142" rx="18" fill="#f6d33b" stroke="#aa8b16" stroke-width="3"/>
+<rect x="2437" y="962" width="105" height="116" rx="9" fill="#ffe35e" stroke="#cfad2b" stroke-width="2"/>
+<rect x="2366" y="1000" width="41" height="32" rx="4" fill="#d4dde2" stroke="#6a7b84" stroke-width="2"/>
+<rect x="2642" y="1005" width="30" height="27" rx="4" fill="#d4dde2" stroke="#6a7b84" stroke-width="2"/>
+<circle cx="2482" cy="1016" r="15" fill="#c3a62d" stroke="none" stroke-width="2"/>
+<text x="2515" y="897" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#172b3b" text-anchor="middle">SILNIK B</text>
+<text x="2515" y="933" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="middle">Prawe koło • 3–6 V</text>
+<polyline points="2149,789 2213,789 2213,989 2643,989" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2149,789 2213,789 2213,989 2643,989" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2149,789 2213,789 2213,989 2643,989" fill="none" stroke="#79513b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2149,869 2180,869 2180,1043 2643,1043" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2149,869 2180,869 2180,1043 2643,1043" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2149,869 2180,869 2180,1043 2643,1043" fill="none" stroke="#d0444b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="2475" y="1140" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="middle">Przewody silnika ≠ masa.</text>
+<text x="2458" y="341" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" fill="#172b3b" text-anchor="middle">PAKIET NAPĘDU</text>
+<text x="2458" y="378" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" fill="#526779" text-anchor="middle">4×AAA • zmierz napięcie</text>
+<rect x="2285" y="418" width="350" height="406" rx="20" fill="#23323b" stroke="#0b1c25" stroke-width="4"/>
+<rect x="2305" y="439" width="65" height="357" rx="12" fill="#0c1c25" stroke="#677680" stroke-width="2"/>
+<rect x="2314" y="475" width="47" height="270" rx="10" fill="#d7ad69" stroke="#957748" stroke-width="2"/>
+<rect x="2314" y="475" width="47" height="48" rx="7" fill="#8facc6" stroke="none" stroke-width="2"/>
+<text x="2337" y="571" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#172b3b" text-anchor="middle">AAA</text>
+<text x="2337" y="629" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" fill="#172b3b" text-anchor="middle">+</text>
+<rect x="2384" y="439" width="65" height="357" rx="12" fill="#0c1c25" stroke="#677680" stroke-width="2"/>
+<rect x="2393" y="475" width="47" height="270" rx="10" fill="#d7ad69" stroke="#957748" stroke-width="2"/>
+<rect x="2393" y="475" width="47" height="48" rx="7" fill="#8facc6" stroke="none" stroke-width="2"/>
+<text x="2416" y="571" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#172b3b" text-anchor="middle">AAA</text>
+<text x="2416" y="629" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" fill="#172b3b" text-anchor="middle">−</text>
+<rect x="2463" y="439" width="65" height="357" rx="12" fill="#0c1c25" stroke="#677680" stroke-width="2"/>
+<rect x="2472" y="475" width="47" height="270" rx="10" fill="#d7ad69" stroke="#957748" stroke-width="2"/>
+<rect x="2472" y="475" width="47" height="48" rx="7" fill="#8facc6" stroke="none" stroke-width="2"/>
+<text x="2495" y="571" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#172b3b" text-anchor="middle">AAA</text>
+<text x="2495" y="629" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" fill="#172b3b" text-anchor="middle">+</text>
+<rect x="2542" y="439" width="65" height="357" rx="12" fill="#0c1c25" stroke="#677680" stroke-width="2"/>
+<rect x="2551" y="475" width="47" height="270" rx="10" fill="#d7ad69" stroke="#957748" stroke-width="2"/>
+<rect x="2551" y="475" width="47" height="48" rx="7" fill="#8facc6" stroke="none" stroke-width="2"/>
+<text x="2574" y="571" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#172b3b" text-anchor="middle">AAA</text>
+<text x="2574" y="629" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" fill="#172b3b" text-anchor="middle">−</text>
+<text x="2338" y="854" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#c22d3c" text-anchor="middle">+</text>
+<text x="2597" y="854" font-family="DejaVu Sans, sans-serif" font-size="36" font-weight="700" fill="#172b3b" text-anchor="middle">−</text>
+<polyline points="2338,826 2338,1233 2130,1233" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2338,826 2338,1233 2130,1233" fill="none" stroke="#273846" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2338,826 2338,1233 2130,1233" fill="none" stroke="#c22d3c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2040,1233 1539,1233 1539,1055" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2040,1233 1539,1233 1539,1055" fill="none" stroke="#273846" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2040,1233 1539,1233 1539,1055" fill="none" stroke="#c22d3c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2040" y="1204" width="90" height="58" rx="8" fill="#25333e" stroke="#111e27" stroke-width="3"/>
+<rect x="2056" y="1216" width="58" height="34" rx="5" fill="#b83743" stroke="#6c1723" stroke-width="2"/>
+<text x="2180" y="1290" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">WYŁĄCZNIK NAPĘDU</text>
+<polyline points="2597,826 2690,826 2690,1320 1609,1320 1609,1055" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2597,826 2690,826 2690,1320 1609,1320 1609,1055" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2597,826 2690,826 2690,1320 1609,1320 1609,1055" fill="none" stroke="#172b3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1609" cy="1320" r="9" fill="#172b3b" stroke="none" stroke-width="2"/>
+<polyline points="1609,1320 1484,1320" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1609,1320 1484,1320" fill="none" stroke="#273846" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1609,1320 1484,1320" fill="none" stroke="#172b3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1456" cy="1320" r="24" fill="#172b3b" stroke="#172b3b" stroke-width="2"/>
+<text x="1456" y="1330" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">8</text>
+<text x="1810" y="1361" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#172b3b" text-anchor="middle">Wspólna masa: Pi + L298N + minus baterii</text>
+<polyline points="1679,1055 1679,1150" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1679,1055 1679,1150" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1679,1055 1679,1150" fill="none" stroke="#c22d3c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1679" cy="1175" r="24" fill="#c22d3c" stroke="#172b3b" stroke-width="2"/>
+<text x="1679" y="1185" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
+<text x="2115" y="1395" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#9f2939" text-anchor="middle">7 = 5 V z Pi → tylko logika, po zdjęciu CON5.</text>
+<rect x="90" y="1430" width="1620" height="456" rx="18" fill="#ffffff" stroke="#d3dfe7" stroke-width="2"/>
+<rect x="90" y="1430" width="1620" height="52" rx="18" fill="#e4edf4" stroke="none" stroke-width="2"/>
+<text x="118" y="1466" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#172b3b" text-anchor="start">NR</text>
+<text x="210" y="1466" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">L298N</text>
+<text x="425" y="1466" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">PIN Pi (fizyczny)</text>
+<text x="710" y="1466" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">GPIO (BCM)</text>
+<text x="958" y="1466" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#172b3b" text-anchor="start">PRZEWÓD / FUNKCJA</text>
+<rect x="92" y="1482" width="1616" height="49" rx="0" fill="#f2f6fa" stroke="none" stroke-width="2"/>
+<circle cx="139" cy="1507" r="24" fill="#148450" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1517" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="210" y="1516" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">ENA</text>
+<text x="525" y="1516" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">32</text>
+<text x="799" y="1516" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">12</text>
+<text x="958" y="1514" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">zielony • PWM — lewe koło</text>
+<circle cx="139" cy="1556" r="24" fill="#1764bb" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1566" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+<text x="210" y="1565" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">IN1</text>
+<text x="525" y="1565" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">11</text>
+<text x="799" y="1565" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">17</text>
+<text x="958" y="1563" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">niebieski • kierunek A</text>
+<rect x="92" y="1580" width="1616" height="49" rx="0" fill="#f2f6fa" stroke="none" stroke-width="2"/>
+<circle cx="139" cy="1605" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1615" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+<text x="210" y="1614" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">IN2</text>
+<text x="525" y="1614" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">13</text>
+<text x="799" y="1614" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">27</text>
+<text x="958" y="1612" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">fioletowy A • kierunek A</text>
+<circle cx="139" cy="1654" r="24" fill="#f5f7fa" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1664" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">4</text>
+<text x="210" y="1663" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">IN3</text>
+<text x="525" y="1663" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">15</text>
+<text x="799" y="1663" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">22</text>
+<text x="958" y="1661" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">biały / jasny • kierunek B</text>
+<rect x="92" y="1678" width="1616" height="49" rx="0" fill="#f2f6fa" stroke="none" stroke-width="2"/>
+<circle cx="139" cy="1703" r="24" fill="#aab3bc" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1713" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">5</text>
+<text x="210" y="1712" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">IN4</text>
+<text x="525" y="1712" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">16</text>
+<text x="799" y="1712" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">23</text>
+<text x="958" y="1710" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">szary / jasny • kierunek B</text>
+<circle cx="139" cy="1752" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1762" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
+<text x="210" y="1761" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">ENB</text>
+<text x="525" y="1761" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">33</text>
+<text x="799" y="1761" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">13</text>
+<text x="958" y="1759" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">fioletowy B • PWM — prawe koło</text>
+<rect x="92" y="1776" width="1616" height="49" rx="0" fill="#f2f6fa" stroke="none" stroke-width="2"/>
+<circle cx="139" cy="1801" r="24" fill="#c22d3c" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1811" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
+<text x="210" y="1810" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">+5V</text>
+<text x="525" y="1810" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">2</text>
+<text x="799" y="1810" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">5 V</text>
+<text x="958" y="1808" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">dodatkowy czerwony • 5 V z Pi → logika L298N</text>
+<circle cx="139" cy="1850" r="24" fill="#172b3b" stroke="#172b3b" stroke-width="2"/>
+<text x="139" y="1860" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">8</text>
+<text x="210" y="1859" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">GND</text>
+<text x="525" y="1859" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="middle">6</text>
+<text x="799" y="1859" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="middle">GND</text>
+<text x="958" y="1857" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#172b3b" text-anchor="start">dodatkowy czarny • wspólna masa</text>
+<rect x="1770" y="1465" width="940" height="421" rx="18" fill="#ffffff" stroke="#d3dfe7" stroke-width="2"/>
+<text x="1798" y="1511" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#172b3b" text-anchor="start">DO DODANIA: 2 REZYSTORY 10 kΩ</text>
+<text x="1798" y="1548" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="400" fill="#526779" text-anchor="start">Wyłączają enable przy starcie / odłączeniu Pi.</text>
+<circle cx="1940" cy="1596" r="24" fill="#148450" stroke="#172b3b" stroke-width="2"/>
+<text x="1940" y="1606" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="1980" y="1606" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#172b3b" text-anchor="start">ENA</text>
+<polyline points="1940,1620 1940,1639" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1940,1639 1940,1657" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1924" y="1657" width="32" height="75" rx="4" fill="#f5dfb7" stroke="#172b3b" stroke-width="2"/>
+<rect x="1924" y="1669" width="32" height="8" rx="0" fill="#995620" stroke="none" stroke-width="2"/>
+<rect x="1924" y="1681" width="32" height="8" rx="0" fill="#111111" stroke="none" stroke-width="2"/>
+<rect x="1924" y="1701" width="32" height="8" rx="0" fill="#dba032" stroke="none" stroke-width="2"/>
+<polyline points="1940,1732 1940,1754" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1979" y="1701" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">10 kΩ</text>
+<polyline points="1940,1754 1940,1791" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="2460" cy="1596" r="24" fill="#7842bb" stroke="#172b3b" stroke-width="2"/>
+<text x="2460" y="1606" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
+<text x="2500" y="1606" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#172b3b" text-anchor="start">ENB</text>
+<polyline points="2460,1620 2460,1639" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2460,1639 2460,1657" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2444" y="1657" width="32" height="75" rx="4" fill="#f5dfb7" stroke="#172b3b" stroke-width="2"/>
+<rect x="2444" y="1669" width="32" height="8" rx="0" fill="#995620" stroke="none" stroke-width="2"/>
+<rect x="2444" y="1681" width="32" height="8" rx="0" fill="#111111" stroke="none" stroke-width="2"/>
+<rect x="2444" y="1701" width="32" height="8" rx="0" fill="#dba032" stroke="none" stroke-width="2"/>
+<polyline points="2460,1732 2460,1754" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="2499" y="1701" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#172b3b" text-anchor="start">10 kΩ</text>
+<polyline points="2460,1754 2460,1791" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1940,1791 2460,1791" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2200,1791 2200,1813" fill="none" stroke="#172b3b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="2200" cy="1840" r="24" fill="#172b3b" stroke="#172b3b" stroke-width="2"/>
+<text x="2200" y="1850" font-family="DejaVu Sans, sans-serif" font-size="29" font-weight="700" fill="#ffffff" text-anchor="middle">8</text>
+<text x="2240" y="1849" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#172b3b" text-anchor="start">GND</text>
+<text x="90" y="1932" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#172b3b" text-anchor="start">Numery 1–8 oznaczają ten sam przewód przy obu płytkach — nie są numerami GPIO.</text>
+<text x="90" y="1973" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="400" fill="#526779" text-anchor="start">Podłączaj bez zasilania. Napis +12V na module to wejście napędu, nie zalecenie 12 V. Pierwszy test: koła uniesione.</text>
+</svg>
