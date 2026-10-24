@@ -43,7 +43,7 @@ GPIO12 i GPIO13 mają domyślny pull-down tylko po resecie. Zamknięcie urządze
 | PWM | przeciwne | Obrót w jednym z kierunków | Jazda |
 | 1 | równe | Aktywne hamowanie | Nieużywane |
 
-Który stan IN oznacza „przód”, ustala test okablowania; odwrócenie robi konfiguracja. STOP oznacza wybieg, nie natychmiastowe zatrzymanie kół ([ADR-0010](../adr/0010-stop-jako-wybieg.md)). Źródło: [nota ST L298, tabela 5](https://www.st.com/resource/en/datasheet/l298.pdf).
+Który stan IN oznacza „przód”, ustala test okablowania; odwrócenie robi konfiguracja. Adapter nigdy nie ustawia EN > 0 przy równych IN, także chwilowo: przy zmianie kierunku najpierw zeruje EN, potem przestawia IN, potem ustawia wypełnienie; zmiana wypełnienia w tym samym kierunku rusza tylko EN. STOP oznacza wybieg, nie natychmiastowe zatrzymanie kół ([ADR-0010](../adr/0010-stop-jako-wybieg.md)). Źródło: [nota ST L298, tabela 5](https://www.st.com/resource/en/datasheet/l298.pdf).
 
 Próg stanu wysokiego wejść L298 to minimum 2,3 V, więc GPIO 3,3 V przy wspólnej masie wystarcza. Na GPIO Pi nigdy nie trafia 5 V.
 

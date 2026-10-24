@@ -17,7 +17,7 @@
       Gotowe, gdy: 07 §1 podaje wersję OS, kandydata na backend PWM i oznaczenia z obudów silników.
       OS, backend i zworki wpisane po smoke teście 2026-10-24; brakuje oznaczeń silników, rodzaju ogniw i modelu powerbanku.
 
-- [ ] (^) **RC-03** Adapter L298N: cztery wyjścia kierunku, dwa enable z PWM, piny i odwrócenie z konfiguracji
+- [x] (^) **RC-03** Adapter L298N: cztery wyjścia kierunku, dwa enable z PWM, piny i odwrócenie z konfiguracji
       Spec: [07 §3](../spec/07-sprzet-i-naped.md#3-sterowanie-mostkiem) · ADR: [0010](../adr/0010-stop-jako-wybieg.md) · Zależy od: RC-01
       Gotowe, gdy: testy na atrapie pinów GPIO Zero potwierdzają każdy wiersz tabeli 07 §3 i oba enable = 0 po `stop`.
 
