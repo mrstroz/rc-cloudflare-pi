@@ -8,7 +8,7 @@
 
 ## Zadania
 
-- [ ] (^) **RC-01** Szkielet `apps/pi-agent/`: pakiet Python, przypięte zależności, testy, lint, wzór konfiguracji
+- [x] (^) **RC-01** Szkielet `apps/pi-agent/`: pakiet Python, przypięte zależności, testy, lint, wzór konfiguracji
       Spec: [01 §4–§5](../spec/01-architektura.md#4-układ-repozytorium)
       Gotowe, gdy: polecenia testów i lintera przechodzą i są dopisane do definicji ukończenia w [README](README.md).
 

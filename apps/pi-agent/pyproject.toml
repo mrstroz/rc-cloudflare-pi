@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rc-agent"
+description = "Raspberry Pi agent for the Internet RC Car"
+version = "0.1.0"
+requires-python = ">=3.13"
+# Pinned. On the Pi gpiozero comes from python3-gpiozero (2.0.1) through a
+# --system-site-packages venv, together with python3-lgpio, which is not on this list.
+dependencies = [
+    "websockets==17.3",
+    "gpiozero==2.0.1.*",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.17.2",
+    "mypy==1.18.2",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+rc_agent = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+files = ["src", "tests"]
+
+# gpiozero ships no type information.
+[[tool.mypy.overrides]]
+module = ["gpiozero", "gpiozero.*"]
+ignore_missing_imports = true

@@ -1,0 +1,62 @@
+# Wzór konfiguracji agenta Pi (docs/spec/01-architektura.md §5).
+# Na Pi kopia leży poza repozytorium, np. /etc/rc-agent/config.toml z prawami 600.
+# Zakomentowane wartości nie są jeszcze zmierzone; bez nich Pi odrzuca `arm`.
+
+[connection]
+# Ścieżkę WebSocketu urządzenia ustala RC-24.
+worker_url = "wss://rc-car.example.workers.dev/device"
+car_id = "car-1"
+# Sekret urządzenia. Nigdy w repozytorium, URL ani frontendzie (docs/spec/03 §2).
+device_token = ""
+# Limit kolejki przychodzącej `websockets` (docs/spec/05 §2).
+max_queue = 16
+
+# Numeracja BCM (docs/spec/07 §2).
+[pins]
+ena = 12
+in1 = 17
+in2 = 27
+in3 = 22
+in4 = 23
+enb = 13
+
+# Potwierdzone smoke testem 2026-10-24: oba koła bez odwrócenia.
+[wheels]
+left_inverted = false
+right_inverted = false
+
+# Profil jazdy (docs/spec/07 §5).
+[drive]
+pwm_frequency_hz = 100
+# direction_change_pause_ms =   # kwestia 7 w docs/spec/00 §9
+# deadband =                    # kwestia 6
+# limit =                       # kwestia 6
+
+[drive.calibration.left_forward]
+# min_start_duty =
+# min_run_duty =
+# max_duty =
+
+[drive.calibration.left_reverse]
+# min_start_duty =
+# min_run_duty =
+# max_duty =
+
+[drive.calibration.right_forward]
+# min_start_duty =
+# min_run_duty =
+# max_duty =
+
+[drive.calibration.right_reverse]
+# min_start_duty =
+# min_run_duty =
+# max_duty =
+
+# Profil czasowy (docs/spec/02 §8).
+[timing]
+token_interval_ms = 50
+# freshness_ttl_ms =            # kwestia 8; najwyżej 400 (T8)
+# rtt_warning_ms =              # poniżej freshness_ttl_ms - token_interval_ms
+motion_watchdog_ms = 400
+control_loop_period_ms = 10
+telemetry_period_ms = 200
