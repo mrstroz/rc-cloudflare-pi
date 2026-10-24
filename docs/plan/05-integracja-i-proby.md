@@ -37,11 +37,11 @@
       Gotowe, gdy: P24 zaliczona.
 
 - [ ] (=) **RC-45** Droga zatrzymania na podłodze przy limicie z profilu
-      Spec: [08 §4](../spec/08-proby-odbiorowe.md#4-progi-zaliczenia) · Zależy od: RC-38
+      Spec: [08 §4](../spec/08-proby-odbiorowe.md#4-progi-zaliczenia) · Zależy od: RC-38 · Blokada: [00 §9, kwestia 16](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie)
       Gotowe, gdy: P25 zaliczona w progu T9; przy przekroczeniu limit operatora jest obniżony w 07 §5, a próba powtórzona.
 
 - [ ] (=) **RC-39** Jazda przez docelowe łącze: oba koła, skręt, obrót w miejscu
-      Spec: [08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp), [00 §6](../spec/00-przeglad-i-zakres.md#6-kryteria-sukcesu) · Zależy od: RC-37, RC-38, RC-44, RC-45 · Blokada: [00 §9, kwestia 10](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie)
+      Spec: [08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp), [00 §6](../spec/00-przeglad-i-zakres.md#6-kryteria-sukcesu) · Zależy od: RC-37, RC-38, RC-44, RC-45 · Blokada: [00 §9, kwestie 10 i 16](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie)
       Gotowe, gdy: P22 zaliczona i spełnione wszystkie kryteria z 00 §6.
 
 - [ ] (=) **RC-40** `README.md`: połączenia, konfiguracja, uruchomienie, testy i wdrożenie obu aplikacji

@@ -14,19 +14,20 @@ Moduł L298N ma regulator 5 V zasilany z wejścia silników, włączany zworką 
 
 ## Decyzja
 
-Pi zasila wyłącznie powerbank przez USB-C. Pakiet 4×AAA zasila wyłącznie napęd, przez fizyczny wyłącznik. Logikę L298N zasila pin 5 V Pi przy zdjętej zworce CON5. Masa jest wspólna; prąd silników wraca do baterii przez moduł, nie przez Pi.
+Pi zasila wyłącznie powerbank przez USB-C. Pakiet 4×AAA zasila wyłącznie napęd; koszyk nie ma wyłącznika. Logikę L298N zasila pin 5 V Pi przy zdjętej zworce CON5. Masa jest wspólna; prąd silników wraca do baterii przez moduł, nie przez Pi.
 
 ## Konsekwencje
 
 **Pozytywne:**
 
 - Rozruch silników nie ciągnie napięcia zasilania Pi.
-- Wyłącznik napędu odcina silniki bez wyłączania Pi.
+- Wyjęcie ogniw odcina silniki bez wyłączania Pi.
 - Logika mostka ma stabilne 5 V niezależnie od stanu baterii.
 
 **Negatywne:**
 
 - Linia 5 V Pi zostaje zasilona przy zawieszonym systemie, więc logika mostka się nie wyłącza; zabezpieczeniem jest wyłącznie enable = 0.
+- Bez wyłącznika odcięcie napędu wymaga wyjęcia ogniw; przy jeździe po ziemi nie da się go wykonać szybko ([00 §9](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 16).
 - Dwa źródła do ładowania lub wymiany.
 
 **Wymagania:** zdjęta zworka CON5 (dwa źródła 5 V przy założonej zworce są niedopuszczalne), sprawdzenie portu i kabla powerbanku (P06).

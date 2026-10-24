@@ -29,7 +29,7 @@ Agent działa jako usługa `Type=notify` z `WatchdogSec=2s`, `WatchdogSignal=SIG
 - Wbudowany watchdog restartuje całe Pi i nie odcina napędu; do restartu wyjścia mogą sterować silnikami.
 - Helper zależy od backendu PWM, który nie jest jeszcze wybrany.
 
-**Wymagania:** fizyczny wyłącznik napędu przy każdej próbie; próby P20 i P21 ([08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp)).
+**Wymagania:** odcięcie napędu przy każdej próbie (przy uniesionych kołach wyjęcie ogniw; jazda po ziemi czeka na [00 §9](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 16); próby P20 i P21 ([08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp)).
 
 ## Rozważane warianty
 

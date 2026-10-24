@@ -36,7 +36,7 @@ Przed zmianą połączeń odłączyć USB-C Pi i wyjąć baterie.
 1. **Pi zasilać przez USB-C z posiadanego powerbanku**. Potwierdzić parametry konkretnego portu (przyjmujemy 5 V / 3 A), odpowiedni kabel i stabilność podczas pracy. Pakietu 4×AAA nie podłączać bezpośrednio do zasilania Pi; zasila wyłącznie napęd.
 2. Zdjąć **zworkę regulatora 5V-EN / CON5**. Na zdjęciu jest nad potrójnym złączem zasilania, przy oznaczeniu CON5. Po jej usunięciu podać 5 V z pinu fizycznego 2 Pi na zacisk +5V modułu. Nie łączyć dwóch źródeł 5 V z założoną zworką regulatora.
 3. Zworki **ENA i ENB mają być zdjęte**. Kabel PWM podłączyć do sygnałowego pinu enable na dolnym brzegu, w szeregu z IN1–IN4. Dodatkowe piny zasilania przy ENA/ENB pozostawić wolne; nie podłączać ich do GPIO.
-4. Plus pakietu 4×AAA przez fizyczny wyłącznik napędu podłączyć do **lewego zacisku +12V**. Napis +12V identyfikuje wejście zasilania mostka — nie oznacza potrzeby zasilania tych silników 12 V.
+4. Plus pakietu 4×AAA podłączyć do **lewego zacisku +12V**. Koszyk nie ma wyłącznika; odcięcie napędu to wyjęcie ogniw. Napis +12V identyfikuje wejście zasilania mostka — nie oznacza potrzeby zasilania tych silników 12 V.
 5. Minus baterii oraz masę Pi, pin fizyczny 6, połączyć z **GND modułu**. W razie problemów z umieszczeniem obu przewodów w zacisku użyć odpowiedniego złącza rozdzielającego masę. Prąd silników powinien wracać do baterii przez przewód moduł–bateria, a nie przez Pi.
 6. Zalecane, lecz opcjonalne dla nadzorowanych prób MVP: **dwa zewnętrzne rezystory 10 kΩ**, ENA–GND i ENB–GND. GPIO12/13 mają domyślny pull-down po resecie. Bez dodatkowych rezystorów trzeba potwierdzić brak ruchu przy starcie, resecie i odłączeniu Pi; start programu oraz helper usługi ustawiają LOW. Pull-down nie wyłączy pinu aktywnie sterowanego w stan wysoki. Nie zwierać enable bezpośrednio do masy.
 
@@ -55,7 +55,7 @@ Linia 5 V Pi może pozostać obecna przy zawieszonym/zatrzymanym systemie. Zasil
 | Prawy górny OUT4 | Brązowy przewód silnika B |
 | Prawy dolny OUT3 | Czerwony przewód silnika B |
 
-Użycie A jako lewego i B jako prawego koła jest umowne. Jeśli koło kręci się przeciwnie, kierunek odwrócić w konfiguracji agenta. Oba przewody każdego silnika trafiają na jego parę wyjść mostka; żaden nie jest na stałe masą. Pierwsze uruchomienie z uniesionymi kołami, krótką próbą i dostępnym wyłącznikiem napędu. Przy braku rozruchu wyłączyć PWM i sprawdzić zasilanie oraz połączenia.
+Użycie A jako lewego i B jako prawego koła jest umowne. Jeśli koło kręci się przeciwnie, kierunek odwrócić w konfiguracji agenta. Oba przewody każdego silnika trafiają na jego parę wyjść mostka; żaden nie jest na stałe masą. Pierwsze uruchomienie z uniesionymi kołami, krótką próbą i ogniwami napędu w zasięgu ręki. Przy braku rozruchu wyłączyć PWM i sprawdzić zasilanie oraz połączenia.
 
 ## Źródła i pliki
 

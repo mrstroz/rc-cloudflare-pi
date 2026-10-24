@@ -4,7 +4,7 @@ Próby, które zamykają MVP ([00 §6](00-przeglad-i-zakres.md#6-kryteria-sukces
 
 ## 1. Zasady prób
 
-- Pierwsze uruchomienie każdego kanału, próby resetu, zawieszenia i awarii procesu: koła uniesione, fizyczny wyłącznik napędu w zasięgu ręki.
+- Pierwsze uruchomienie każdego kanału, próby resetu, zawieszenia i awarii procesu: koła uniesione, ogniwa napędu w zasięgu ręki; auto nie ma wyłącznika napędu, więc odcięcie to wyjęcie ogniw. Jazda po ziemi czeka na [00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 16.
 - Jazda tylko w kontrolowanym miejscu i w zasięgu wzroku kierowcy, z limitem z profilu jazdy.
 - Silnik, który nie rusza, wyłączamy od razu i szukamy przyczyny.
 - Internet i Cloudflare nie dają twardego czasu rzeczywistego. Prędkość i timeouty dobieramy z wyników prób.
@@ -48,7 +48,7 @@ P12, P13, P15, P16, P23, P24 i P26 sprawdzamy najpierw testami w trybie symulacj
 
 | Nr | Data | Wynik | Wartości i sprzęt |
 |---|---|---|---|
-| — (smoke test) | 2026-10-24 | Okablowanie i oba kanały działają | Jednorazowy skrypt poza repo (przed RC-05), GPIO Zero + `lgpio`, PWM 100 Hz, koła uniesione. Piny IN1–IN4 osiągają oba poziomy przy ENA/ENB = LOW. Impulsy 1 s przy duty 0,7 i 1,0: A = lewe koło, B = prawe, oba kierunki, przy 1,0 wyraźnie szybciej; A+B razem 1,5 s przy 1,0. Pi: `throttled=0x0` przez cały test, temperatura SoC 50,6 °C. Wyłącznik baterii wyłączony + 100% na obu kanałach: koła stoją, czyli napęd nie jest zasilany z Pi. Znalezisko: po zamknięciu GPIO Zero ENA wisi na HIGH ([07 §2](07-sprzet-i-naped.md#2-połączenia-i-gpio)). Bez miernika: brak napięć pakietu i silników, prądu i temperatury silników, więc P01, P03 i P05 pozostają otwarte |
+| — (smoke test) | 2026-10-24 | Okablowanie i oba kanały działają | Jednorazowy skrypt poza repo (przed RC-05), GPIO Zero + `lgpio`, PWM 100 Hz, koła uniesione. Piny IN1–IN4 osiągają oba poziomy przy ENA/ENB = LOW. Impulsy 1 s przy duty 0,7 i 1,0: A = lewe koło, B = prawe, oba kierunki, przy 1,0 wyraźnie szybciej; A+B razem 1,5 s przy 1,0. Pi: `throttled=0x0` przez cały test, temperatura SoC 50,6 °C. Napęd odcięty od zasilania + 100% na obu kanałach: koła stoją, czyli napęd nie jest zasilany z Pi. Znalezisko: po zamknięciu GPIO Zero ENA wisi na HIGH ([07 §2](07-sprzet-i-naped.md#2-połączenia-i-gpio)). Bez miernika: brak napięć pakietu i silników, prądu i temperatury silników, więc P01, P03 i P05 pozostają otwarte |
 | — (smoke test na docelowym powerbanku) | 2026-10-24 | Skrypt przeszedł, bez undervoltage | `rc-diagnostics --all` (RC-05), konfiguracja z `config.example.toml`, PWM 100 Hz. Przebiegi: duty 0,5 po 1 s i duty 0,9 po 2 s na próbę (A, B, A+B, oba kierunki); oba zakończone kodem 0, po każdym ENA/ENB = wyjście LOW. Pi: `get_throttled` i `in0_lcrit_alarm` próbkowane co ~50 ms przez cały czas, zawsze `0x0` / `0`; temperatura SoC 45,2 → 47,2 °C. Pi 4B nie mierzy napięcia wejścia 5 V, więc wynik oznacza tylko brak spadku poniżej progu undervoltage (~4,63 V). Obrót kół nie został zapisany w tym wierszu. Bez miernika i bez modelu powerbanku i kabla P06 pozostaje otwarta |
 
 ## 4. Progi zaliczenia

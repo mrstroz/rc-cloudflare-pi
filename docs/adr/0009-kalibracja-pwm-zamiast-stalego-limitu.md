@@ -28,7 +28,7 @@ Limit jazdy wynika z pomiaru. Diagnostyka dopuszcza krótkie próby do `max_duty
 - Próby przy 100% wymagają kontroli napięcia, prądu i temperatury oraz uniesionych kół.
 - Kalibrację trzeba powtórzyć po zmianie ogniw, silników lub mostka.
 
-**Wymagania:** miernik, fizyczny wyłącznik napędu, próby P02 i P03 ([08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp)).
+**Wymagania:** miernik, możliwość odcięcia napędu przez wyjęcie ogniw, próby P02 i P03 ([08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp)).
 
 ## Rozważane warianty
 

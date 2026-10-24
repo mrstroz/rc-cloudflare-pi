@@ -1,6 +1,6 @@
 # 06. Nadzór procesu i systemu
 
-Co wyłącza napęd, gdy sam agent przestaje działać. Żaden z tych mechanizmów nie jest niezależnym od komputera odcięciem zasilania napędu; tę rolę pełni fizyczny wyłącznik ([07 §4](07-sprzet-i-naped.md#4-zasilanie)).
+Co wyłącza napęd, gdy sam agent przestaje działać. Żaden z tych mechanizmów nie jest niezależnym od komputera odcięciem zasilania napędu; tę rolę przy uniesionych kołach pełni wyjęcie ogniw napędu ([07 §4](07-sprzet-i-naped.md#4-zasilanie)); odcięcie przy jeździe po ziemi to [00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 16.
 
 ## 1. Usługa systemd
 
@@ -46,7 +46,7 @@ Blok `finally` w Pythonie nie wystarcza: nie wykona się po `SIGKILL`, a samo za
 | Watchdog procesu | Brak `WATCHDOG=1` | Około 2 s plus helper | `SIGKILL`, helper GPIO, restart usługi w stanie rozbrojonym |
 | Watchdog systemu | `systemd` przestaje karmić `/dev/watchdog0` | Sekundy (początkowo 8 s) plus reset | Restart całego Pi |
 
-Mechanizmy mają różne zakresy i nie składają się w jedną gwarancję zatrzymania w 400 ms. Progi zaliczenia dla każdego poziomu i łańcuch czasu do zatrzymania kół: [08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia). Po każdym restarcie sprawdzamy brak samoczynnego ruchu. Próby resetu i zawieszenia wykonujemy tylko z uniesionymi kołami i dostępnym wyłącznikiem ([08 §1](08-proby-odbiorowe.md#1-zasady-prób)).
+Mechanizmy mają różne zakresy i nie składają się w jedną gwarancję zatrzymania w 400 ms. Progi zaliczenia dla każdego poziomu i łańcuch czasu do zatrzymania kół: [08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia). Po każdym restarcie sprawdzamy brak samoczynnego ruchu. Próby resetu i zawieszenia wykonujemy tylko z uniesionymi kołami i ogniwami napędu w zasięgu ręki ([08 §1](08-proby-odbiorowe.md#1-zasady-prób)).
 
 ## 5. Sieć Wi-Fi
 

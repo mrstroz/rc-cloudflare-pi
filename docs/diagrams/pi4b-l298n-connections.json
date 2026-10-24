@@ -81,7 +81,7 @@
   ],
   "power": {
     "pi": "existing powerbank via USB-C; verify port 5 V / 3 A and cable",
-    "motor_supply": "4xAAA positive through switch to +12V; negative to GND",
+    "motor_supply": "4xAAA positive to +12V (no switch; cut by removing the cells); negative to GND",
     "logic": "Pi pin2 to +5V with regulator jumper removed"
   },
   "pulldowns_ohm": {

@@ -10,7 +10,7 @@ Posiadany zestaw, sposób sterowania mostkiem i profil jazdy. Parametry egzempla
 | Zasilanie Pi | Posiadany powerbank przez USB-C; wymaganie 5 V / 3 A | Bez ostrzeżeń undervoltage (`throttled=0x0`) przy obu silnikach na 100% z uniesionymi kołami (2026-10-24); model, port i kabel do zapisania, próba P06 otwarta |
 | Sterownik | L298N, Botland MOD-03164 | Posiadany; zworki ENA, ENB i CON5 zdjęte (2026-10-24) |
 | Napęd | 2× szczotkowy silnik DC z przekładnią TT, roboczo 3–6 V, jeden na koło | Oba kanały kręcą w obu kierunkach (smoke test, [08 §3](08-proby-odbiorowe.md#3-wyniki)); SKU niepotwierdzony, DNG-16016 jako punkt odniesienia (§7) |
-| Zasilanie napędu | Koszyk 4×AAA przez fizyczny wyłącznik | Wyłącznik odcina napęd: przy wyłączonym i 100% PWM koła stoją. Rodzaj ogniw i napięcie pod obciążeniem do sprawdzenia; brak miernika |
+| Zasilanie napędu | Koszyk 4×AAA, bez wyłącznika | Odcięcie napędu to wyjęcie ogniw: przy odciętym i 100% PWM koła stoją. Rodzaj ogniw i napięcie pod obciążeniem do sprawdzenia; brak miernika |
 | System | Debian GNU/Linux 13 (trixie) z repozytoriami Raspberry Pi, kernel 6.18.50+rpt-rpi-v8, Python 3.13.5 | Potwierdzony 2026-10-24 |
 | Backend PWM | GPIO Zero 2.0.1 z `lgpio` 0.2.2 (pakiety systemowe `python3-gpiozero`, `python3-lgpio`) | Kandydat; działa w smoke teście. Wybór zamyka próba helpera RC-04 ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 2) |
 
@@ -50,7 +50,7 @@ Próg stanu wysokiego wejść L298 to minimum 2,3 V, więc GPIO 3,3 V przy wspó
 ## 4. Zasilanie
 
 - Pi: wyłącznie powerbank przez USB-C. Pakiet napędu nie zasila Pi, a regulator L298N nie zasila Pi ([ADR-0011](../adr/0011-osobne-zasilanie-pi-i-napedu.md)).
-- Napęd: plus 4×AAA przez fizyczny wyłącznik na zacisk `+12V` modułu, minus na `GND`. Napis `+12V` oznacza wejście zasilania mostka, nie napięcie dla tych silników.
+- Napęd: plus 4×AAA na zacisk `+12V` modułu, bez wyłącznika (odcięcie to wyjęcie ogniw), minus na `GND`. Napis `+12V` oznacza wejście zasilania mostka, nie napięcie dla tych silników.
 - Logika L298N: 5 V z pinu 2 Pi, regulator modułu odłączony zworką CON5. Linia 5 V Pi może pozostać zasilana przy zawieszonym systemie, więc wyłączenie logiki mostka nie jest zabezpieczeniem.
 
 | Wielkość | Wartość | Źródło |

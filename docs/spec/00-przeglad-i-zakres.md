@@ -61,7 +61,7 @@ Wersja 1 to MVP z briefu: etapy E1–E5.
 |---|---|
 | Operator | Zalogować się do panelu, zobaczyć stan auta i połączenia, świadomie przejąć sterowanie |
 | Kierowca | Sterować oboma kołami z telefonu lub komputera i zatrzymać auto jednym przyciskiem |
-| Osoba przy aucie | Wykonać próby sprzętowe z uniesionymi kołami i fizycznym wyłącznikiem napędu w zasięgu ręki |
+| Osoba przy aucie | Wykonać próby sprzętowe z uniesionymi kołami i ogniwami napędu w zasięgu ręki (auto nie ma wyłącznika napędu) |
 
 W wersji 1 wszystkie trzy role pełni zwykle jedna osoba.
 
@@ -132,3 +132,4 @@ Numery kwestii są stałe, bo plan się do nich odwołuje. Rozstrzygnięta kwest
 | 13 | Jakie limity rozmiaru i częstotliwości wiadomości stosuje DO? | Rozstrzygnięta: `protocol/limits.json`, wartości i reguły w [02 §10](02-protokol-v1.md#10-pliki-w-protocol) | Schematy w `protocol/` (RC-12) |
 | 14 | Czy dodać zewnętrzne 10 kΩ ENA–GND i ENB–GND? | Z rezystorami; bez | Próba P04: start, reset i odłączenie Pi bez ruchu kół |
 | 15 | Jak agent kończy pracę przy błędzie trwałym (odrzucony token, zła konfiguracja, błąd helpera), skoro `systemd` restartuje go co 1 s? | Kod wyjścia z `RestartPreventExitStatus`; długi odstęp ponowień w procesie | Projekt usługi `systemd` i próba z błędnym tokenem na Pi |
+| 16 | Czym odcinamy napęd przy jeździe po ziemi, skoro koszyk 4×AAA nie ma wyłącznika? | Wyłącznik w przewodzie plus; wyjęcie ogniw; inne odcięcie niezależne od Pi | Decyzja właściciela projektu przed pierwszą jazdą po ziemi (P22, P25); przy uniesionych kołach wystarcza wyjęcie ogniw. Właściciel nie planuje wyłącznika (2026-10-24) |
