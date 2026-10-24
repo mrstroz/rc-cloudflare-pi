@@ -21,6 +21,7 @@ Na komputerze bez GPIO wystarcza zwykły venv (`python3 -m venv .venv`); `gpioze
 | Testy | `.venv/bin/pytest` |
 | Lint | `.venv/bin/ruff check . && .venv/bin/ruff format --check .` |
 | Typy | `.venv/bin/mypy` |
+| Helper GPIO (ENA i ENB na LOW) | `.venv/bin/rc-gpio-helper --config /etc/rc-agent/config.toml` |
 
 ## Konfiguracja
 

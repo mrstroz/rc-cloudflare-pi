@@ -14,6 +14,9 @@ dependencies = [
     "gpiozero==2.0.1.*",
 ]
 
+[project.scripts]
+rc-gpio-helper = "rc_agent.gpio_helper:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest==9.1.1",

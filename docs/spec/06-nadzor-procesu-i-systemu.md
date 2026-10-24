@@ -26,7 +26,9 @@ Osobny program wywoływany przez `ExecStartPre` i `ExecStopPost`. Musi:
 - działać dla wybranego backendu PWM ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 2),
 - zatrzymać istniejący PWM, także sprzętowy lub obsługiwany przez osobny daemon,
 - ustawić oba enable (GPIO12, GPIO13) jako wyjścia LOW,
-- zakończyć się w ciągu 500 ms ([08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia), T4).
+- zakończyć się w ciągu 500 ms ([08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia), T4); komenda dostaje limit czasu 0,4 s.
+
+Piny bierze z konfiguracji agenta. Gdy konfiguracji nie da się wczytać, helper i tak wyłącza domyślne GPIO12 i GPIO13 ([07 §2](07-sprzet-i-naped.md#2-połączenia-i-gpio)), wypisuje powód i kończy się kodem 2, żeby usługa nie wystartowała na złej konfiguracji. Kod 1 oznacza błąd samej komendy i ma pierwszeństwo przed 2: piny mogły nie zostać wyłączone.
 
 Blok `finally` w Pythonie nie wystarcza: nie wykona się po `SIGKILL`, a samo zakończenie procesu ani rezystor nie gwarantują wyłączenia PWM. Błąd helpera blokuje start usługi i uzbrojenie do usunięcia przyczyny ([05 §4](05-agent-pi.md#4-uzbrojenie-i-sesja-ruchu)).
 

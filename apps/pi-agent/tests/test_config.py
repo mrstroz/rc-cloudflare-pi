@@ -123,3 +123,10 @@ def test_rejects_invalid_toml(tmp_path: Path) -> None:
     bad.write_text("[pins\n")
     with pytest.raises(ConfigError, match=r"config\.toml"):
         load_config(bad)
+
+
+def test_rejects_file_that_is_not_utf8(tmp_path: Path) -> None:
+    bad = tmp_path / "config.toml"
+    bad.write_bytes(b"\xff\xfe[pins]\n")
+    with pytest.raises(ConfigError, match=r"config\.toml"):
+        load_config(bad)

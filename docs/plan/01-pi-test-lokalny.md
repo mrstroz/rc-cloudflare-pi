@@ -25,6 +25,7 @@
       Spec: [06 §2](../spec/06-nadzor-procesu-i-systemu.md#2-helper-gpio) · Zależy od: RC-01, RC-02
       Gotowe, gdy: po `kill -9` procesu z aktywnym PWM helper ustawia oba enable LOW, zmierzone na pinach.
       Zamyka kwestię 2 w 00 §9; od wyniku zależy projekt usługi w E3.
+      Kod i testy offline gotowe (`rc-gpio-helper`, 2026-10-24); kryterium wymaga Pi: pomiar pinów po `kill -9` i T4 nie wykonane.
 
 - [ ] (^) **RC-05** Skrypt diagnostyczny kanałów A i B z limitem czasu każdej próby
       Spec: [07 §6](../spec/07-sprzet-i-naped.md#6-diagnostyka-lokalna) · Zależy od: RC-03

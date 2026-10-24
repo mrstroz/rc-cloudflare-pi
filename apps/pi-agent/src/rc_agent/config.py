@@ -18,6 +18,9 @@ MAX_FRESHNESS_TTL_MS = 400
 CALIBRATION_KEYS = ("left_forward", "left_reverse", "right_forward", "right_reverse")
 # User-accessible BCM GPIO on the Pi 4B header.
 VALID_BCM = range(2, 28)
+# ENA and ENB on the Pi 4B (docs/spec/07 §2); the GPIO helper falls back to them when the
+# config cannot be read, because switching the enables off matters more than a clean config.
+DEFAULT_ENABLE_PINS = (12, 13)
 
 
 class ConfigError(ValueError):
@@ -274,6 +277,6 @@ def load_config(path: Path) -> Config:
     try:
         with path.open("rb") as f:
             data = tomllib.load(f)
-    except tomllib.TOMLDecodeError as e:
+    except (tomllib.TOMLDecodeError, UnicodeDecodeError) as e:
         raise ConfigError(f"{path}: {e}") from e
     return parse_config(data)

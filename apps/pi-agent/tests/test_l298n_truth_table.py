@@ -29,6 +29,8 @@ _state_at_close: dict[int, float] = {}
 
 
 class RecordingPin(MockPWMPin):  # type: ignore[misc]
+    """Relies on MockPin's private ``_change_state`` and ``_state`` (gpiozero 2.0.1)."""
+
     def _change_state(self, value: float) -> bool:
         changed: bool = super()._change_state(value)
         if changed:
