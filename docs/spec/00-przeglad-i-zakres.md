@@ -118,7 +118,7 @@ Numery kwestii są stałe, bo plan się do nich odwołuje. Rozstrzygnięta kwest
 | # | Pytanie | Warianty | Co to rozstrzygnie |
 |---|---|---|---|
 | 1 | Jak uwierzytelniać operatora panelu i jego WebSocketu? | Cloudflare Access; własne logowanie z cookie sesji | Decyzja właściciela projektu przed udostępnieniem panelu w internecie |
-| 2 | Która wersja Raspberry Pi OS i który backend PWM GPIO Zero? | `lgpio`, `pigpio`, `RPi.GPIO`, natywny | Sprawdzenie OS na Pi i próba helpera GPIO po zabiciu procesu z aktywnym PWM |
+| 2 | Która wersja Raspberry Pi OS i który backend PWM GPIO Zero? | Rozstrzygnięta: GPIO Zero z `lgpio` dla PWM i helper na `pinctrl`, [07 §1](07-sprzet-i-naped.md#1-zestaw); wynik w [08 §3](08-proby-odbiorowe.md#3-wyniki) | Sprawdzenie OS na Pi i próba helpera GPIO po zabiciu procesu z aktywnym PWM |
 | 3 | Jakie są parametry posiadanych silników? | DNG-16016 lub inny TT 3–6 V | Oznaczenia na obudowie i pomiar prądu przy 100% PWM |
 | 4 | Czy pakiet 4×AAA daje pod obciążeniem `VS ≥ 5,8 V` i wystarczający moment? | Alkaliczne; inne ogniwa; inny pakiet lub mostek | Próba 100% PWM (P03, P05) |
 | 5 | Czy powerbank (model, port, kabel) utrzymuje Pi przy rozruchu silników? | Obecny port i kabel; inny port lub kabel | Próba P06 bez resetów i ostrzeżeń undervoltage |

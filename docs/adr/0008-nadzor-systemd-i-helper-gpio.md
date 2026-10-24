@@ -14,7 +14,7 @@ Domyślny watchdog usługi `systemd` wysyła SIGABRT, a zapis core dump opóźni
 
 ## Decyzja
 
-Agent działa jako usługa `Type=notify` z `WatchdogSec=2s`, `WatchdogSignal=SIGKILL` i `TimeoutStopSec=1s`, karmiąc watchdog po zdrowej iteracji pętli. `ExecStartPre` i `ExecStopPost` uruchamiają helper, który wyłącza oba enable dla wybranego backendu. Wbudowany watchdog Pi działa przez `RuntimeWatchdogSec`, początkowo 8 s. Konfiguracja: [06](../spec/06-nadzor-procesu-i-systemu.md).
+Agent działa jako usługa `Type=notify` z `WatchdogSec=2s`, `WatchdogSignal=SIGKILL` i `TimeoutStopSec=1s`, karmiąc watchdog po zdrowej iteracji pętli. `ExecStartPre` i `ExecStopPost` uruchamiają helper, który wyłącza oba enable. Backend PWM to GPIO Zero z `lgpio`, a helper używa `pinctrl` z pakietów Raspberry Pi, który ustawia stan pada poza procesem. Wbudowany watchdog Pi działa przez `RuntimeWatchdogSec`, początkowo 8 s. Konfiguracja: [06](../spec/06-nadzor-procesu-i-systemu.md).
 
 ## Konsekwencje
 
@@ -27,7 +27,7 @@ Agent działa jako usługa `Type=notify` z `WatchdogSec=2s`, `WatchdogSignal=SIG
 
 - Trzy mechanizmy w trzech skalach czasu; żaden nie gwarantuje zatrzymania w 400 ms przy awarii procesu.
 - Wbudowany watchdog restartuje całe Pi i nie odcina napędu; do restartu wyjścia mogą sterować silnikami.
-- Helper zależy od backendu PWM, który nie jest jeszcze wybrany.
+- Helper zależy od `pinctrl` z pakietów Raspberry Pi; zmiana backendu lub systemu wymaga powtórzenia próby helpera ([08 §3](../spec/08-proby-odbiorowe.md#3-wyniki)).
 
 **Wymagania:** odcięcie napędu przy każdej próbie (przy uniesionych kołach wyjęcie ogniw; jazda po ziemi czeka na [00 §9](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 16); próby P20 i P21 ([08 §2](../spec/08-proby-odbiorowe.md#2-próby-odbiorowe-mvp)).
 

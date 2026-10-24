@@ -81,7 +81,7 @@ All four checks (pytest, ruff check, ruff format, mypy) must pass for a task to 
 ### Connecting
 
 - `ssh pi` — alias in `~/.ssh/config` (`raspberrypi.local`, user `mstroz`, key `~/.ssh/pi`).
-- Pi 4B, Debian 13 (trixie), Python 3.13, passwordless `sudo`. GPIO Zero runs on `lgpio` from system packages (`python3-gpiozero`, `python3-lgpio`). It is still the candidate backend; the RC-04 helper trial makes the final choice (open question 2).
+- Pi 4B, Debian 13 (trixie), Python 3.13, passwordless `sudo`. GPIO Zero runs on `lgpio` from system packages (`python3-gpiozero`, `python3-lgpio`). It is the chosen backend, and the helper uses `pinctrl` (open question 2, resolved by the RC-04 trial in `docs/spec/08-proby-odbiorowe.md` §3).
 - Paths differ: the repo is `~/apps/extra/rc-cloudflare-pi` on the laptop and `~/apps/rc-cloudflare-pi` on the Pi.
 
 ### Getting code onto the Pi

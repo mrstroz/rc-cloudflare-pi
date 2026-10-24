@@ -12,20 +12,18 @@
       Spec: [01 §4–§5](../spec/01-architektura.md#4-układ-repozytorium)
       Gotowe, gdy: polecenia testów i lintera przechodzą i są dopisane do definicji ukończenia w [README](README.md).
 
-- [ ] (=) **RC-02** Inwentaryzacja zestawu: wersja OS, kandydat na backend PWM, oznaczenia silników, ogniwa, powerbank, zworki
+- [ ] (=) **RC-02** Inwentaryzacja zestawu: wersja OS, backend PWM, oznaczenia silników, ogniwa, powerbank, zworki
       Spec: [07 §1](../spec/07-sprzet-i-naped.md#1-zestaw)
-      Gotowe, gdy: 07 §1 podaje wersję OS, kandydata na backend PWM i oznaczenia z obudów silników.
+      Gotowe, gdy: 07 §1 podaje wersję OS, backend PWM i oznaczenia z obudów silników.
       OS, backend i zworki wpisane po smoke teście 2026-10-24; brakuje oznaczeń silników, rodzaju ogniw i modelu powerbanku.
 
 - [x] (^) **RC-03** Adapter L298N: cztery wyjścia kierunku, dwa enable z PWM, piny i odwrócenie z konfiguracji
       Spec: [07 §3](../spec/07-sprzet-i-naped.md#3-sterowanie-mostkiem) · ADR: [0010](../adr/0010-stop-jako-wybieg.md) · Zależy od: RC-01
       Gotowe, gdy: testy na atrapie pinów GPIO Zero potwierdzają każdy wiersz tabeli 07 §3 i oba enable = 0 po `stop`.
 
-- [ ] (=) **RC-04** Helper GPIO wyłączający ENA i ENB dla wybranego backendu
+- [x] (=) **RC-04** Helper GPIO wyłączający ENA i ENB dla wybranego backendu
       Spec: [06 §2](../spec/06-nadzor-procesu-i-systemu.md#2-helper-gpio) · Zależy od: RC-01, RC-02
       Gotowe, gdy: po `kill -9` procesu z aktywnym PWM helper ustawia oba enable LOW, zmierzone na pinach.
-      Zamyka kwestię 2 w 00 §9; od wyniku zależy projekt usługi w E3.
-      Kod i testy offline gotowe (`rc-gpio-helper`, 2026-10-24); kryterium wymaga Pi: pomiar pinów po `kill -9` i T4 nie wykonane.
 
 - [ ] (^) **RC-05** Skrypt diagnostyczny kanałów A i B z limitem czasu każdej próby
       Spec: [07 §6](../spec/07-sprzet-i-naped.md#6-diagnostyka-lokalna) · Zależy od: RC-03

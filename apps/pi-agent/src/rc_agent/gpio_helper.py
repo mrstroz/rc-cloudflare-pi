@@ -3,9 +3,9 @@
 Run it before the agent starts and after every exit (``ExecStartPre`` and
 ``ExecStopPost``), and after any program that closed a ``Bridge``: closing releases the
 pins, and lgpio leaves them as inputs that the L298N pulls high (07 §2). It uses
-``pinctrl``, the candidate backend from 07 §1, because it sets the pad state and that
-state outlives the process. Whether it really holds after ``kill -9`` is the hardware
-check of RC-04; offline only the command and the exit codes are tested.
+``pinctrl`` (07 §1, ADR-0008), because it sets the pad state and that state outlives the
+process. Measured on the Pi (08 §3): after ``kill -9`` the enables keep their last level
+and this helper sets both LOW; offline only the command and the exit codes are tested.
 
 Exit codes: 0 done, 1 the command failed, 2 bad arguments or a config that cannot be
 used. The pins are switched off in every case: those from ``[pins]`` when that table is
