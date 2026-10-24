@@ -45,7 +45,7 @@ Numeracja `RC-NN` biegnie przez cały projekt, niezależnie od pliku i etapu. Nu
 ## Definicja ukończenia
 
 1. Testy, typy i lint aplikacji, której dotyczy zadanie, przechodzą. Polecenia dla `apps/cloudflare/` dopisze RC-23.
-   - `apps/pi-agent/` (z katalogu aplikacji, venv według [jej README](../../apps/pi-agent/README.md)): `.venv/bin/pytest`, `.venv/bin/ruff check .`, `.venv/bin/ruff format --check .`, `.venv/bin/mypy`. Testy zawsze używają atrapy pinów GPIO Zero i nie ruszają silników.
+   - `apps/pi-agent/` (z katalogu aplikacji, venv według [jej README](../../apps/pi-agent/README.md)): `.venv/bin/pytest`, `.venv/bin/ruff check . ../../protocol/tools --config pyproject.toml`, `.venv/bin/ruff format --check . ../../protocol/tools --config pyproject.toml`, `.venv/bin/mypy` (objęte jest też `protocol/tools`). Testy zawsze używają atrapy pinów GPIO Zero i nie ruszają silników.
 2. Zmiana kontraktu: schemat i przykłady w `protocol/` w tym samym commicie, a walidatory obu aplikacji przechodzą przykłady (od RC-10).
 3. Próba na sprzęcie: zasady z [08 §1](../spec/08-proby-odbiorowe.md#1-zasady-prób), wynik dopisany w [08 §3](../spec/08-proby-odbiorowe.md#3-wyniki).
 4. Żadnych sekretów w repozytorium, tylko wzory konfiguracji.

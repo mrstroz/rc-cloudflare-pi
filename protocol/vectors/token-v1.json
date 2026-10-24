@@ -1,0 +1,242 @@
+{
+  "version": 1,
+  "description": "Token vectors for docs/spec/02 §5. valid: token is what the Pi issues for (key, session_id, issued_pi_ms). invalid: verifying token against (key, session_id) must fail with the given reason; pattern_rejects says whether the freshness_token pattern already rejects it.",
+  "valid": [
+    {
+      "name": "typical",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "issued_pi_ms": 4200,
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU"
+    },
+    {
+      "name": "zero",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "issued_pi_ms": 0,
+      "token": "0.JsSCKOZZRCHyCf7j8FFwjd1cXbS4YFDcDyd8WY9uZ-E"
+    },
+    {
+      "name": "one",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "issued_pi_ms": 1,
+      "token": "1.Zsd9cEW18MR_Gnl2R8IhKtL78S2uNMm4U9i9FxqYPTo"
+    },
+    {
+      "name": "max-safe-integer",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "issued_pi_ms": 9007199254740991,
+      "token": "9007199254740991.66Buoofw6rqOkCRMwg4HUDvBvAvwidtTuXGo7bUYrrw"
+    },
+    {
+      "name": "session-id-with-dash-or-underscore",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "k6urQcxy_f2c12r94zeaVQ",
+      "issued_pi_ms": 4200,
+      "token": "4200.NPzQfdxIH6IAnnDJDgPs03lidA6HeA80PAISuteZRZY"
+    },
+    {
+      "name": "mac-with-dash-or-underscore",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "XficJo9ByVySYIobkp2YNg",
+      "issued_pi_ms": 4200,
+      "token": "4200.QzqiychwQRewGXmGAA-DVZ-NPgC0MO_rX07hdLfzonU"
+    }
+  ],
+  "invalid": [
+    {
+      "name": "other-key",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.0fuAwp6To-Qn3IujNNoD_WkxSI4-4U31Y7Q4E4BtNcw",
+      "reason": "mac",
+      "pattern_rejects": false
+    },
+    {
+      "name": "issued-plus-one",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4201.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "mac",
+      "pattern_rejects": false
+    },
+    {
+      "name": "issued-minus-one",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4199.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "mac",
+      "pattern_rejects": false
+    },
+    {
+      "name": "other-session",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.0dcLi5OrNKFFQxVXNUaDkxKCEDujp_vi5f5q1pHI6c8",
+      "reason": "mac",
+      "pattern_rejects": false
+    },
+    {
+      "name": "other-version",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.gVBfsl6jO1WbyMeyuGdWH0WjEuhPtukQpPYX4Xay4AQ",
+      "reason": "mac",
+      "pattern_rejects": false
+    },
+    {
+      "name": "mac-one-letter-case-changed",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.PO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "mac",
+      "pattern_rejects": false
+    },
+    {
+      "name": "leading-zero",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "04200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "plus-sign",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "+4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "minus-sign",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "-4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "underscore-in-digits",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4_200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "fullwidth-digits",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "４２００.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "leading-space",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": " 4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "trailing-space",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU ",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "trailing-newline",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU\n",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "two-dots",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200..pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "empty-mac",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "no-dot",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "mac-with-padding",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU=",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "mac-42-chars",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYH",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "mac-44-chars",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHUA",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "issued-above-max-safe-integer",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "9007199254740992.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": false
+    },
+    {
+      "name": "issued-17-digits",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "10000000000000000.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHU",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "non-canonical-last-char",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "hAl4KPwxqMjSkhDfSJAahQ",
+      "token": "4200.pO4jNWEKIixfqHW8iCqQWfZZ5t1gH2mALN6abxHBYHV",
+      "reason": "format",
+      "pattern_rejects": true
+    },
+    {
+      "name": "standard-alphabet-same-mac",
+      "key_hex": "ea8892987c622a9df847f5e6d36c336875b6245f11e5eff387c1f45f3ee0a9cf",
+      "session_id": "XficJo9ByVySYIobkp2YNg",
+      "token": "4200.QzqiychwQRewGXmGAA+DVZ+NPgC0MO/rX07hdLfzonU",
+      "reason": "format",
+      "pattern_rejects": true
+    }
+  ]
+}

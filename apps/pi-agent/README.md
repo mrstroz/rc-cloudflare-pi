@@ -19,7 +19,7 @@ Na komputerze bez GPIO wystarcza zwykły venv (`python3 -m venv .venv`); `gpioze
 | Co | Polecenie |
 |---|---|
 | Testy | `.venv/bin/pytest` |
-| Lint | `.venv/bin/ruff check . && .venv/bin/ruff format --check .` |
+| Lint | `.venv/bin/ruff check . ../../protocol/tools --config pyproject.toml && .venv/bin/ruff format --check . ../../protocol/tools --config pyproject.toml` |
 | Typy | `.venv/bin/mypy` |
 | Diagnostyka kół (po sprawdzeniu zasilania) | `.venv/bin/rc-diagnostics --config /etc/rc-agent/config.toml --duty 0.5 --all` |
 | Helper GPIO (ENA i ENB na LOW) | `.venv/bin/rc-gpio-helper --config /etc/rc-agent/config.toml` |

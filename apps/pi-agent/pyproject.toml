@@ -45,7 +45,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 
 [tool.mypy]
 strict = true
-files = ["src", "tests"]
+files = ["src", "tests", "../../protocol/tools"]
 
 # gpiozero and jsonschema ship no type information.
 [[tool.mypy.overrides]]

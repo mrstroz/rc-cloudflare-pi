@@ -9,7 +9,8 @@ Kontrakt protokołu v1 ([spec 02](../docs/spec/02-protokol-v1.md)). Zasady, dial
 | `message-types.json` | Odcinki: kto komu wysyła każdy typ |
 | `examples/case.schema.json` | Kształt pliku przypadku |
 | `examples/valid`, `examples/invalid` | Przypadki przyjęte i odrzucone |
-| `vectors/` | Wektory testowe tokenu |
+| `vectors/token-v1.json` | Wektory testowe tokenu: poprawne i odrzucane z powodem |
+| `tools/gen_token_vectors.py` | Odtwarza wektory (`--check` sprawdza, czy plik jest aktualny) |
 | `limits.json` | Limity rozmiaru i częstotliwości |
 
 Testy: z `apps/pi-agent/` polecenie `.venv/bin/pytest tests/test_protocol_*.py`.

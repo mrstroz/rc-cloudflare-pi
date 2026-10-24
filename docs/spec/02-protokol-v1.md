@@ -65,6 +65,19 @@ Pi wydaje token w `armed`, a potem co `token_interval_ms` w uzbrojonej sesji. To
 | `issued_pi_ms` | Całkowite milisekundy z `time.monotonic_ns()` liczone od początku sesji |
 | MAC | HMAC-SHA256 kluczem sesji po wersji protokołu, `session_id` i `issued_pi_ms` |
 
+Kodowanie:
+
+| Element | Zapis |
+|---|---|
+| `session_id` | 22 znaki base64url bez paddingu (128 bitów losowych) |
+| `issued_pi_ms` | Liczba całkowita 0…2^53−1, dziesiętnie bez zer wiodących (`0` dla zera) |
+| Wejście MAC | Bajty ASCII: `v1`, LF, `session_id`, LF, `issued_pi_ms`. Alfabet `session_id` nie zawiera LF, więc granice pól są jednoznaczne |
+| Klucz | 32 losowe bajty |
+| MAC | Pełne HMAC-SHA256, 32 bajty |
+| Token | `<issued_pi_ms>.<MAC w base64url bez paddingu>`, 43 znaki MAC. Ostatni znak niesie 4 bity, więc w zapisie kanonicznym jego dwa najniższe bity są zerowe |
+
+Base64url to alfabet z RFC 4648 §5 (`-` i `_`). Pi sprawdza token w tej kolejności: pełne dopasowanie wzorca (tylko ASCII), potem kodowanie oczekiwanego tokenu dla `issued_pi_ms` z odebranego i `session_id` bieżącej sesji Pi (nie z ramki), na końcu porównanie obu napisów jako bajtów ASCII przez `hmac.compare_digest`. Inny zapis tego samego MAC (niekanoniczny ostatni znak, zera wiodące) jest odrzucany. Wzorzec napisu: `freshness_token` w `protocol/schemas/common.schema.json`. Wektory testowe, w tym negatywne: `protocol/vectors/token-v1.json`.
+
 Klucz HMAC jest losowy, nowy dla każdej sesji, istnieje tylko w pamięci Pi i znika przy rozbrojeniu lub reconnect. To unieważnia wszystkie tokeny starej sesji. Pi nie przechowuje listy wydanych tokenów.
 
 Przy `drive` Pi sprawdza format, bieżącą sesję, MAC porównaniem `hmac.compare_digest` oraz `0 ≤ now_pi_ms − issued_pi_ms ≤ freshness_ttl_ms`. Czas z przyszłości jest odrzucany.
