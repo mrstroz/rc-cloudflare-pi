@@ -7,9 +7,10 @@ pins, and lgpio leaves them as inputs that the L298N pulls high (07 §2). It use
 state outlives the process. Whether it really holds after ``kill -9`` is the hardware
 check of RC-04; offline only the command and the exit codes are tested.
 
-Exit codes: 0 done, 1 the command failed, 2 the config could not be read. In the last
-case the default enable pins are switched off anyway and the nonzero code still blocks
-the service from starting (06 §2). 1 wins over 2: the pins may not have been switched off.
+Exit codes: 0 done, 1 the command failed, 2 bad arguments or a config that cannot be
+used. The pins are switched off in every case: those from ``[pins]`` when that table is
+valid, otherwise the defaults; code 2 still blocks the service from starting (06 §2).
+1 wins over 2: the pins may not have been switched off.
 """
 
 from __future__ import annotations
@@ -20,7 +21,7 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 
-from rc_agent.config import DEFAULT_ENABLE_PINS, Pins, load_config
+from rc_agent.config import DEFAULT_ENABLE_PINS, Pins, parse_config, parse_pins, read_toml
 
 # T4 in docs/spec/08 §4: the helper ends within 500 ms.
 COMMAND_TIMEOUT_S = 0.4
@@ -56,35 +57,52 @@ def disable_enables(pins: Pins, run_cmd: Runner = subprocess.run) -> None:
     _run(enable_off_command(pins), run_cmd)
 
 
+def _finish(pins: tuple[int, int], problem: str | None, run_cmd: Runner) -> int:
+    """Switch the pins off whatever the problem was; 1 (command failed) wins over 2."""
+    code = 2 if problem else 0
+    if problem:
+        print(problem, file=sys.stderr)
+    try:
+        _run(_command(*pins), run_cmd)
+    except HelperError as e:
+        print(e, file=sys.stderr)
+        code = 1
+    return code
+
+
 def main(argv: list[str] | None = None, run_cmd: Runner = subprocess.run) -> int:
     parser = argparse.ArgumentParser(
-        prog="rc-gpio-helper", description="Switch ENA and ENB low (docs/spec/06 §2)."
+        prog="rc-gpio-helper",
+        description="Switch ENA and ENB low (docs/spec/06 §2).",
+        exit_on_error=False,
     )
     parser.add_argument(
         "--config",
         type=Path,
         help="agent config; without it the default enable pins are used",
     )
-    args = parser.parse_args(argv)
-
-    command = _command(*DEFAULT_ENABLE_PINS)
-    config_error: str | None = None
-    if args.config is not None:
-        try:
-            command = enable_off_command(load_config(args.config).pins)
-        # Any failure to read the config falls back: switching the enables off comes first.
-        except Exception as e:
-            config_error = f"cannot read config, switching off the default pins: {e}"
-
-    code = 2 if config_error else 0
-    if config_error:
-        print(config_error, file=sys.stderr)
+    pins = DEFAULT_ENABLE_PINS
     try:
-        _run(command, run_cmd)
-    except HelperError as e:
-        print(e, file=sys.stderr)
-        code = 1
-    return code
+        args = parser.parse_args(argv)
+    except argparse.ArgumentError as e:
+        parser.print_usage(sys.stderr)
+        return _finish(
+            pins, f"bad arguments, switching off GPIO {pins[0]} and {pins[1]}: {e}", run_cmd
+        )
+
+    if args.config is None:
+        return _finish(pins, None, run_cmd)
+    try:
+        data = read_toml(args.config)
+        found = parse_pins(data)
+        pins = (found.ena, found.enb)
+        parse_config(data)
+    # Any failure keeps the pins found so far: switching the enables off comes first.
+    except Exception as e:
+        return _finish(
+            pins, f"cannot use config, switching off GPIO {pins[0]} and {pins[1]}: {e}", run_cmd
+        )
+    return _finish(pins, None, run_cmd)
 
 
 if __name__ == "__main__":

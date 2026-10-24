@@ -69,12 +69,11 @@ class Bridge:
             def pwm(pin: int) -> PWMOutputDevice:
                 return stack.enter_context(PWMOutputDevice(pin, frequency=pwm_frequency_hz))
 
-            self._left = _Wheel(
-                pwm(pins.ena), digital(pins.in1), digital(pins.in2), wheels.left_inverted
-            )
-            self._right = _Wheel(
-                pwm(pins.enb), digital(pins.in3), digital(pins.in4), wheels.right_inverted
-            )
+            # Both enables first, so neither is left unclaimed while the direction pins are set up.
+            ena = pwm(pins.ena)
+            enb = pwm(pins.enb)
+            self._left = _Wheel(ena, digital(pins.in1), digital(pins.in2), wheels.left_inverted)
+            self._right = _Wheel(enb, digital(pins.in3), digital(pins.in4), wheels.right_inverted)
             self._devices = stack.pop_all()
 
     @property

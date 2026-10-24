@@ -10,7 +10,7 @@ Program Python na Raspberry Pi. Jest jedynym autorytetem napędu: uzbraja, prowa
 | `arm` spełniający §4 | rozbrojony | uzbrojony | bez zmian (wejścia neutralne) |
 | Przyjęty `drive` (§5) | uzbrojony | uzbrojony | wysterowanie według profilu |
 | `stop` | dowolny | rozbrojony | oba enable = 0 |
-| 400 ms bez przyjętego `drive` | uzbrojony | rozbrojony | oba enable = 0 |
+| `motion_watchdog_ms` bez przyjętego `drive` | uzbrojony | rozbrojony | oba enable = 0 |
 | Błąd sterowania | uzbrojony | rozbrojony | oba enable = 0 |
 | Rozłączenie z DO | uzbrojony | rozbrojony | oba enable = 0 |
 | Reconnect | rozbrojony | rozbrojony | bez zmian |
@@ -31,7 +31,7 @@ Każde rozbrojenie unieważnia sesję ruchu, jej `seq` i klucz HMAC. Stan nie je
 - Obsługa sieci, pętla sterowania i watchdog są oddzielone. Pętla działa także bez sieci, z wyłączonym napędem.
 - Pętla bierze najnowszy ważny stan; nie wykonuje zaległej sekwencji ruchów.
 - Pętla działa z okresem 10 ms (wartość początkowa) i w każdej iteracji sprawdza termin watchdoga.
-- Watchdog ruchu mierzy czas od ostatniego przyjętego `drive`, a przed pierwszym od `armed`, zegarem monotonicznym. Po 400 ms wyłącza napęd, rozbraja agenta i unieważnia sesję.
+- Watchdog ruchu mierzy czas od ostatniego przyjętego `drive`, a przed pierwszym od `armed`, zegarem monotonicznym. Po `motion_watchdog_ms` (wartość początkowa 400 ms, najwyżej 400 ms, T1 w [08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia)) wyłącza napęd, rozbraja agenta i unieważnia sesję.
 - Przy odbiorze `drive` agent najpierw sprawdza termin watchdoga. Jeśli minął, rozbraja się i odrzuca komendę, nawet gdy iteracja pętli jeszcze tego nie zrobiła.
 - `stop` wyłącza oba enable najpóźniej w ciągu jednego okresu pętli od odbioru.
 - Watchdoga nie przedłużają: `heartbeat`, telemetria, wydanie tokenu, ramki Ping/Pong. Opóźniona komenda nie może wznowić ruchu po rozbrojeniu.
@@ -54,7 +54,7 @@ Agent sprawdza kolejno:
 
 | Krok | Odrzucenie, gdy |
 |---|---|
-| Termin watchdoga | Minęło ponad 400 ms od ostatniego przyjętego `drive` lub od `armed`; agent najpierw się rozbraja |
+| Termin watchdoga | Minęło ponad `motion_watchdog_ms` od ostatniego przyjętego `drive` lub od `armed`; agent najpierw się rozbraja |
 | Struktura według `protocol/` | Brak pola, zły typ, `v ≠ 1` |
 | Sesja | `session_id` inny niż bieżący lub brak uzbrojenia |
 | Dzierżawa | `lease_id` inny niż związany z sesją |

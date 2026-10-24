@@ -9,13 +9,12 @@ from __future__ import annotations
 
 import math
 import tomllib
-from dataclasses import astuple, dataclass
+from dataclasses import astuple, dataclass, field, fields
 from pathlib import Path
 from typing import Any
 
-# T8 in docs/spec/08 §4: a command may not be older than the motion watchdog window.
-MAX_FRESHNESS_TTL_MS = 400
-CALIBRATION_KEYS = ("left_forward", "left_reverse", "right_forward", "right_reverse")
+# T1 in docs/spec/08 §4: the motion watchdog window is at most 400 ms.
+MAX_MOTION_WATCHDOG_MS = 400
 # User-accessible BCM GPIO on the Pi 4B header.
 VALID_BCM = range(2, 28)
 # ENA and ENB on the Pi 4B (docs/spec/07 §2); the GPIO helper falls back to them when the
@@ -31,7 +30,7 @@ class ConfigError(ValueError):
 class Connection:
     worker_url: str
     car_id: str
-    device_token: str
+    device_token: str = field(repr=False)
     max_queue: int
 
 
@@ -59,12 +58,20 @@ class Calibration:
 
 
 @dataclass(frozen=True)
+class Calibrations:
+    left_forward: Calibration
+    left_reverse: Calibration
+    right_forward: Calibration
+    right_reverse: Calibration
+
+
+@dataclass(frozen=True)
 class Drive:
     pwm_frequency_hz: float
     direction_change_pause_ms: int | None
     deadband: float | None
     limit: float | None
-    calibration: dict[str, Calibration]
+    calibration: Calibrations
 
 
 @dataclass(frozen=True)
@@ -206,18 +213,18 @@ def _wheels(t: _Table) -> Wheels:
     return wheels
 
 
-def _calibration(t: _Table) -> dict[str, Calibration]:
-    calibration = {}
-    for key in CALIBRATION_KEYS:
-        c = t.table(key)
-        calibration[key] = Calibration(
+def _calibration(t: _Table) -> Calibrations:
+    rows: dict[str, Calibration] = {}
+    for row in fields(Calibrations):
+        c = t.table(row.name)
+        rows[row.name] = Calibration(
             min_start_duty=c.opt_fraction("min_start_duty"),
             min_run_duty=c.opt_fraction("min_run_duty"),
             max_duty=c.opt_fraction("max_duty"),
         )
         c.done()
     t.done()
-    return calibration
+    return Calibrations(**rows)
 
 
 def _drive(t: _Table) -> Drive:
@@ -246,10 +253,13 @@ def _timing(t: _Table) -> Timing:
         telemetry_period_ms=t.integer("telemetry_period_ms", minimum=1),
     )
     t.done()
+    if timing.motion_watchdog_ms > MAX_MOTION_WATCHDOG_MS:
+        raise ConfigError(f"timing.motion_watchdog_ms must be <= {MAX_MOTION_WATCHDOG_MS}")
     ttl = timing.freshness_ttl_ms
     if ttl is not None:
-        if ttl > MAX_FRESHNESS_TTL_MS:
-            raise ConfigError(f"timing.freshness_ttl_ms must be <= {MAX_FRESHNESS_TTL_MS}")
+        # T8 in docs/spec/08 §4: a command may not be older than the motion watchdog window.
+        if ttl > timing.motion_watchdog_ms:
+            raise ConfigError("timing.freshness_ttl_ms must be <= motion_watchdog_ms")
         if ttl <= timing.token_interval_ms:
             raise ConfigError("timing.freshness_ttl_ms must be > token_interval_ms")
         budget = ttl - timing.token_interval_ms
@@ -273,10 +283,21 @@ def parse_config(data: dict[str, Any]) -> Config:
     return config
 
 
-def load_config(path: Path) -> Config:
+def parse_pins(data: dict[str, Any]) -> Pins:
+    """Only the ``[pins]`` table, with the same checks as ``parse_config``.
+
+    The GPIO helper needs the pins even when another table is wrong.
+    """
+    return _pins(_Table(data, "config").table("pins"))
+
+
+def read_toml(path: Path) -> dict[str, Any]:
     try:
         with path.open("rb") as f:
-            data = tomllib.load(f)
+            return tomllib.load(f)
     except (tomllib.TOMLDecodeError, UnicodeDecodeError) as e:
         raise ConfigError(f"{path}: {e}") from e
-    return parse_config(data)
+
+
+def load_config(path: Path) -> Config:
+    return parse_config(read_toml(path))

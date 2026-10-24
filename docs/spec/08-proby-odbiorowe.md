@@ -64,7 +64,7 @@ Próba z czasem lub drogą jest zaliczona, gdy każdy pomiar mieści się w prog
 | T5 | Zabity proces | `SIGKILL` agenta → oba enable LOW | ≤ 1 s | Wykrycie końca procesu przez `systemd` plus T4 |
 | T6 | Zawieszony proces | `SIGSTOP` agenta → oba enable LOW | ≤ 2,5 s | `WatchdogSec` plus T4 |
 | T7 | Watchdog systemu | Zawieszenie `systemd` → reset Pi | ≤ `RuntimeWatchdogSec` + 1 s | Do resetu wyjścia mogą sterować napędem ([06 §3](06-nadzor-procesu-i-systemu.md#3-wbudowany-watchdog-pi)); próg dotyczy resetu, nie enable |
-| T8 | Maksymalny wiek komendy | — | `freshness_ttl_ms` ≤ 400 ms | Komenda nie starsza niż okno watchdoga ruchu |
+| T8 | Maksymalny wiek komendy | — | `freshness_ttl_ms` ≤ `motion_watchdog_ms` (≤ 400 ms) | Komenda nie starsza niż okno watchdoga ruchu |
 | T9 | Droga zatrzymania | Ostatnia przyjęta komenda → koła stoją, na podłodze, przy limicie z profilu | ≤ 50 cm | Mały pojazd w kontrolowanym miejscu; przy przekroczeniu obniżamy limit operatora w [07 §5](07-sprzet-i-naped.md#5-profil-jazdy-i-kalibracja) |
 
 Pełny czas reakcji na utratę kontroli składa się z trzech części: komenda w chwili przyjęcia może mieć do T8, ruch trwa do T1 po ostatniej przyjętej komendzie, potem koła toczą się wybiegiem. T9 mierzy dwie ostatnie części razem. T1–T3 mierzy log agenta i panelu zegarami monotonicznymi; dla T4–T7, gdy agent nie działa, potrzebny jest pomiar na pinie spoza procesu agenta. Metodę zapisujemy razem z wynikiem w §3.

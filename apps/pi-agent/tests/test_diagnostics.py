@@ -9,7 +9,7 @@ import math
 import os
 import signal
 import subprocess
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +21,7 @@ from rc_agent.config import Pins, Wheels
 from rc_agent.diagnostics import (
     MAX_TRIAL_S,
     SAFE_MAX_DUTY,
+    TRIAL_PAUSE_S,
     Args,
     Trial,
     all_trials,
@@ -130,8 +131,13 @@ def matches(actual: tuple[float, ...], expected: tuple[float | None, ...]) -> bo
     return True
 
 
-def args(trials: tuple[Trial, ...], power_checked: bool = False) -> Args:
-    return Args(config=CONFIG, trials=trials, power_checked=power_checked)
+def args(trials: tuple[Trial, ...]) -> Args:
+    return Args(config=CONFIG, trials=trials)
+
+
+def run_bridge(parsed: Args, bridge: Bridge, runner: Any, sleep: Callable[[float], None]) -> int:
+    """run() with an already opened bridge."""
+    return run(parsed, bridge.pins, lambda: bridge, runner, sleep)
 
 
 # --- Trial values ---------------------------------------------------------------------------
@@ -203,7 +209,6 @@ def test_full_duty_requires_power_checked() -> None:
         parse_args(["--config", str(CONFIG), "--duty", over, "--all"])
     assert excinfo.value.code == 2
     parsed = parse_args(["--config", str(CONFIG), "--duty", over, "--all", "--power-checked"])
-    assert parsed.power_checked
     assert all(t.duty == float(over) for t in parsed.trials)
 
 
@@ -261,9 +266,17 @@ def test_run_executes_every_trial_with_stop_between(mock_gpio: MockFactory) -> N
     runner = FakeRunner(mock_gpio)
     trials = all_trials(0.5, 0.2)
 
-    code = run(args(trials), bridge, runner, lambda _: seen.append(snapshot(mock_gpio)))
+    sleeps: list[float] = []
+
+    def sleep(seconds: float) -> None:
+        sleeps.append(seconds)
+        if len(sleeps) % 2:  # trial, pause, trial, pause, ...
+            seen.append(snapshot(mock_gpio))
+
+    code = run_bridge(args(trials), bridge, runner, sleep)
 
     assert code == 0
+    assert sleeps[1::2] == [TRIAL_PAUSE_S] * 5
     assert len(seen) == 6
     for trial, pins in zip(trials, seen, strict=True):
         assert matches(pins, EXPECTED[(trial.channel, trial.direction)]), (trial, pins)
@@ -274,7 +287,7 @@ def test_run_executes_every_trial_with_stop_between(mock_gpio: MockFactory) -> N
 def test_run_releases_pins_then_runs_helper(mock_gpio: MockFactory) -> None:
     bridge = Bridge(PINS, STRAIGHT, 100)
     runner = FakeRunner(mock_gpio)
-    assert run(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) == 0
+    assert run_bridge(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) == 0
     assert len(runner.calls) == 1
     cmd, functions = runner.calls[0]
     assert cmd[:3] == ["pinctrl", "set", "12,13"]
@@ -282,7 +295,7 @@ def test_run_releases_pins_then_runs_helper(mock_gpio: MockFactory) -> None:
     assert functions == ("input", "input")
 
 
-def test_run_helper_gets_pins_from_the_bridge(mock_gpio: MockFactory) -> None:
+def test_run_helper_gets_the_pins_it_was_given(mock_gpio: MockFactory) -> None:
     other = Pins(ena=18, in1=5, in2=6, in3=24, in4=25, enb=19)
     bridge = Bridge(other, STRAIGHT, 100)
     calls: list[list[str]] = []
@@ -291,7 +304,7 @@ def test_run_helper_gets_pins_from_the_bridge(mock_gpio: MockFactory) -> None:
         calls.append(list(cmd))
         return subprocess.CompletedProcess(cmd, 0, "", "")
 
-    assert run(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) == 0
+    assert run_bridge(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) == 0
     assert calls and calls[0][:3] == ["pinctrl", "set", "18,19"]
 
 
@@ -322,7 +335,7 @@ def test_run_cleans_up_on_every_interruption(
     bridge = SpyBridge(PINS, STRAIGHT, 100)
     runner = FakeRunner(mock_gpio)
 
-    code = run(args(all_trials(0.5, 1.0)), bridge, runner, sleep)
+    code = run_bridge(args(all_trials(0.5, 1.0)), bridge, runner, sleep)
 
     assert code == expected
     # Interrupted in the first trial: no further drive, stop, close, then the helper.
@@ -338,7 +351,9 @@ def test_run_reports_both_reasons_when_helper_fails_after_error(
     bridge = Bridge(PINS, STRAIGHT, 100)
     runner = FakeRunner(mock_gpio, returncode=1)
 
-    code = run(args(all_trials(0.5, 1.0)), bridge, runner, _interrupting(RuntimeError("stalled")))
+    code = run_bridge(
+        args(all_trials(0.5, 1.0)), bridge, runner, _interrupting(RuntimeError("stalled"))
+    )
 
     assert code != 0
     err = capsys.readouterr().err
@@ -351,7 +366,7 @@ def test_run_fails_when_helper_fails_after_success(
 ) -> None:
     bridge = Bridge(PINS, STRAIGHT, 100)
     runner = FakeRunner(mock_gpio, returncode=1)
-    assert run(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) != 0
+    assert run_bridge(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) != 0
     assert capsys.readouterr().err.strip()
 
 
@@ -372,12 +387,101 @@ def test_signal_during_cleanup_does_not_cut_it_short(mock_gpio: MockFactory, sig
         calls.append(list(cmd))
         return subprocess.CompletedProcess(cmd, 0, "", "")
 
-    assert run(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) == 0
+    assert run_bridge(args(all_trials(0.5, 0.1)), bridge, runner, lambda _: None) == 0
     assert len(calls) == 1
     assert {s: signal.getsignal(s) for s in before} == before
 
 
 # --- main: config and bridge set-up ----------------------------------------------------------
+
+
+# The handlers are on before the bridge is opened: a signal or an error while the pins are
+# being claimed still ends with the helper (07 §6, 06 §2).
+
+
+def _sigterm_while_opening() -> Bridge:
+    if signal.getsignal(signal.SIGTERM) in (signal.SIG_DFL, signal.SIG_IGN, None):
+        # A real SIGTERM now would end pytest itself: fail the test instead.
+        raise RuntimeError("SIGTERM handler not installed before open_bridge")
+    os.kill(os.getpid(), signal.SIGTERM)
+    raise AssertionError("the SIGTERM handler did not interrupt open_bridge")
+
+
+def _ctrl_c_while_opening() -> Bridge:
+    raise KeyboardInterrupt
+
+
+def _pin_busy_while_opening() -> Bridge:
+    raise RuntimeError("pin in use")
+
+
+@pytest.mark.parametrize(
+    ("open_bridge", "expected"),
+    [
+        (_sigterm_while_opening, 128 + signal.SIGTERM),
+        (_ctrl_c_while_opening, 130),
+        (_pin_busy_while_opening, 1),
+    ],
+    ids=["sigterm", "ctrl-c", "pin-busy"],
+)
+def test_run_interrupted_while_opening_the_bridge_still_runs_helper(
+    mock_gpio: MockFactory, open_bridge: Callable[[], Bridge], expected: int
+) -> None:
+    runner = FakeRunner(mock_gpio)
+    assert run(args(all_trials(0.5, 1.0)), PINS, open_bridge, runner, lambda _: None) == expected
+    assert [cmd[:3] for cmd, _ in runner.calls] == [["pinctrl", "set", "12,13"]]
+
+
+def test_run_reports_a_failed_bridge_setup_as_such(
+    mock_gpio: MockFactory, capsys: pytest.CaptureFixture[str]
+) -> None:
+    runner = FakeRunner(mock_gpio)
+    assert run(args(all_trials(0.5, 1.0)), PINS, _pin_busy_while_opening, runner) == 1
+    err = capsys.readouterr().err
+    assert "cannot set up the bridge: pin in use" in err
+    assert "trial failed" not in err
+
+
+def test_helper_failure_wins_over_interrupted_bridge_setup(mock_gpio: MockFactory) -> None:
+    runner = FakeRunner(mock_gpio, returncode=1)
+    assert run(args(all_trials(0.5, 1.0)), PINS, _ctrl_c_while_opening, runner) == 1
+    assert len(runner.calls) == 1
+
+
+# Between two trials the bridge stays stopped for TRIAL_PAUSE_S, so a wheel coasts before it
+# is reversed; there is no pause after the last trial (07 §6).
+
+
+def test_run_pauses_between_trials_with_both_enables_off(mock_gpio: MockFactory) -> None:
+    enables_in_pause: list[tuple[float, float]] = []
+
+    def sleep(seconds: float) -> None:
+        if seconds == TRIAL_PAUSE_S:
+            enables_in_pause.append(snapshot(mock_gpio)[::3])
+
+    bridge = Bridge(PINS, STRAIGHT, 100)
+    assert run_bridge(args(all_trials(0.5, 0.2)), bridge, FakeRunner(mock_gpio), sleep) == 0
+    assert enables_in_pause == [(0.0, 0.0)] * 5
+
+
+def test_run_single_trial_has_no_pause(mock_gpio: MockFactory) -> None:
+    sleeps: list[float] = []
+    trial = (Trial("A", "forward", 0.5, 0.2),)
+    bridge = Bridge(PINS, STRAIGHT, 100)
+    assert run_bridge(args(trial), bridge, FakeRunner(mock_gpio), sleeps.append) == 0
+    assert sleeps == [0.2]
+
+
+def test_run_interrupted_during_the_pause_cleans_up(mock_gpio: MockFactory) -> None:
+    def sleep(seconds: float) -> None:
+        if seconds == TRIAL_PAUSE_S:
+            raise KeyboardInterrupt
+
+    bridge = SpyBridge(PINS, STRAIGHT, 100)
+    runner = FakeRunner(mock_gpio)
+    assert run_bridge(args(all_trials(0.5, 0.2)), bridge, runner, sleep) == 130
+    assert bridge.calls == ["drive", "stop", "close"]
+    assert [functions for _, functions in runner.calls] == [("input", "input")]
 
 
 def _config(tmp_path: Path, **pins: int) -> Path:
@@ -480,7 +584,8 @@ def test_helper_failure_wins_over_signal_code(mock_gpio: MockFactory) -> None:
     bridge = Bridge(PINS, STRAIGHT, 100)
     runner = FakeRunner(mock_gpio, returncode=1)
     assert (
-        run(args(all_trials(0.5, 1.0)), bridge, runner, _interrupting(signum=signal.SIGTERM)) == 1
+        run_bridge(args(all_trials(0.5, 1.0)), bridge, runner, _interrupting(signum=signal.SIGTERM))
+        == 1
     )
 
 
@@ -499,6 +604,8 @@ def test_cleanup_runs_when_the_terminal_is_gone(
     monkeypatch.setattr("sys.stderr", _GoneTerminal())
     bridge = Bridge(PINS, STRAIGHT, 100)
     runner = FakeRunner(mock_gpio)
-    code = run(args(all_trials(0.5, 1.0)), bridge, runner, _interrupting(signum=signal.SIGHUP))
+    code = run_bridge(
+        args(all_trials(0.5, 1.0)), bridge, runner, _interrupting(signum=signal.SIGHUP)
+    )
     assert code == 128 + signal.SIGHUP
     assert [functions for _, functions in runner.calls] == [("input", "input")]

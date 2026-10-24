@@ -156,8 +156,94 @@ def test_main_falls_back_on_any_config_failure(
     def unexpected(_: Path) -> None:
         raise RuntimeError("unforeseen")
 
-    monkeypatch.setattr("rc_agent.gpio_helper.load_config", unexpected)
+    monkeypatch.setattr("rc_agent.gpio_helper.read_toml", unexpected)
     run = FakeRunner()
     assert main(["--config", str(EXAMPLE_CONFIG)], run_cmd=run) == 2
     assert [c for c, _ in run.calls] == [["pinctrl", "set", "12,13", "op", "dl"]]
     assert "unforeseen" in capsys.readouterr().err
+
+
+def _with_enables_18_19(tmp_path: Path, broken_timing: bool = False) -> Path:
+    swaps = [("ena = 12\n", "ena = 18\n"), ("enb = 13\n", "enb = 19\n")]
+    if broken_timing:
+        swaps.append(("motion_watchdog_ms = 400", 'motion_watchdog_ms = "x"'))
+    return _example_with(tmp_path, swaps)
+
+
+def _example_with(tmp_path: Path, swaps: list[tuple[str, str]]) -> Path:
+    text = EXAMPLE_CONFIG.read_text()
+    for old, new in swaps:
+        assert old in text, old
+        text = text.replace(old, new)
+    path = tmp_path / "config.toml"
+    path.write_text(text)
+    return path
+
+
+# A valid [pins] table decides which pins go LOW even when another table is wrong; the
+# wrong table still keeps the service from starting (06 §2).
+
+
+def test_main_with_broken_timing_switches_off_the_configured_pins(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run = FakeRunner()
+    assert main(["--config", str(_with_enables_18_19(tmp_path, broken_timing=True))], run) == 2
+    assert [c for c, _ in run.calls] == [["pinctrl", "set", "18,19", "op", "dl"]]
+    assert "motion_watchdog_ms" in capsys.readouterr().err
+
+
+def test_main_with_broken_timing_and_failing_command_exits_1(tmp_path: Path) -> None:
+    run = FakeRunner(returncode=1)
+    assert main(["--config", str(_with_enables_18_19(tmp_path, broken_timing=True))], run) == 1
+    assert [c for c, _ in run.calls] == [["pinctrl", "set", "18,19", "op", "dl"]]
+
+
+@pytest.mark.parametrize(
+    ("old", "new"),
+    [("ena = 12\n", "ena = 99\n"), ("enb = 13\n", "enb = 17\n"), ("[pins]\n", "[pinz]\n")],
+    ids=["out-of-range", "duplicate", "no-pins-table"],
+)
+def test_main_with_unusable_pins_switches_off_the_defaults(
+    tmp_path: Path, old: str, new: str
+) -> None:
+    run = FakeRunner()
+    assert main(["--config", str(_example_with(tmp_path, [(old, new)]))], run_cmd=run) == 2
+    assert [c for c, _ in run.calls] == [["pinctrl", "set", "12,13", "op", "dl"]]
+
+
+# Bad arguments, e.g. a typo in ExecStopPost, still switch the default pins off (06 §2).
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [["--bogus"], ["--config"], ["extra"]],
+    ids=["unknown-option", "missing-value", "positional"],
+)
+def test_main_with_bad_arguments_switches_off_the_defaults(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    run = FakeRunner()
+    assert main(argv, run_cmd=run) == 2
+    assert [c for c, _ in run.calls] == [["pinctrl", "set", "12,13", "op", "dl"]]
+    assert capsys.readouterr().err.strip()
+
+
+def test_main_with_bad_arguments_ignores_a_valid_config(tmp_path: Path) -> None:
+    run = FakeRunner()
+    assert main(["--config", str(_with_enables_18_19(tmp_path)), "--bogus"], run_cmd=run) == 2
+    assert [c for c, _ in run.calls] == [["pinctrl", "set", "12,13", "op", "dl"]]
+
+
+def test_main_with_bad_arguments_and_failing_command_exits_1() -> None:
+    run = FakeRunner(returncode=1)
+    assert main(["--bogus"], run_cmd=run) == 1
+    assert [c for c, _ in run.calls] == [["pinctrl", "set", "12,13", "op", "dl"]]
+
+
+def test_main_help_exits_0_without_switching_anything() -> None:
+    run = FakeRunner()
+    with pytest.raises(SystemExit) as excinfo:
+        main(["--help"], run_cmd=run)
+    assert excinfo.value.code == 0
+    assert run.calls == []

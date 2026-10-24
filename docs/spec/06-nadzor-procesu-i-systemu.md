@@ -28,7 +28,7 @@ Osobny program wywoływany przez `ExecStartPre` i `ExecStopPost`. Musi:
 - ustawić oba enable (GPIO12, GPIO13) jako wyjścia LOW,
 - zakończyć się w ciągu 500 ms ([08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia), T4); komenda dostaje limit czasu 0,4 s.
 
-Piny bierze z konfiguracji agenta. Gdy konfiguracji nie da się wczytać, helper i tak wyłącza domyślne GPIO12 i GPIO13 ([07 §2](07-sprzet-i-naped.md#2-połączenia-i-gpio)), wypisuje powód i kończy się kodem 2, żeby usługa nie wystartowała na złej konfiguracji. Kod 1 oznacza błąd samej komendy i ma pierwszeństwo przed 2: piny mogły nie zostać wyłączone.
+Piny bierze z tabeli `[pins]` konfiguracji agenta, a potem sprawdza całą konfigurację. Błąd w innej tabeli nie zmienia wyłączanych pinów, ale kończy helper kodem 2. Gdy `[pins]` nie da się wczytać albo plik jest nieczytelny, helper wyłącza domyślne GPIO12 i GPIO13 ([07 §2](07-sprzet-i-naped.md#2-połączenia-i-gpio)) i kończy się kodem 2. Tak samo postępuje przy błędnych argumentach: wyłącza domyślne piny, wypisuje powód i kończy się kodem 2. Kod 2 ma zablokować start usługi na złej konfiguracji lub wywołaniu. Bez `--config` helper wyłącza domyślne piny i kończy się kodem 0. `--help` kończy się kodem 0 i niczego nie wyłącza. Kod 1 oznacza błąd samej komendy i ma pierwszeństwo przed 2: piny mogły nie zostać wyłączone.
 
 Blok `finally` w Pythonie nie wystarcza: nie wykona się po `SIGKILL`, a samo zakończenie procesu ani rezystor nie gwarantują wyłączenia PWM. Błąd helpera blokuje start usługi i uzbrojenie do usunięcia przyczyny ([05 §4](05-agent-pi.md#4-uzbrojenie-i-sesja-ruchu)).
 

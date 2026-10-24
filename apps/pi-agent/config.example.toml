@@ -55,8 +55,8 @@ pwm_frequency_hz = 100
 # Profil czasowy (docs/spec/02 §8).
 [timing]
 token_interval_ms = 50
-# freshness_ttl_ms =            # kwestia 8; najwyżej 400 (T8)
+# freshness_ttl_ms =            # kwestia 8; najwyżej motion_watchdog_ms (T8)
 # rtt_warning_ms =              # poniżej freshness_ttl_ms - token_interval_ms
-motion_watchdog_ms = 400
+motion_watchdog_ms = 400       # najwyżej 400 (T1)
 control_loop_period_ms = 10
 telemetry_period_ms = 200

@@ -50,6 +50,7 @@
       Spec: [06 §1](../spec/06-nadzor-procesu-i-systemu.md#1-usługa-systemd) · ADR: [0008](../adr/0008-nadzor-systemd-i-helper-gpio.md) · Zależy od: RC-04, RC-14
       Gotowe, gdy: `SIGSTOP` i `SIGKILL` agenta na Pi kończą się restartem w stanie rozbrojonym, a helper mieści się w progu T4 z 08 §4.
       Zamyka kwestię 15 w 00 §9 (błąd trwały a `Restart=always`).
+      Z przeglądu E1: między wejściem w `finally` a `SIG_IGN` w sprzątaniu `rc-diagnostics` jest wąskie okno sygnału; zamyka je `signal.pthread_sigmask` wokół sprzątania, także w agencie.
 
 - [ ] (=) **RC-22** Wbudowany watchdog Pi przez `RuntimeWatchdogSec`
       Spec: [06 §3](../spec/06-nadzor-procesu-i-systemu.md#3-wbudowany-watchdog-pi) · Zależy od: RC-21

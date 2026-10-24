@@ -128,7 +128,7 @@ Jitter, harmonogram przeglądarki i utrata kolejnych tokenów zmniejszają ten z
 | Parametr | Wartość początkowa | Gdzie działa |
 |---|---|---|
 | `token_interval_ms` | 50 ms | Pi |
-| `freshness_ttl_ms` | Nieustalony ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 8); najwyżej 400 ms ([08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia), T8) | Pi |
+| `freshness_ttl_ms` | Nieustalony ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 8); najwyżej `motion_watchdog_ms`, czyli nie więcej niż 400 ms ([08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia), T8) | Pi |
 | Próg ostrzegania | Nieustalony; poniżej `TTL − T` | Profil czasowy |
 | Okres `drive` | 50 ms (20 Hz), także przy niezmienionych wejściach | Panel |
 | Okres `heartbeat` | 1 s w widocznej karcie, także bez jazdy | Panel |
@@ -140,7 +140,7 @@ Jitter, harmonogram przeglądarki i utrata kolejnych tokenów zmniejszają ten z
 
 Wartości są początkowe i podlegają weryfikacji na sprzęcie. Bez skonfigurowanego profilu czasowego Pi odrzuca `arm`.
 
-TTL dobieramy tak: przy rozbrojonym napędzie zbieramy próbki obiegu z heartbeatów na docelowym łączu (typowe, p95, p99, skoki), przyjmujemy `TTL ≥ RTT_p99 + T + margines`, nie więcej niż 400 ms, a potem sprawdzamy rzeczywisty wiek tokenów i odsetek odrzuceń. Heartbeat płynie w przeciwnym kierunku niż tokeny i ma inny harmonogram, dlatego druga weryfikacja jest konieczna. Jeśli wymagany TTL przekracza 400 ms, poprawiamy łącze; TTL nie rośnie automatycznie ani podczas jazdy.
+TTL dobieramy tak: przy rozbrojonym napędzie zbieramy próbki obiegu z heartbeatów na docelowym łączu (typowe, p95, p99, skoki), przyjmujemy `TTL ≥ RTT_p99 + T + margines`, nie więcej niż `motion_watchdog_ms`, a potem sprawdzamy rzeczywisty wiek tokenów i odsetek odrzuceń. Heartbeat płynie w przeciwnym kierunku niż tokeny i ma inny harmonogram, dlatego druga weryfikacja jest konieczna. Jeśli wymagany TTL przekracza `motion_watchdog_ms`, poprawiamy łącze; TTL nie rośnie automatycznie ani podczas jazdy.
 
 ## 9. Poza zakresem
 

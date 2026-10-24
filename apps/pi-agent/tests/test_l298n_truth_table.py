@@ -303,3 +303,48 @@ def test_drive_after_close_is_refused_without_claiming_pins(factory: MockFactory
     # stop() and a second close() after close are harmless.
     bridge.stop()
     bridge.close()
+
+
+class _ClaimOrder:
+    """Wraps MockFactory.pin: records the order pins are claimed in, can refuse one of them."""
+
+    def __init__(self, factory: MockFactory, refuse: int | None = None) -> None:
+        self._pin = factory.pin
+        self.refuse = refuse
+        self.order: list[int] = []
+        self.enables_when_refused: tuple[tuple[str, float], ...] | None = None
+
+    def __call__(self, spec: Any, **kwargs: Any) -> Any:
+        number = int(spec)
+        if number not in self.order:
+            self.order.append(number)
+        if number == self.refuse:
+            self.enables_when_refused = tuple(
+                (self._pin(n).function, float(self._pin(n).state)) for n in (PINS.ena, PINS.enb)
+            )
+            raise RuntimeError(f"GPIO{number} in use")
+        return self._pin(spec, **kwargs)
+
+
+def test_both_enables_are_claimed_before_any_direction_pin(
+    factory: MockFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Neither enable is left floating while the IN pins are set up (07 §2)."""
+    claims = _ClaimOrder(factory)
+    monkeypatch.setattr(factory, "pin", claims)
+    Bridge(PINS, STRAIGHT, 100).close()
+    assert set(claims.order[:2]) == {PINS.ena, PINS.enb}
+    assert set(claims.order) == {12, 13, 17, 27, 22, 23}
+
+
+def test_refused_direction_pin_finds_both_enables_low(
+    factory: MockFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    claims = _ClaimOrder(factory, refuse=PINS.in1)
+    monkeypatch.setattr(factory, "pin", claims)
+    with pytest.raises(RuntimeError, match="in use"):
+        Bridge(PINS, STRAIGHT, 100)
+    assert claims.enables_when_refused == (("output", 0.0), ("output", 0.0))
+    monkeypatch.undo()
+    for n in (PINS.ena, PINS.enb):
+        assert factory.pin(n).function == "input", n
