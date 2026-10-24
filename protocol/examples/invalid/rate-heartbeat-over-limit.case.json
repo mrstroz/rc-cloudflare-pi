@@ -1,0 +1,37 @@
+{
+  "case": "rate-heartbeat-over-limit",
+  "covers": "rate",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 166,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 332,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 498,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 664,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    }
+  ],
+  "twin": [
+    "twin-rate-heartbeat-at-limit",
+    "twin-rate-heartbeat-window-edge"
+  ],
+  "expect": {
+    "reason": "rate_limited"
+  }
+}

@@ -129,6 +129,6 @@ Numery kwestii są stałe, bo plan się do nich odwołuje. Rozstrzygnięta kwest
 | 10 | Podwozie, koła i obciążenie? | — | Potwierdzenie dwóch niezależnych napędów na złożonym aucie |
 | 11 | Czy `/dev/watchdog0` działa i jaki timeout system faktycznie stosuje? | — | Sprawdzenie na docelowym OS (P21) |
 | 12 | Jaką wartość zadaje wciśnięty klawisz? | ±1 ograniczane limitem na Pi; stała z ustawień panelu | Pierwsza próba klawiatury na symulatorze |
-| 13 | Jakie limity rozmiaru i częstotliwości wiadomości stosuje DO? | Wynikają z 20 Hz `drive`, 1 Hz heartbeat i 20 Hz tokenów | Schematy w `protocol/` |
+| 13 | Jakie limity rozmiaru i częstotliwości wiadomości stosuje DO? | Rozstrzygnięta: `protocol/limits.json`, wartości i reguły w [02 §10](02-protokol-v1.md#10-pliki-w-protocol) | Schematy w `protocol/` (RC-12) |
 | 14 | Czy dodać zewnętrzne 10 kΩ ENA–GND i ENB–GND? | Z rezystorami; bez | Próba P04: start, reset i odłączenie Pi bez ruchu kół |
 | 15 | Jak agent kończy pracę przy błędzie trwałym (odrzucony token, zła konfiguracja, błąd helpera), skoro `systemd` restartuje go co 1 s? | Kod wyjścia z `RestartPreventExitStatus`; długi odstęp ponowień w procesie | Projekt usługi `systemd` i próba z błędnym tokenem na Pi |

@@ -1,0 +1,33 @@
+{
+  "case": "twin-rate-heartbeat-window-edge",
+  "covers": "ok",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 166,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 332,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 498,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    },
+    {
+      "t_ms": 1000,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "case": "range-seq-negative",
+  "covers": "range",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"drive\",\"session_id\":\"kQ3v9XbT2mWc7ZyH4nPdLe\",\"seq\":-1,\"freshness_token\":\"4250.t7nkPssPxLNf4a4O89y7DQhNqVnaAenJIhSZtVN2L-8\",\"left\":0.7,\"right\":-0.7}"
+    }
+  ],
+  "expect": {
+    "reason": "invalid_message"
+  }
+}

@@ -5,8 +5,8 @@
 | Pole | Wartość |
 |---|---|
 | **Etap** | E1. Pi lokalnie: w toku, 2 z 9. E2 → E4 mogą iść równolegle |
-| **Ostatnio ukończone** | RC-11 kodowanie i wektory tokenu świeżości w `protocol/vectors/` (2026-10-24) |
-| **Następne** | Bez sprzętu: [RC-12](02-protokol-v1.md) przykłady niepoprawne i limity (E2). Czekają na Pi: RC-02, RC-04 i RC-05 (kod gotowy; pomiar helpera po `kill -9` i próba P01), potem RC-06, RC-07 |
+| **Ostatnio ukończone** | RC-12 przykłady niepoprawne i limity w `protocol/` (2026-10-24); E2 zamknięty |
+| **Następne** | Bez sprzętu: E3 i E4 ([RC-13](03-agent-pi.md), [RC-23](04-cloudflare.md)). Czekają na Pi: RC-02, RC-04 i RC-05 (kod gotowy; pomiar helpera po `kill -9` i próba P01), potem RC-06, RC-07 |
 
 Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego trzeba zajrzeć na początku sesji.
 
@@ -15,7 +15,7 @@ Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego 
 | Etap | Plik | Cel | Co działa na końcu | Postęp |
 |---|---|---|---|---|
 | **E1** | [01-pi-test-lokalny](01-pi-test-lokalny.md) | Python: test Pi → L298N → silniki (MVP-A) | Oba koła kręcą się z lokalnego skryptu; profil jazdy zmierzony | 2/9 |
-| **E2** | [02-protokol-v1](02-protokol-v1.md) | Wspólne: kontrakt v1 w `protocol/` | Schematy, przykłady i wektory tokenu dla obu aplikacji | 2/3 |
+| **E2** | [02-protokol-v1](02-protokol-v1.md) | Wspólne: kontrakt v1 w `protocol/` | Schematy, przykłady i wektory tokenu dla obu aplikacji | 3/3 |
 | **E3** | [03-agent-pi](03-agent-pi.md) | Python: agent z WSS, sesją, tokenami, watchdogiem i `systemd` | Agent jako usługa na Pi; testy protokołu i utraty kontroli w symulacji | 0/11 |
 | **E4** | [04-cloudflare](04-cloudflare.md) | Cloudflare: Worker, Durable Object, panel | Panel steruje atrapą urządzenia lokalnie, z dzierżawą i ochroną dostępu | 0/12 |
 | **E5** | [05-integracja-i-proby](05-integracja-i-proby.md) | Oba: wdrożenie, profil czasowy, próby odbiorowe | Jazda przez docelowe łącze; MVP zamknięte | 0/10 |

@@ -16,6 +16,6 @@
       Spec: [02 §5](../spec/02-protokol-v1.md#5-token-świeżości) · ADR: [0003](../adr/0003-token-swiezosci-hmac-z-zegarem-pi.md) · Zależy od: RC-10
       Gotowe, gdy: `protocol/` zawiera wektory (klucz, `session_id`, `issued_pi_ms` → token), a 02 §5 opisuje kodowanie.
 
-- [ ] (=) **RC-12** Przykłady niepoprawne oraz limity rozmiaru i częstotliwości
+- [x] (=) **RC-12** Przykłady niepoprawne oraz limity rozmiaru i częstotliwości
       Spec: [02 §1](../spec/02-protokol-v1.md#1-transport-i-zasady-ogólne), [03 §4](../spec/03-worker-i-durable-object.md#4-walidacja) · Zależy od: RC-10
       Gotowe, gdy: każdy wiersz tabeli 03 §4 ma przykład odrzucenia, a kwestia 13 w 00 §9 jest zamknięta.

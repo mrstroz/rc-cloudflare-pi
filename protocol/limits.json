@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "max_frame_bytes": 1024,
+  "rate": {
+    "hello": {
+      "max": 2,
+      "window_ms": 1000
+    },
+    "heartbeat": {
+      "max": 4,
+      "window_ms": 1000
+    },
+    "takeover": {
+      "max": 2,
+      "window_ms": 1000
+    },
+    "arm": {
+      "max": 2,
+      "window_ms": 1000
+    },
+    "armed": {
+      "max": 5,
+      "window_ms": 1000
+    },
+    "control_token": {
+      "max": 40,
+      "window_ms": 1000
+    },
+    "drive": {
+      "max": 40,
+      "window_ms": 1000
+    },
+    "stop": {
+      "max": 10,
+      "window_ms": 1000
+    },
+    "stopped": {
+      "max": 10,
+      "window_ms": 1000
+    },
+    "status": {
+      "max": 10,
+      "window_ms": 1000
+    },
+    "error": {
+      "max": 40,
+      "window_ms": 1000
+    }
+  }
+}

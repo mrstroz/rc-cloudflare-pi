@@ -1,0 +1,20 @@
+{
+  "case": "role-lease-from-device",
+  "covers": "role",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"lease\",\"state\":\"granted\",\"lease_id\":\"r8JfA0sUo5GxN1tVqBhY6w\"}"
+    }
+  ],
+  "twin": [
+    "lease-granted-server-panel"
+  ],
+  "expect": {
+    "reason": "wrong_role"
+  }
+}

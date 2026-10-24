@@ -1,0 +1,17 @@
+{
+  "case": "schema-not-an-object",
+  "covers": "schema",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "[]"
+    }
+  ],
+  "expect": {
+    "reason": "invalid_message"
+  }
+}

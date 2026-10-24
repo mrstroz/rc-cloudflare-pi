@@ -1,0 +1,29 @@
+{
+  "case": "rate-arm-over-limit",
+  "covers": "rate",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"arm\",\"request_id\":\"Zp2L9cMEd4TqYk7RxB1VnA\"}"
+    },
+    {
+      "t_ms": 250,
+      "frame": "{\"v\":1,\"type\":\"arm\",\"request_id\":\"Zp2L9cMEd4TqYk7RxB1VnA\"}"
+    },
+    {
+      "t_ms": 500,
+      "frame": "{\"v\":1,\"type\":\"arm\",\"request_id\":\"Zp2L9cMEd4TqYk7RxB1VnA\"}"
+    }
+  ],
+  "twin": [
+    "twin-rate-arm-at-limit",
+    "twin-rate-arm-window-edge"
+  ],
+  "expect": {
+    "reason": "rate_limited"
+  }
+}

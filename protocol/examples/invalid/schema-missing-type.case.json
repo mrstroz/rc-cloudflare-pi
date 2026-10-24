@@ -1,0 +1,17 @@
+{
+  "case": "schema-missing-type",
+  "covers": "schema",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1}"
+    }
+  ],
+  "expect": {
+    "reason": "invalid_message"
+  }
+}

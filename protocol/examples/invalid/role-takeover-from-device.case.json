@@ -1,0 +1,20 @@
+{
+  "case": "role-takeover-from-device",
+  "covers": "role",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"takeover\"}"
+    }
+  ],
+  "twin": [
+    "takeover-panel-server"
+  ],
+  "expect": {
+    "reason": "wrong_role"
+  }
+}

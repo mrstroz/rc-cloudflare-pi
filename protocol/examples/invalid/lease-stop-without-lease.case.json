@@ -1,0 +1,23 @@
+{
+  "case": "lease-stop-without-lease",
+  "covers": "lease",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"stop\",\"request_id\":\"e5HsW0uJ3Fg8NaCyOzXb1Q\"}"
+    }
+  ],
+  "context": {
+    "sender_holds_lease": false
+  },
+  "twin": [
+    "twin-lease-stop-holder"
+  ],
+  "expect": {
+    "reason": "lease_mismatch"
+  }
+}

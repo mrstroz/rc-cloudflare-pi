@@ -18,6 +18,7 @@
 - [ ] (=) **RC-15** Walidacja struktury wiadomości według `protocol/`
       Spec: [05 §5](../spec/05-agent-pi.md#5-przyjęcie-drive) · Zależy od: RC-12
       Gotowe, gdy: wszystkie przykłady z `protocol/` dają w teście agenta oczekiwany wynik.
+      Z E2: ścisły parser z `tests/protocol_support.py` przenieść do `src/`; liczby całkowite `1.0` normalizować po walidacji; zdecydować, czy `jsonschema` jest zależnością runtime na Pi.
 
 - [ ] (^) **RC-16** Uzbrojenie, sesja ruchu, `stop` i `stopped` z `request_id`
       Spec: [05 §4](../spec/05-agent-pi.md#4-uzbrojenie-i-sesja-ruchu), [02 §4](../spec/02-protokol-v1.md#4-arm-i-stop) · Zależy od: RC-14, RC-15
@@ -26,6 +27,7 @@
 - [ ] (=) **RC-17** Tokeny świeżości: wydawanie co 50 ms i sprawdzanie przy `drive`
       Spec: [02 §5](../spec/02-protokol-v1.md#5-token-świeżości), [05 §5](../spec/05-agent-pi.md#5-przyjęcie-drive) · Zależy od: RC-11, RC-16
       Gotowe, gdy: przypadki P12, P13 i P15 z 08 §2 przechodzą jako testy w trybie symulacji.
+      Z E2: powody odrzucenia tokenu (`format`, `mac` z wektorów) trafiają do `error_reason` w `common.schema.json` razem z przykładem.
 
 - [ ] (=) **RC-18** Profil jazdy: mapowanie -1…1 na duty, blokada niespójnego profilu, przerwa przy zmianie kierunku
       Spec: [07 §5](../spec/07-sprzet-i-naped.md#5-profil-jazdy-i-kalibracja), [05 §6](../spec/05-agent-pi.md#6-wysterowanie-kół) · Zależy od: RC-03

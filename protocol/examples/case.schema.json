@@ -85,7 +85,8 @@
         "sender_holds_lease": {
           "type": "boolean"
         }
-      }
+      },
+      "description": "Brak context oznacza, że nadawca trzyma dzierżawę (sender_holds_lease: true)."
     },
     "twin": {
       "description": "Nazwy przypadków covers=ok, które różnią się od tego tylko badanym czynnikiem. Wymagane dla role, size, rate i lease (sprawdza test).",
@@ -114,7 +115,8 @@
             }
           ]
         }
-      }
+      },
+      "description": "Wynik ostatniej ramki przypadku; wcześniejsze ramki są przyjęte."
     }
   }
 }
