@@ -1,0 +1,134 @@
+# 02. Protokół v1
+
+Wspólny kontrakt panelu, Durable Object i agenta. Schematy JSON i przykłady powstają w `protocol/`; ten dokument opisuje semantykę, którą schematy muszą zachować. Kodowanie pól, których tu nie wymieniono, ustalają schematy.
+
+## 1. Transport i zasady ogólne
+
+- JSON przez WSS. Każda wiadomość ma `v: 1` i `type`.
+- Nie ma aplikacyjnych `ping`/`pong`. Ramki Ping/Pong transportu WebSocket obsługuje biblioteka lub runtime; służą tylko utrzymaniu połączenia i nie odnawiają dzierżawy ani pozwolenia na ruch ([ADR-0006](../adr/0006-heartbeat-zamiast-ping-pong.md)).
+- Dzierżawę nadaje DO, sesję ruchu i tokeny nadaje Pi. DO dopisuje `lease_id` do wiadomości przekazywanych do Pi po stronie serwera; identyfikator podsunięty przez klienta nie ma znaczenia.
+- Strukturę waliduje DO i ponownie Pi. Semantyczne przyjęcie `session_id`, `seq` i tokenu należy wyłącznie do Pi.
+- Liczby muszą być skończone. `NaN`, `Infinity` i wartości spoza zakresu są odrzucane.
+
+## 2. Typy wiadomości
+
+| Typ | Kierunek | Pola znane z założeń | Znaczenie |
+|---|---|---|---|
+| `hello` | panel → DO, Pi → DO | `v` | Pierwsza wiadomość połączenia. Panel dostaje w odpowiedzi `lease` |
+| `lease` | DO → panel | stan, `lease_id`, powód | Dzierżawa nadana, utracona, zajęta przez inną kartę albo wolna ([03 §5](03-worker-i-durable-object.md#5-dzierżawa-kierowcy)) |
+| `heartbeat` | panel → DO → Pi | `heartbeat_seq` | Co 1 s w widocznej karcie. Odnawia dzierżawę, służy do pomiaru obiegu. Nie jest komendą ruchu |
+| `takeover` | panel → DO | — | Świadome przejęcie sterowania albo wzięcie wolnej dzierżawy ([03 §6](03-worker-i-durable-object.md#6-przejęcie)) |
+| `arm` | panel → DO → Pi | `request_id` | Prośba o uzbrojenie przy neutralnych wejściach |
+| `armed` | Pi → DO → panel | `request_id`, `session_id`, `freshness_token` | Uzbrojenie przyjęte, pierwszy token |
+| `control_token` | Pi → DO → panel | `session_id`, `freshness_token` | Nowy token co `token_interval_ms` w uzbrojonej sesji |
+| `drive` | panel → DO → Pi | §3 | Pełny stan obu kół |
+| `stop` | panel → DO → Pi, DO → Pi | `request_id` | Rozbrojenie |
+| `stopped` | Pi → DO → panel | `request_id`, przyczyna | Potwierdzenie rozbrojenia |
+| `status` | Pi → DO → panel | §6 | Telemetria |
+| `error` | odbiorca → nadawca | powód | Odrzucenie wiadomości |
+
+## 3. Komenda `drive`
+
+```json
+{
+  "v": 1,
+  "type": "drive",
+  "session_id": "opaque-session-id",
+  "seq": 123,
+  "freshness_token": "opaque-signed-pi-monotonic-stamp",
+  "left": 0.7,
+  "right": -0.7
+}
+```
+
+- `left` i `right` to żądane wysterowanie -1…1 przed lokalnym limitem mocy. Dodatnie: do przodu, ujemne: do tyłu, zero: koło wyłączone. To nie są obroty na minutę.
+- `seq` rośnie w obrębie sesji ruchu. Pi przyjmuje tylko `seq` większy od ostatnio przyjętego.
+- Potwierdzenie `seq` w telemetrii oznacza przyjęcie nastawy przez agenta, nie ruch koła.
+- Tylko komenda przyjęta przez Pi odświeża watchdog ruchu ([05 §3](05-agent-pi.md#3-pętla-sterowania-i-watchdog-ruchu)).
+- Nie ma pól czasu UTC (`sent_at_ms`, `expires_at_ms`). Wiek komendy ogranicza token (§5).
+
+## 4. `arm` i `stop`
+
+- `arm` wymaga neutralnych wejść, aktualnej dzierżawy i skonfigurowanego profilu na Pi. Każde uzbrojenie dostaje nowy `session_id`.
+- Pi przyjmuje każdy `request_id` żądania `arm` najwyżej raz w obrębie dzierżawy. Powtórzenie w trakcie sesji, którą to żądanie utworzyło, powtarza `armed` bez tworzenia drugiej sesji. Powtórzenie po rozbrojeniu dostaje `error` i nie uzbraja auta. Zbiór zużytych identyfikatorów jest ograniczony i znika razem z dzierżawą.
+- `arm` ze starego połączenia lub starej dzierżawy nie uzbraja auta.
+- Panel pamięta `request_id` oczekującej aktywacji. STOP, ukrycie karty i utrata fokusu anulują ją i wysyłają `stop`, więc Pi kończy rozbrojone także wtedy, gdy zdążyło uzbroić. Utrata dzierżawy też ją anuluje, a `stop` wysyła wtedy DO. `armed` z innym `request_id` albo po anulowaniu panel ignoruje ([04 §3](04-panel-sterowania.md#3-aktywacja-i-stop)).
+- `stop` wyłącza napęd i unieważnia sesję oraz jej tokeny. Jest idempotentny, nie wymaga `seq`, a jego `request_id` wraca w `stopped`.
+- DO wysyła `stop` sam, gdy dzierżawa wygaśnie, kierowca się rozłączy albo trwa przejęcie.
+
+## 5. Token świeżości
+
+Pi wydaje token w `armed`, a potem co `token_interval_ms` w uzbrojonej sesji. Token zawiera:
+
+| Składnik | Treść |
+|---|---|
+| `issued_pi_ms` | Całkowite milisekundy z `time.monotonic_ns()` liczone od początku sesji |
+| MAC | HMAC-SHA256 kluczem sesji po wersji protokołu, `session_id` i `issued_pi_ms` |
+
+Klucz HMAC jest losowy, nowy dla każdej sesji, istnieje tylko w pamięci Pi i znika przy rozbrojeniu lub reconnect. To unieważnia wszystkie tokeny starej sesji. Pi nie przechowuje listy wydanych tokenów.
+
+Przy `drive` Pi sprawdza format, bieżącą sesję, MAC porównaniem `hmac.compare_digest` oraz `0 ≤ now_pi_ms − issued_pi_ms ≤ freshness_ttl_ms`. Czas z przyszłości jest odrzucany.
+
+Panel dołącza do każdej nowej ramki najnowszy token, bez zmian. DO przekazuje tokeny natychmiast i ich nie podmienia. Odbiór komendy nie odnawia terminu tokenu. Ponieważ ramka powstaje po poznaniu tokenu, wiek ważnego tokenu ogranicza wiek komendy; nie dowodzi natomiast aktualności fizycznego zamiaru operatora ([ADR-0003](../adr/0003-token-swiezosci-hmac-z-zegarem-pi.md)).
+
+Każdy bufor po drodze (przeglądarka, runtime Cloudflare, TCP, biblioteka `websockets`) może zatrzymać ramkę. Przed wykonaniem zaległej ramki chroni wiek tokenu, nie rozmiar bufora. Bufory ograniczamy po to, żeby zator nie rósł bez końca: panel pomija takt ([04 §4](04-panel-sterowania.md#4-wysyłanie)), DO niczego nie kolejkuje ([03 §7](03-worker-i-durable-object.md#7-przekazywanie)), agent ma ograniczoną kolejkę ([05 §2](05-agent-pi.md#2-połączenie)).
+
+## 6. Telemetria `status`
+
+Około 5 Hz, także gdy agent jest rozbrojony.
+
+| Pole | Znaczenie |
+|---|---|
+| Stan agenta | Rozbrojony lub uzbrojony ([05 §1](05-agent-pi.md#1-stany-agenta)) |
+| `session_id` | Bieżąca sesja ruchu albo `null` |
+| `last_seq`, `seq_age_ms` | Ostatni przyjęty `seq` i czas od jego przyjęcia |
+| Zadane wartości kół | `left`, `right` z ostatniego przyjętego `drive` |
+| Wysterowanie kół | Wartości po profilu jazdy; nie zmierzona prędkość |
+| Przyczyna zatrzymania | Ostatni powód rozbrojenia |
+| `lease_id` | Dzierżawa, z którą Pi wiąże heartbeat i sesję |
+| `last_heartbeat_seq`, `heartbeat_age_ms` | Ostatni heartbeat i czas od jego odbioru |
+
+Wiek to czas od odebrania komunikatu do utworzenia telemetrii, mierzony na Pi zegarem monotonicznym. Brak komunikatu oznacza `null`.
+
+## 7. Estymata obiegu
+
+Panel zapamiętuje ograniczoną historię `sent[session_id, seq] = performance.now()`. Estymata to:
+
+```text
+performance.now() − sent[session_id, last_seq] − seq_age_ms
+```
+
+Przed uzbrojeniem panel liczy to samo z `sent_heartbeat[lease_id, heartbeat_seq]` i `heartbeat_age_ms`. Ten wariant nie wymaga sesji ruchu, GPIO ani ustalonego TTL.
+
+Wynik to przybliżenie obiegu komenda + telemetria. Nie dzielimy go przez dwa i nie nazywamy opóźnieniem jednokierunkowym. Obcy identyfikator, brak wpisu albo wynik ujemny lub niespójny dają „brak pomiaru”. Historię czyści zmiana sesji lub dzierżawy, a brak postępu potwierdzeń oznacza pomiar nieaktualny.
+
+## 8. Budżet świeżości i parametry czasowe
+
+Przy tokenach wydawanych co `T` bez jitteru wiek tokenu po powrocie do Pi to około `RTT_token + faza`, gdzie `0 ≤ faza < T`. Nominalny budżet pełnego obiegu Pi → panel → Pi:
+
+```text
+RTT_max ≈ freshness_ttl_ms − token_interval_ms
+```
+
+Jitter, harmonogram przeglądarki i utrata kolejnych tokenów zmniejszają ten zapas. Przykład obliczeniowy, nie profil: `TTL=300 ms` i `T=50 ms` dają około 250 ms budżetu i ostrzeżenie w okolicy 150–200 ms.
+
+| Parametr | Wartość początkowa | Gdzie działa |
+|---|---|---|
+| `token_interval_ms` | 50 ms | Pi |
+| `freshness_ttl_ms` | Nieustalony ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 8); najwyżej 400 ms ([08 §4](08-proby-odbiorowe.md#4-progi-zaliczenia), T8) | Pi |
+| Próg ostrzegania | Nieustalony; poniżej `TTL − T` | Profil czasowy |
+| Okres `drive` | 50 ms (20 Hz), także przy niezmienionych wejściach | Panel |
+| Okres `heartbeat` | 1 s w widocznej karcie, także bez jazdy | Panel |
+| Wygaśnięcie dzierżawy | 3 s | DO |
+| Telemetria | Około 5 Hz | Pi |
+| Watchdog ruchu | 400 ms | Pi |
+| Okres pętli sterowania | 10 ms | Pi |
+| Oczekiwanie na `stopped` przy nadaniu dzierżawy | 2 s | DO |
+
+Wartości są początkowe i podlegają weryfikacji na sprzęcie. Bez skonfigurowanego profilu czasowego Pi odrzuca `arm`.
+
+TTL dobieramy tak: przy rozbrojonym napędzie zbieramy próbki obiegu z heartbeatów na docelowym łączu (typowe, p95, p99, skoki), przyjmujemy `TTL ≥ RTT_p99 + T + margines`, nie więcej niż 400 ms, a potem sprawdzamy rzeczywisty wiek tokenów i odsetek odrzuceń. Heartbeat płynie w przeciwnym kierunku niż tokeny i ma inny harmonogram, dlatego druga weryfikacja jest konieczna. Jeśli wymagany TTL przekracza 400 ms, poprawiamy łącze; TTL nie rośnie automatycznie ani podczas jazdy.
+
+## 9. Poza zakresem
+
+Synchronizacja zegarów (NTP, offset przeglądarki) nie bierze udziału w decyzji o wykonaniu komendy. Poprawny czas systemowy potrzebny do weryfikacji certyfikatów WSS zapewnia OS.
