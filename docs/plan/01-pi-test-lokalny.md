@@ -15,6 +15,7 @@
 - [ ] (=) **RC-02** Inwentaryzacja zestawu: wersja OS, kandydat na backend PWM, oznaczenia silników, ogniwa, powerbank, zworki
       Spec: [07 §1](../spec/07-sprzet-i-naped.md#1-zestaw)
       Gotowe, gdy: 07 §1 podaje wersję OS, kandydata na backend PWM i oznaczenia z obudów silników.
+      OS, backend i zworki wpisane po smoke teście 2026-10-24; brakuje oznaczeń silników, rodzaju ogniw i modelu powerbanku.
 
 - [ ] (^) **RC-03** Adapter L298N: cztery wyjścia kierunku, dwa enable z PWM, piny i odwrócenie z konfiguracji
       Spec: [07 §3](../spec/07-sprzet-i-naped.md#3-sterowanie-mostkiem) · ADR: [0010](../adr/0010-stop-jako-wybieg.md) · Zależy od: RC-01

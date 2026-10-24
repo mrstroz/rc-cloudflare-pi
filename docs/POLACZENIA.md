@@ -4,7 +4,7 @@
 
 ![Plan fizycznych połączeń Pi 4B, L298N, dwóch silników i pakietu 4×AAA](diagrams/pi4b-l298n-polaczenia.png)
 
-To proponowane połączenie do pierwszego testu, oparte na zdjęciach użytkownika z 24 października 2026 i dokumentacji złączy. Nie jest potwierdzeniem wykonania ani sprawności obecnego okablowania. Na zdjęciu nie widać drugich końców przewodów sterujących. Rysunek odwzorowuje kolejność i położenie złączy; nie jest wydrukiem w skali wymiarowej 1:1.
+To połączenie do pierwszego testu, oparte na zdjęciach użytkownika z 24 października 2026 i dokumentacji złączy. Okablowanie wykonane według tej instrukcji przeszło smoke test 2026-10-24: oba kanały, oba kierunki, napęd tylko z baterii ([08 §3](spec/08-proby-odbiorowe.md#3-wyniki)); pomiarów napięć i prądów jeszcze nie ma. Na zdjęciu nie widać drugich końców przewodów sterujących. Rysunek odwzorowuje kolejność i położenie złączy; nie jest wydrukiem w skali wymiarowej 1:1.
 
 ## Jak czytać rysunek
 

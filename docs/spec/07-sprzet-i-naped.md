@@ -6,12 +6,13 @@ Posiadany zestaw, sposób sterowania mostkiem i profil jazdy. Parametry egzempla
 
 | Element | Konfiguracja | Stan |
 |---|---|---|
-| Komputer | Raspberry Pi 4 Model B | Potwierdzony |
-| Zasilanie Pi | Posiadany powerbank przez USB-C; wymaganie 5 V / 3 A | Model, port i kabel do sprawdzenia |
-| Sterownik | L298N, Botland MOD-03164 | Posiadany; oznaczenia i zworki do potwierdzenia na egzemplarzu |
-| Napęd | 2× szczotkowy silnik DC z przekładnią TT, roboczo 3–6 V, jeden na koło | SKU niepotwierdzony; DNG-16016 jako punkt odniesienia (§7) |
-| Zasilanie napędu | Koszyk 4×AAA | Rodzaj ogniw i napięcie pod obciążeniem do sprawdzenia |
-| System i backend PWM | Raspberry Pi OS, backend GPIO Zero | Do ustalenia ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 2) |
+| Komputer | Raspberry Pi 4 Model B Rev 1.4 | Potwierdzony |
+| Zasilanie Pi | Posiadany powerbank przez USB-C; wymaganie 5 V / 3 A | Bez ostrzeżeń undervoltage (`throttled=0x0`) przy obu silnikach na 100% z uniesionymi kołami (2026-10-24); model, port i kabel do zapisania, próba P06 otwarta |
+| Sterownik | L298N, Botland MOD-03164 | Posiadany; zworki ENA, ENB i CON5 zdjęte (2026-10-24) |
+| Napęd | 2× szczotkowy silnik DC z przekładnią TT, roboczo 3–6 V, jeden na koło | Oba kanały kręcą w obu kierunkach (smoke test, [08 §3](08-proby-odbiorowe.md#3-wyniki)); SKU niepotwierdzony, DNG-16016 jako punkt odniesienia (§7) |
+| Zasilanie napędu | Koszyk 4×AAA przez fizyczny wyłącznik | Wyłącznik odcina napęd: przy wyłączonym i 100% PWM koła stoją. Rodzaj ogniw i napięcie pod obciążeniem do sprawdzenia; brak miernika |
+| System | Debian GNU/Linux 13 (trixie) z repozytoriami Raspberry Pi, kernel 6.18.50+rpt-rpi-v8, Python 3.13.5 | Potwierdzony 2026-10-24 |
+| Backend PWM | GPIO Zero 2.0.1 z `lgpio` 0.2.2 (pakiety systemowe `python3-gpiozero`, `python3-lgpio`) | Kandydat; działa w smoke teście. Wybór zamyka próba helpera RC-04 ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 2) |
 
 Podwójny wał silnika należy do jednego napędu i nie daje drugiego kanału.
 
@@ -30,7 +31,9 @@ Instrukcja montażu i rysunek: [POLACZENIA.md](../POLACZENIA.md), [PNG](../diagr
 | +5V | 5 V | 2 | Zasilanie logiki L298N z Pi |
 | GND | GND | 6 | Wspólna masa |
 
-Piny i odwrócenie kierunku każdego koła są w konfiguracji agenta ([01 §5](01-architektura.md#5-konfiguracja-i-sekrety)). Zworki ENA, ENB i regulatora 5V-EN (CON5) są zdjęte. GPIO12 i GPIO13 mają domyślny pull-down po resecie, a agent i helper ustawiają je LOW. Zewnętrzne 10 kΩ ENA–GND i ENB–GND są zalecane, decyzja zależy od próby P04 ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 14). Żaden pull-down nie wymusi LOW na pinie aktywnie sterowanym w stan wysoki.
+Piny i odwrócenie kierunku każdego koła są w konfiguracji agenta ([01 §5](01-architektura.md#5-konfiguracja-i-sekrety)). Zworki ENA, ENB i regulatora 5V-EN (CON5) są zdjęte. Okablowanie potwierdzone 2026-10-24: kanał A to lewe koło, kanał B prawe, a `IN1=1, IN2=0` i `IN3=1, IN4=0` kręcą koła do przodu, więc żadne koło nie wymaga odwrócenia.
+
+GPIO12 i GPIO13 mają domyślny pull-down tylko po resecie. Zamknięcie urządzeń GPIO Zero z backendem `lgpio` zwalnia piny jako wejścia **bez** pull-down; w smoke teście GPIO12 (ENA) czytało wtedy HIGH, bo wejście L298N bez zworki podciąga linię. Dlatego każdy program sterujący mostkiem, agent i helper kończą pracę, ustawiając ENA i ENB jako wyjścia LOW (np. `pinctrl set 12,13 op dl`), zamiast zwalniać piny. Zewnętrzne 10 kΩ ENA–GND i ENB–GND są zalecane, decyzja zależy od próby P04 ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 14); do tego czasu ich nie ma. Żaden pull-down nie wymusi LOW na pinie aktywnie sterowanym w stan wysoki.
 
 ## 3. Sterowanie mostkiem
 

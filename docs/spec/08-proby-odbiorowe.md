@@ -44,10 +44,11 @@ P12, P13, P15, P16, P23, P24 i P26 sprawdzamy najpierw testami w trybie symulacj
 
 ## 3. Wyniki
 
-Do 2026-10-24 nie wykonano żadnej próby. Każda wykonana próba dopisuje wiersz: wynik, zmierzone wartości (napięcia, prądy, temperatury, czasy) oraz użyty sprzęt. Wartości kalibracji trafiają dodatkowo do [07 §5](07-sprzet-i-naped.md#5-profil-jazdy-i-kalibracja), a profil czasowy do [02 §8](02-protokol-v1.md#8-budżet-świeżości-i-parametry-czasowe).
+Żadna z prób P01–P26 nie jest jeszcze zaliczona. Każda wykonana próba dopisuje wiersz: wynik, zmierzone wartości (napięcia, prądy, temperatury, czasy) oraz użyty sprzęt. Wartości kalibracji trafiają dodatkowo do [07 §5](07-sprzet-i-naped.md#5-profil-jazdy-i-kalibracja), a profil czasowy do [02 §8](02-protokol-v1.md#8-budżet-świeżości-i-parametry-czasowe). Wiersz bez numeru próby to sprawdzenie pomocnicze, które żadnej próby nie zalicza.
 
 | Nr | Data | Wynik | Wartości i sprzęt |
 |---|---|---|---|
+| — (smoke test) | 2026-10-24 | Okablowanie i oba kanały działają | Jednorazowy skrypt poza repo (przed RC-05), GPIO Zero + `lgpio`, PWM 100 Hz, koła uniesione. Piny IN1–IN4 osiągają oba poziomy przy ENA/ENB = LOW. Impulsy 1 s przy duty 0,7 i 1,0: A = lewe koło, B = prawe, oba kierunki, przy 1,0 wyraźnie szybciej; A+B razem 1,5 s przy 1,0. Pi: `throttled=0x0` przez cały test, temperatura SoC 50,6 °C. Wyłącznik baterii wyłączony + 100% na obu kanałach: koła stoją, czyli napęd nie jest zasilany z Pi. Znalezisko: po zamknięciu GPIO Zero ENA wisi na HIGH ([07 §2](07-sprzet-i-naped.md#2-połączenia-i-gpio)). Bez miernika: brak napięć pakietu i silników, prądu i temperatury silników, więc P01, P03 i P05 pozostają otwarte |
 
 ## 4. Progi zaliczenia
 
