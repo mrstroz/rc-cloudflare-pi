@@ -33,14 +33,18 @@ Kolory przewodów 1–6 są odczytane orientacyjnie ze zdjęcia. Rozstrzygające
 
 Przed zmianą połączeń odłączyć USB-C Pi i wyjąć baterie.
 
-1. **Pi zasilać osobno przez USB-C**, stabilizowanym źródłem 5 V / 3 A. Pakietu 4×AAA nie podłączać bezpośrednio do zasilania Pi. Wersja mobilna będzie wymagała osobnego, odpowiedniego źródła dla Pi.
+1. **Pi zasilać przez USB-C z posiadanego powerbanku**. Potwierdzić parametry konkretnego portu (przyjmujemy 5 V / 3 A), odpowiedni kabel i stabilność podczas pracy. Pakietu 4×AAA nie podłączać bezpośrednio do zasilania Pi; zasila wyłącznie napęd.
 2. Zdjąć **zworkę regulatora 5V-EN / CON5**. Na zdjęciu jest nad potrójnym złączem zasilania, przy oznaczeniu CON5. Po jej usunięciu podać 5 V z pinu fizycznego 2 Pi na zacisk +5V modułu. Nie łączyć dwóch źródeł 5 V z założoną zworką regulatora.
 3. Zworki **ENA i ENB mają być zdjęte**. Kabel PWM podłączyć do sygnałowego pinu enable na dolnym brzegu, w szeregu z IN1–IN4. Dodatkowe piny zasilania przy ENA/ENB pozostawić wolne; nie podłączać ich do GPIO.
 4. Plus pakietu 4×AAA przez fizyczny wyłącznik napędu podłączyć do **lewego zacisku +12V**. Napis +12V identyfikuje wejście zasilania mostka — nie oznacza potrzeby zasilania tych silników 12 V.
 5. Minus baterii oraz masę Pi, pin fizyczny 6, połączyć z **GND modułu**. W razie problemów z umieszczeniem obu przewodów w zacisku użyć odpowiedniego złącza rozdzielającego masę. Prąd silników powinien wracać do baterii przez przewód moduł–bateria, a nie przez Pi.
-6. Dodać **dwa zewnętrzne rezystory 10 kΩ**: ENA–GND i ENB–GND, aby enable miały stan niski przy starcie/odłączonym Pi. Nie zwierać enable bezpośrednio do masy.
+6. Zalecane, lecz opcjonalne dla nadzorowanych prób MVP: **dwa zewnętrzne rezystory 10 kΩ**, ENA–GND i ENB–GND. GPIO12/13 mają domyślny pull-down po resecie. Bez dodatkowych rezystorów trzeba potwierdzić brak ruchu przy starcie, resecie i odłączeniu Pi; start programu oraz helper usługi ustawiają LOW. Pull-down nie wyłączy pinu aktywnie sterowanego w stan wysoki. Nie zwierać enable bezpośrednio do masy.
 
 Zdjęcie przedstawia pusty koszyk; rodzaj ogniw i napięcie nie są potwierdzone. Cztery ogniwa 1,5 V dają nominalnie 6 V, a cztery akumulatory NiMH 1,2 V — 4,8 V. Napięcie pakietu należy zmierzyć także podczas rozruchu. Podane przez sklep minimum zasilania modułu to 5 V; 4,8 V jest poniżej tego zakresu. Straty L298N i spadki napięcia AAA mogą uniemożliwić rozruch lub ograniczyć moment. Sam schemat nie potwierdza wydajności tego źródła pod obciążeniem.
+
+Dodatkowo nota ST wymaga zapasu `VS ≥ VIH + 2,5 V`; przy sygnale około 3,3 V to około 5,8 V na mostku. Pierwszą próbę wykonać na świeżych ogniwach alkalicznych, jeśli są dostępne, i sprawdzić warunek także pod obciążeniem. Ustawienie 30% PWM może uniemożliwić rozruch, dlatego zakres kalibrujemy krótkimi próbami do 100% przy początkowych 100 Hz. Przy 100% zmierzyć pakiet i napięcie między wyjściami silnika; przy PWM sam odczyt średni z miernika nie opisuje impulsów. AAA nie eliminują możliwości przeciążenia/zablokowania.
+
+Linia 5 V Pi może pozostać obecna przy zawieszonym/zatrzymanym systemie. Zasilanie logiki z Pi nie zastępuje watchdoga ani wyłączenia enable. Nadzór procesu/systemu i próbę helpera GPIO opisuje [brief](BRIEF.md); ocenę uwag — [triage](TRIAGE.md).
 
 ## Silniki
 
@@ -57,6 +61,7 @@ Użycie A jako lewego i B jako prawego koła jest umowne. Jeśli koło kręci si
 
 - [Raspberry Pi — oficjalne położenie pinów i numeracja GPIO](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#gpio).
 - [Raspberry Pi 4B — wymagania zasilania, sekcja 4.1](https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-datasheet.pdf).
+- [ST — L298, warunek zasilania i sterowanie enable](https://www.st.com/resource/en/datasheet/l298.pdf).
 - [Botland — L298N: wyprowadzenia, regulator i zworki](https://botland.com.pl/sterowniki-silnikow-moduly/3164-l298n-dwukanalowy-sterownik-silnikow-modul-12v-2a-5904422359317.html).
 - [Mapa połączeń JSON](diagrams/pi4b-l298n-connections.json) jest źródłem danych pinów dla finalnego rysunku. SVG i PNG narysowano programowo z jawną numeracją kontaktów; nie są wynikiem testu sprzętu.
 - Wstępna próba z użyciem wbudowanego narzędzia `imagegen` miała błędne trasy przewodów i została odrzucona. [Zapis promptu tej próby](diagrams/pi4b-l298n-prompt.txt) pozostaje jako dokumentacja; nie należy używać pierwotnej grafiki jako instrukcji. Finalne pliki do podłączania to SVG i PNG podlinkowane na początku tego dokumentu.
