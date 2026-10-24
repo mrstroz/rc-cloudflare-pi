@@ -8,7 +8,7 @@
 
 ## Zadania
 
-- [ ] (^) **RC-10** Schematy JSON wszystkich typów v1 w `protocol/` z przykładami poprawnymi
+- [x] (^) **RC-10** Schematy JSON wszystkich typów v1 w `protocol/` z przykładami poprawnymi
       Spec: [02 §2–§4](../spec/02-protokol-v1.md#2-typy-wiadomości)
       Gotowe, gdy: każdy typ z tabeli 02 §2 ma schemat i co najmniej jeden poprawny przykład.
 

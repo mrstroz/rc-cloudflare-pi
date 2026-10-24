@@ -1,0 +1,17 @@
+{
+  "case": "stopped-device-server",
+  "covers": "ok",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"stopped\",\"request_id\":\"e5HsW0uJ3Fg8NaCyOzXb1Q\",\"cause\":\"stop_command\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

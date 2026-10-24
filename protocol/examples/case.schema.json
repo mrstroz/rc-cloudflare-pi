@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "case.schema.json",
+  "title": "Przypadek testowy protokołu v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case",
+    "covers",
+    "hop",
+    "frames",
+    "expect"
+  ],
+  "properties": {
+    "case": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]{1,64}$(?!\\n)"
+    },
+    "covers": {
+      "enum": [
+        "ok",
+        "schema",
+        "range",
+        "role",
+        "size",
+        "rate",
+        "lease"
+      ]
+    },
+    "hop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "enum": [
+            "panel",
+            "server",
+            "device"
+          ]
+        },
+        "to": {
+          "enum": [
+            "panel",
+            "server",
+            "device"
+          ]
+        }
+      }
+    },
+    "frames": {
+      "description": "Surowy tekst każdej ramki. pad dopełnia ramkę spacjami po końcowym znaku do max_frame_bytes (limit) albo o jeden bajt więcej (limit+1); ramka przed dopełnieniem mieści się w limicie.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "t_ms",
+          "frame"
+        ],
+        "properties": {
+          "t_ms": {
+            "$ref": "common.schema.json#/$defs/duration_ms"
+          },
+          "frame": {
+            "type": "string"
+          },
+          "pad": {
+            "enum": [
+              "limit",
+              "limit+1"
+            ]
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sender_holds_lease": {
+          "type": "boolean"
+        }
+      }
+    },
+    "twin": {
+      "description": "Nazwy przypadków covers=ok, które różnią się od tego tylko badanym czynnikiem. Wymagane dla role, size, rate i lease (sprawdza test).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9_-]{1,64}$(?!\\n)"
+      }
+    },
+    "expect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason"
+      ],
+      "properties": {
+        "reason": {
+          "description": "null oznacza przyjęcie.",
+          "oneOf": [
+            {
+              "$ref": "common.schema.json#/$defs/error_reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

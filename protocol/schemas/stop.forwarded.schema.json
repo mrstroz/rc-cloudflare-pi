@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stop.forwarded.schema.json",
+  "title": "stop.forwarded",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type",
+    "request_id",
+    "lease_id"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "stop"
+    },
+    "request_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "lease_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    }
+  }
+}

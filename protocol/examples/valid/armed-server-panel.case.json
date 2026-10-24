@@ -1,0 +1,17 @@
+{
+  "case": "armed-server-panel",
+  "covers": "ok",
+  "hop": {
+    "from": "server",
+    "to": "panel"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"armed\",\"request_id\":\"Zp2L9cMEd4TqYk7RxB1VnA\",\"session_id\":\"kQ3v9XbT2mWc7ZyH4nPdLe\",\"freshness_token\":\"4200.kF7FLu2kWOb_gvVlpETLkCxjMa91_w7RYdLoyLNS5Rw\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

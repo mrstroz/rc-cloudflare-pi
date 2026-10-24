@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "arm.client.schema.json",
+  "title": "arm.client",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type",
+    "request_id"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "arm"
+    },
+    "request_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    }
+  }
+}

@@ -20,6 +20,7 @@ rc-gpio-helper = "rc_agent.gpio_helper:main"
 
 [project.optional-dependencies]
 dev = [
+    "jsonschema==4.26.0",
     "pytest==9.1.1",
     "ruff==0.17.2",
     "mypy==1.18.2",
@@ -46,7 +47,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 strict = true
 files = ["src", "tests"]
 
-# gpiozero ships no type information.
+# gpiozero and jsonschema ship no type information.
 [[tool.mypy.overrides]]
-module = ["gpiozero", "gpiozero.*"]
+module = ["gpiozero", "gpiozero.*", "jsonschema", "jsonschema.*"]
 ignore_missing_imports = true

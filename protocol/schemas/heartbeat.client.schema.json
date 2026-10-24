@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "heartbeat.client.schema.json",
+  "title": "heartbeat.client",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type",
+    "heartbeat_seq"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "heartbeat"
+    },
+    "heartbeat_seq": {
+      "$ref": "common.schema.json#/$defs/counter"
+    }
+  }
+}

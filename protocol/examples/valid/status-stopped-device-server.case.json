@@ -1,0 +1,17 @@
+{
+  "case": "status-stopped-device-server",
+  "covers": "ok",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"status\",\"state\":\"disarmed\",\"session_id\":null,\"last_seq\":null,\"seq_age_ms\":null,\"command_left\":null,\"command_right\":null,\"output_left\":null,\"output_right\":null,\"stop_cause\":\"watchdog_timeout\",\"lease_id\":\"r8JfA0sUo5GxN1tVqBhY6w\",\"last_heartbeat_seq\":17,\"heartbeat_age_ms\":240}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

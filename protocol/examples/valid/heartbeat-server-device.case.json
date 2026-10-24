@@ -1,0 +1,17 @@
+{
+  "case": "heartbeat-server-device",
+  "covers": "ok",
+  "hop": {
+    "from": "server",
+    "to": "device"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"heartbeat\",\"heartbeat_seq\":17,\"lease_id\":\"r8JfA0sUo5GxN1tVqBhY6w\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

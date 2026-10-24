@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lease.schema.json",
+  "title": "lease",
+  "description": "granted niesie lease_id, lost niesie reason, busy i free nic poza stanem.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "type",
+        "state",
+        "lease_id"
+      ],
+      "properties": {
+        "v": {
+          "$ref": "common.schema.json#/$defs/version"
+        },
+        "type": {
+          "const": "lease"
+        },
+        "state": {
+          "const": "granted"
+        },
+        "lease_id": {
+          "$ref": "common.schema.json#/$defs/id"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "type",
+        "state",
+        "reason"
+      ],
+      "properties": {
+        "v": {
+          "$ref": "common.schema.json#/$defs/version"
+        },
+        "type": {
+          "const": "lease"
+        },
+        "state": {
+          "const": "lost"
+        },
+        "reason": {
+          "$ref": "common.schema.json#/$defs/lease_reason"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "type",
+        "state"
+      ],
+      "properties": {
+        "v": {
+          "$ref": "common.schema.json#/$defs/version"
+        },
+        "type": {
+          "const": "lease"
+        },
+        "state": {
+          "const": "busy"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "type",
+        "state"
+      ],
+      "properties": {
+        "v": {
+          "$ref": "common.schema.json#/$defs/version"
+        },
+        "type": {
+          "const": "lease"
+        },
+        "state": {
+          "const": "free"
+        }
+      }
+    }
+  ]
+}

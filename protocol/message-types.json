@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "hops": [
+    {
+      "type": "hello",
+      "from": "panel",
+      "to": "server",
+      "schema": "hello.schema.json"
+    },
+    {
+      "type": "hello",
+      "from": "device",
+      "to": "server",
+      "schema": "hello.schema.json"
+    },
+    {
+      "type": "lease",
+      "from": "server",
+      "to": "panel",
+      "schema": "lease.schema.json"
+    },
+    {
+      "type": "heartbeat",
+      "from": "panel",
+      "to": "server",
+      "schema": "heartbeat.client.schema.json"
+    },
+    {
+      "type": "heartbeat",
+      "from": "server",
+      "to": "device",
+      "schema": "heartbeat.forwarded.schema.json"
+    },
+    {
+      "type": "takeover",
+      "from": "panel",
+      "to": "server",
+      "schema": "takeover.schema.json"
+    },
+    {
+      "type": "arm",
+      "from": "panel",
+      "to": "server",
+      "schema": "arm.client.schema.json"
+    },
+    {
+      "type": "arm",
+      "from": "server",
+      "to": "device",
+      "schema": "arm.forwarded.schema.json"
+    },
+    {
+      "type": "armed",
+      "from": "device",
+      "to": "server",
+      "schema": "armed.schema.json"
+    },
+    {
+      "type": "armed",
+      "from": "server",
+      "to": "panel",
+      "schema": "armed.schema.json",
+      "note": "przekazane bez zmian"
+    },
+    {
+      "type": "control_token",
+      "from": "device",
+      "to": "server",
+      "schema": "control_token.schema.json"
+    },
+    {
+      "type": "control_token",
+      "from": "server",
+      "to": "panel",
+      "schema": "control_token.schema.json",
+      "note": "przekazane bez zmian"
+    },
+    {
+      "type": "drive",
+      "from": "panel",
+      "to": "server",
+      "schema": "drive.client.schema.json"
+    },
+    {
+      "type": "drive",
+      "from": "server",
+      "to": "device",
+      "schema": "drive.forwarded.schema.json"
+    },
+    {
+      "type": "stop",
+      "from": "panel",
+      "to": "server",
+      "schema": "stop.client.schema.json"
+    },
+    {
+      "type": "stop",
+      "from": "server",
+      "to": "device",
+      "schema": "stop.forwarded.schema.json",
+      "note": "przekazany od panelu albo wysłany przez DO"
+    },
+    {
+      "type": "stopped",
+      "from": "device",
+      "to": "server",
+      "schema": "stopped.schema.json"
+    },
+    {
+      "type": "stopped",
+      "from": "server",
+      "to": "panel",
+      "schema": "stopped.schema.json",
+      "note": "przekazane bez zmian"
+    },
+    {
+      "type": "status",
+      "from": "device",
+      "to": "server",
+      "schema": "status.schema.json"
+    },
+    {
+      "type": "status",
+      "from": "server",
+      "to": "panel",
+      "schema": "status.schema.json",
+      "note": "przekazane bez zmian"
+    },
+    {
+      "type": "error",
+      "from": "device",
+      "to": "server",
+      "schema": "error.schema.json"
+    },
+    {
+      "type": "error",
+      "from": "server",
+      "to": "panel",
+      "schema": "error.schema.json",
+      "note": "przekazany od Pi albo własny"
+    },
+    {
+      "type": "error",
+      "from": "server",
+      "to": "device",
+      "schema": "error.schema.json"
+    }
+  ]
+}

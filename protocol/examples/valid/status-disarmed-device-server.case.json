@@ -1,0 +1,17 @@
+{
+  "case": "status-disarmed-device-server",
+  "covers": "ok",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"status\",\"state\":\"disarmed\",\"session_id\":null,\"last_seq\":null,\"seq_age_ms\":null,\"command_left\":null,\"command_right\":null,\"output_left\":null,\"output_right\":null,\"stop_cause\":null,\"lease_id\":null,\"last_heartbeat_seq\":null,\"heartbeat_age_ms\":null}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

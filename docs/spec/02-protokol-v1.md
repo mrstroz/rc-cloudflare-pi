@@ -6,7 +6,7 @@ Wspólny kontrakt panelu, Durable Object i agenta. Schematy JSON i przykłady po
 
 - JSON przez WSS. Każda wiadomość ma `v: 1` i `type`.
 - Nie ma aplikacyjnych `ping`/`pong`. Ramki Ping/Pong transportu WebSocket obsługuje biblioteka lub runtime; służą tylko utrzymaniu połączenia i nie odnawiają dzierżawy ani pozwolenia na ruch ([ADR-0006](../adr/0006-heartbeat-zamiast-ping-pong.md)).
-- Dzierżawę nadaje DO, sesję ruchu i tokeny nadaje Pi. DO dopisuje `lease_id` do wiadomości przekazywanych do Pi po stronie serwera; identyfikator podsunięty przez klienta nie ma znaczenia.
+- Dzierżawę nadaje DO, sesję ruchu i tokeny nadaje Pi. DO dopisuje `lease_id` do wiadomości przekazywanych do Pi. Wiadomość panelu z własnym `lease_id` jest odrzucana jako niezgodna ze schematem.
 - Strukturę waliduje DO i ponownie Pi. Semantyczne przyjęcie `session_id`, `seq` i tokenu należy wyłącznie do Pi.
 - Liczby muszą być skończone. `NaN`, `Infinity` i wartości spoza zakresu są odrzucane.
 
@@ -53,7 +53,7 @@ Wspólny kontrakt panelu, Durable Object i agenta. Schematy JSON i przykłady po
 - Pi przyjmuje każdy `request_id` żądania `arm` najwyżej raz w obrębie dzierżawy. Powtórzenie w trakcie sesji, którą to żądanie utworzyło, powtarza `armed` bez tworzenia drugiej sesji. Powtórzenie po rozbrojeniu dostaje `error` i nie uzbraja auta. Zbiór zużytych identyfikatorów jest ograniczony i znika razem z dzierżawą.
 - `arm` ze starego połączenia lub starej dzierżawy nie uzbraja auta.
 - Panel pamięta `request_id` oczekującej aktywacji. STOP, ukrycie karty i utrata fokusu anulują ją i wysyłają `stop`, więc Pi kończy rozbrojone także wtedy, gdy zdążyło uzbroić. Utrata dzierżawy też ją anuluje, a `stop` wysyła wtedy DO. `armed` z innym `request_id` albo po anulowaniu panel ignoruje ([04 §3](04-panel-sterowania.md#3-aktywacja-i-stop)).
-- `stop` wyłącza napęd i unieważnia sesję oraz jej tokeny. Jest idempotentny, nie wymaga `seq`, a jego `request_id` wraca w `stopped`.
+- `stop` wyłącza napęd i unieważnia sesję oraz jej tokeny. Jest idempotentny, nie wymaga `seq`, a jego `request_id` wraca w `stopped` z przyczyną bieżącego rozbrojenia, jak `stop_cause` w `status` (`stop_command`, gdy rozbroił go ten `stop`; `null`, gdy agent od startu nie był uzbrojony).
 - DO wysyła `stop` sam, gdy dzierżawa wygaśnie, kierowca się rozłączy albo trwa przejęcie.
 
 ## 5. Token świeżości
@@ -79,12 +79,12 @@ Około 5 Hz, także gdy agent jest rozbrojony.
 
 | Pole | Znaczenie |
 |---|---|
-| Stan agenta | Rozbrojony lub uzbrojony ([05 §1](05-agent-pi.md#1-stany-agenta)) |
+| `state` | Rozbrojony (`disarmed`) lub uzbrojony (`armed`) ([05 §1](05-agent-pi.md#1-stany-agenta)) |
 | `session_id` | Bieżąca sesja ruchu albo `null` |
 | `last_seq`, `seq_age_ms` | Ostatni przyjęty `seq` i czas od jego przyjęcia |
-| Zadane wartości kół | `left`, `right` z ostatniego przyjętego `drive` |
-| Wysterowanie kół | Wartości po profilu jazdy; nie zmierzona prędkość |
-| Przyczyna zatrzymania | Ostatni powód rozbrojenia |
+| `command_left`, `command_right` | Zadane wartości z ostatniego przyjętego `drive` |
+| `output_left`, `output_right` | Wysterowanie po profilu jazdy; nie zmierzona prędkość |
+| `stop_cause` | Ostatni powód rozbrojenia albo `null` przed pierwszym |
 | `lease_id` | Dzierżawa, z którą Pi wiąże heartbeat i sesję |
 | `last_heartbeat_seq`, `heartbeat_age_ms` | Ostatni heartbeat i czas od jego odbioru |
 
@@ -132,3 +132,23 @@ TTL dobieramy tak: przy rozbrojonym napędzie zbieramy próbki obiegu z heartbea
 ## 9. Poza zakresem
 
 Synchronizacja zegarów (NTP, offset przeglądarki) nie bierze udziału w decyzji o wykonaniu komendy. Poprawny czas systemowy potrzebny do weryfikacji certyfikatów WSS zapewnia OS.
+
+## 10. Pliki w `protocol/`
+
+Schematy i przykłady są źródłem kodowania pól. Mapa plików: [`protocol/README.md`](../../protocol/README.md). Wartości zamkniętych słowników (`error_reason`, stan i powód `lease`, `stop_cause`, stan agenta) stoją w `schemas/common.schema.json`.
+
+- **Dialekt.** JSON Schema 2020-12 w podzbiorze obsługiwanym przez Ajv w Workers i przez `jsonschema`: `$schema`, `$id`, `$ref`, `$defs`, `type`, `properties`, `required`, `additionalProperties`, `enum`, `const`, `minimum`, `maximum`, `minLength`, `maxLength`, `pattern`, `items`, `minItems`, `oneOf`, `title`, `description`. Bez `format`. `pattern` to `^…$(?!\n)` z prostych klas ASCII: w Pythonie samo `$` dopuszcza końcowy `\n`, w JavaScripcie nie, a dodatkowe wyrażenie wyrównuje oba silniki.
+- **Odcinki.** `message-types.json` wylicza, kto komu wysyła każdy typ (`panel`, `server`, `device`); kluczem wpisu jest (typ, od, do). Typy przekazywane do Pi mają dwie formy: `*.client` (panel → DO, bez `lease_id`) i `*.forwarded` (DO → Pi, `lease_id` wymagane). DO budując wiadomość dla Pi tworzy nowy obiekt z pól formy `client` i własnym `lease_id`. `stop` wysłany przez DO ma `lease_id` dzierżawy kończonej albo nadawanej; Pi wykonuje `stop` niezależnie od niego.
+- **Schematy.** Każdy ma `additionalProperties: false`. Liczby całkowite zapisane jako `1.0` przechodzą schemat; agent normalizuje je po walidacji.
+- **Ścisły parser.** Pi sprawdza kolejno rozmiar ramki, ścisły parse i schemat. Parse odrzuca `NaN`, `Infinity`, `-Infinity`, liczby poza zakresem zmiennoprzecinkowym (`1e400`) i zduplikowane klucze, zanim zastosuje schemat. Na DO wystarcza `JSON.parse` i schemat, bo DO przekazuje do Pi nowo zbudowany obiekt.
+- **Reguły odbiorcy**, które nie wynikają ze schematu:
+
+| Wiersz 03 §4 | Reguła | `error_reason` |
+|---|---|---|
+| Wersja i schemat, zakresy i liczby skończone | Ramka nie przechodzi schematu odcinka | `invalid_message` |
+| Rola nadawcy | Typ nie ma w `message-types.json` odcinka (typ, od, do) tego połączenia | `wrong_role` |
+| Rozmiar | Ramka ma więcej niż `max_frame_bytes` bajtów UTF-8 (limit włącznie) | `frame_too_large` |
+| Częstotliwość | W oknie przesuwnym `[t, t + window_ms)` na połączeniu jest więcej niż `max` wiadomości tego typu | `rate_limited` |
+| Dzierżawa | Nadawca `arm`, `stop` albo `drive` nie trzyma aktualnej dzierżawy | `lease_mismatch` |
+
+- **Przykłady.** `examples/valid` i `examples/invalid` mają jeden kształt pliku (`examples/case.schema.json`): ramki jako surowy tekst, odcinek, kontekst, oczekiwany powód (`null` = przyjęta). Przypadek dla reguły roli, rozmiaru, częstotliwości i dzierżawy ma w `twin` listę bliźniaków z `examples/valid`, które różnią się tylko badanym czynnikiem; wymóg sprawdza test, nie schemat. Limity: `limits.json`.

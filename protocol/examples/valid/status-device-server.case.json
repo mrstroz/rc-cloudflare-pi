@@ -1,0 +1,17 @@
+{
+  "case": "status-device-server",
+  "covers": "ok",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"status\",\"state\":\"armed\",\"session_id\":\"kQ3v9XbT2mWc7ZyH4nPdLe\",\"last_seq\":123,\"seq_age_ms\":12,\"command_left\":0.7,\"command_right\":-0.7,\"output_left\":0.55,\"output_right\":-0.55,\"stop_cause\":null,\"lease_id\":\"r8JfA0sUo5GxN1tVqBhY6w\",\"last_heartbeat_seq\":17,\"heartbeat_age_ms\":240}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

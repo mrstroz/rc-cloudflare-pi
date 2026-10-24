@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hello.schema.json",
+  "title": "hello",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "hello"
+    }
+  }
+}

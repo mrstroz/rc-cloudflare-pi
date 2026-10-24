@@ -1,0 +1,17 @@
+{
+  "case": "error-for-request-device-server",
+  "covers": "ok",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"error\",\"reason\":\"invalid_message\",\"request_id\":\"Zp2L9cMEd4TqYk7RxB1VnA\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

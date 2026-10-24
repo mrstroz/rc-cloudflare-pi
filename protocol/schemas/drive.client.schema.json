@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "drive.client.schema.json",
+  "title": "drive.client",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type",
+    "session_id",
+    "seq",
+    "freshness_token",
+    "left",
+    "right"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "drive"
+    },
+    "session_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "seq": {
+      "$ref": "common.schema.json#/$defs/counter"
+    },
+    "freshness_token": {
+      "$ref": "common.schema.json#/$defs/freshness_token"
+    },
+    "left": {
+      "$ref": "common.schema.json#/$defs/wheel"
+    },
+    "right": {
+      "$ref": "common.schema.json#/$defs/wheel"
+    }
+  }
+}

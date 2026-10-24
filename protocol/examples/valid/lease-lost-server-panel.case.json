@@ -1,0 +1,17 @@
+{
+  "case": "lease-lost-server-panel",
+  "covers": "ok",
+  "hop": {
+    "from": "server",
+    "to": "panel"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"lease\",\"state\":\"lost\",\"reason\":\"expired\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

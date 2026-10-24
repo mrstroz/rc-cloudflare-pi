@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "status.schema.json",
+  "title": "status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type",
+    "state",
+    "session_id",
+    "last_seq",
+    "seq_age_ms",
+    "command_left",
+    "command_right",
+    "output_left",
+    "output_right",
+    "stop_cause",
+    "lease_id",
+    "last_heartbeat_seq",
+    "heartbeat_age_ms"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "status"
+    },
+    "state": {
+      "$ref": "common.schema.json#/$defs/agent_state"
+    },
+    "session_id": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "last_seq": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/counter"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "seq_age_ms": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/duration_ms"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "command_left": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/wheel"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "command_right": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/wheel"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "output_left": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/wheel"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "output_right": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/wheel"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stop_cause": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/stop_cause"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "lease_id": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "last_heartbeat_seq": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/counter"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "heartbeat_age_ms": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/duration_ms"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

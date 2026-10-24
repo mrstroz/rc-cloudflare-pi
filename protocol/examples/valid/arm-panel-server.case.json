@@ -1,0 +1,17 @@
+{
+  "case": "arm-panel-server",
+  "covers": "ok",
+  "hop": {
+    "from": "panel",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"arm\",\"request_id\":\"Zp2L9cMEd4TqYk7RxB1VnA\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

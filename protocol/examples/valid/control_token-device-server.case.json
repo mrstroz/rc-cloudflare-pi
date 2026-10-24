@@ -1,0 +1,17 @@
+{
+  "case": "control_token-device-server",
+  "covers": "ok",
+  "hop": {
+    "from": "device",
+    "to": "server"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"control_token\",\"session_id\":\"kQ3v9XbT2mWc7ZyH4nPdLe\",\"freshness_token\":\"4250.t7nkPssPxLNf4a4O89y7DQhNqVnaAenJIhSZtVN2L-8\"}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}
