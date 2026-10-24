@@ -105,7 +105,7 @@ Skrypt diagnostyczny w `apps/pi-agent/` działa bez panelu i Cloudflare:
 
 - uruchamia kanał A i B osobno i razem, w obu kierunkach, z zadanym duty,
 - każda próba ma jawny, krótki limit czasu; napęd nie czeka włączony na kolejne polecenie,
-- między kolejnymi próbami jest przerwa 0,5 s przy wyłączonych enable, żeby koło wybiegło przed odwróceniem kierunku; wartość nie jest zmierzona, potwierdza ją P01 ([08 §2](08-proby-odbiorowe.md#2-próby-odbiorowe-mvp)),
+- między kolejnymi próbami jest przerwa 0,5 s przy wyłączonych enable, żeby koło wybiegło przed odwróceniem kierunku; wartość nie jest zmierzona; P01 potwierdziła wzrokowo na uniesionych kołach przy duty 0,9, że koło staje przed zmianą kierunku, a na podłodze nie sprawdzano ([08 §3](08-proby-odbiorowe.md#3-wyniki)),
 - dopuszcza duty do 1,0 dopiero po sprawdzeniu zasilania,
 - wyłącza oba enable po zakończeniu próby i po obsłużonym błędzie.
 
