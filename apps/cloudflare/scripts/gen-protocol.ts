@@ -56,6 +56,7 @@ import type { ValidateFunction } from "ajv";
 import * as validators from "./validators.js";
 
 export const ERROR_REASONS = ${JSON.stringify(common.$defs.error_reason.enum)} as const;
+export type ProtocolErrorReason = (typeof ERROR_REASONS)[number];
 export const LIMITS = ${JSON.stringify(limits)} as const;
 export const HOPS = ${JSON.stringify(hops)} as const;
 export const VALIDATORS: Record<(typeof HOPS)[number]["validator"], ValidateFunction> = validators;

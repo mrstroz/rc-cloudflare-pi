@@ -38,7 +38,11 @@ export default defineConfig(async () => {
           test: { name: "panel", include: ["test/panel/**/*.test.ts"], environment: "happy-dom" },
         },
         {
-          test: { name: "node", include: ["test/node/**/*.test.ts"], environment: "node" },
+          test: {
+            name: "node",
+            include: ["test/node/**/*.test.ts", "test/unit/**/*.test.ts"],
+            environment: "node",
+          },
         },
       ],
     },

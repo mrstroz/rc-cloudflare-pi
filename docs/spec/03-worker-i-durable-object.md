@@ -51,12 +51,13 @@ Dzierżawa należy do jednej karty (jednego połączenia WebSocket), nie do oper
 | `hello` karty, dzierżawa wolna, nic nie oczekuje | Nadanie (poniżej) | „nadana” z `lease_id` do tej karty |
 | `hello` karty, dzierżawa zajęta lub nadanie oczekuje | Brak | „zajęta” do tej karty |
 | `takeover` | Przejęcie (§6) | jak w §6 |
-| 3 s bez poprawnej wiadomości właściciela | Odcięcie karty, `stop` do Pi, zwolnienie | „utracona” (wygasła) do właściciela, „wolna” do pozostałych |
+| 3 s bez `heartbeat` ani poprawnego `drive` od właściciela | Karta traci dzierżawę, `stop` do Pi, zwolnienie | „utracona” (wygasła) do właściciela, „wolna” do pozostałych |
 | Rozłączenie właściciela | `stop` do Pi, zwolnienie | „wolna” do pozostałych |
 
 Każde nadanie przechodzi tę samą drogę. Gdy Pi jest połączone, DO wysyła `stop` z nowym `request_id` i nadaje dzierżawę dopiero po `stopped` z tym `request_id`, czekając najwyżej 2 s. Bez `stopped` w tym czasie nadanie się nie udaje: nikt nie ma dzierżawy, a karta dostaje `error` (brak potwierdzenia STOP) i może ponowić przez `takeover`. Gdy Pi nie jest połączone, DO nadaje od razu, bo nowe połączenie Pi zaczyna rozbrojone; panel pokazuje wtedy auto jako offline, a DO nie deklaruje skutecznego STOP.
 
 - Wolnej dzierżawy nie dziedziczy automatycznie żadna otwarta karta. Karta bierze ją przez `takeover`.
+- Karta, która straciła dzierżawę, zostaje połączona: DO odrzuca jej `arm`, `stop` i `drive`, a ona może wysłać `takeover`.
 - Dzierżawę odnawiają `heartbeat` i poprawny `drive` od właściciela. Ramki Ping/Pong transportu jej nie odnawiają.
 - DO sprawdza termin przy każdej wiadomości. Wiadomość po terminie nie odnawia dzierżawy, nawet jeśli timer sprzątający jeszcze się nie wykonał.
 - Nowy kierowca zawsze uzbraja auto w nowej sesji.
@@ -67,7 +68,7 @@ Uzasadnienie wartości i wariantów: [ADR-0005](../adr/0005-dzierzawa-kierowcy-i
 
 `takeover` od uprawnionego operatora uruchamia kolejność:
 
-1. Unieważnienie starej dzierżawy, jeśli istnieje, i odcięcie starej karty (`lease` „utracona”, powód: przejęta).
+1. Unieważnienie starej dzierżawy, jeśli istnieje: stara karta ją traci (`lease` „utracona”, powód: przejęta).
 2. Nadanie dzierżawy przejmującemu drogą z §5: `stop`, `stopped`, `lease` „nadana”.
 3. Osobne uzbrojenie przy neutralnych wejściach.
 

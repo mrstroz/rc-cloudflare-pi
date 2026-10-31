@@ -1,5 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
-import { RateWindows, receive, type Party } from "./receive";
+import { DriverLease, type Effect } from "./lease";
+import { RateWindows, receive, type Message, type Party } from "./receive";
 
 /** Paths on which the Worker hands an authenticated connection to the object. */
 export const DEVICE_PATH = "/device";
@@ -15,6 +16,14 @@ interface Connection {
   readonly rates: RateWindows;
 }
 
+function newId(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return btoa(String.fromCharCode(...bytes))
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replace(/=+$/, "");
+}
+
 function connect(party: Connection["party"]): { client: WebSocket; connection: Connection } {
   const { 0: client, 1: socket } = new WebSocketPair();
   socket.accept();
@@ -28,6 +37,8 @@ function connect(party: Connection["party"]): { client: WebSocket; connection: C
 export class CarObject extends DurableObject<Env> {
   private device: Connection | null = null;
   private readonly panels = new Set<Connection>();
+  private readonly lease = new DriverLease<Connection>({ now: () => Date.now(), newId });
+  private leaseTimer: ReturnType<typeof setTimeout> | null = null;
 
   override fetch(request: Request): Response {
     switch (new URL(request.url).pathname) {
@@ -44,7 +55,9 @@ export class CarObject extends DurableObject<Env> {
     const { client, connection } = connect("panel");
     this.panels.add(connection);
     const forget = (): void => {
-      this.panels.delete(connection);
+      if (this.panels.delete(connection)) {
+        this.apply(this.lease.gone(connection, this.device !== null));
+      }
     };
     this.listen(connection, forget);
     return new Response(null, { status: 101, webSocket: client });
@@ -74,6 +87,7 @@ export class CarObject extends DurableObject<Env> {
 
   /** Validation of docs/spec/03 §4; a rejected frame gets `error` on the same connection. */
   private onFrame(connection: Connection, data: string | ArrayBuffer): void {
+    this.apply(this.lease.expire(this.device !== null));
     const verdict =
       typeof data === "string"
         ? receive(data, {
@@ -81,11 +95,12 @@ export class CarObject extends DurableObject<Env> {
             to: "server",
             nowMs: Date.now(),
             rates: connection.rates,
-            holdsLease: false,
+            holdsLease: this.lease.holds(connection),
           })
         : ({ ok: false, reason: "invalid_message", requestId: null } as const);
     if (verdict.ok) {
-      return; // Lease (RC-27) and forwarding (RC-28) act on accepted messages.
+      this.onMessage(connection, verdict.message);
+      return;
     }
     connection.socket.send(
       JSON.stringify({
@@ -95,6 +110,57 @@ export class CarObject extends DurableObject<Env> {
         request_id: verdict.requestId,
       }),
     );
+  }
+
+  /** Lease events of 03 §5; forwarding to the Pi and back comes with RC-28. */
+  private onMessage(connection: Connection, message: Message): void {
+    const deviceConnected = this.device !== null;
+    if (connection.party === "panel") {
+      if (message.type === "hello") {
+        this.apply(this.lease.hello(connection, deviceConnected));
+      } else if (message.type === "heartbeat" || message.type === "drive") {
+        this.lease.renew(connection);
+        this.armLeaseTimer();
+      }
+    } else if (message.type === "stopped") {
+      this.apply(this.lease.stopped(message.request_id as string | null));
+    }
+  }
+
+  private apply(effects: readonly Effect<Connection>[]): void {
+    for (const effect of effects) {
+      const text = JSON.stringify(effect.message);
+      if (effect.to === "panel") {
+        effect.tab.socket.send(text);
+      } else if (effect.to === "device") {
+        this.device?.socket.send(text);
+      } else {
+        for (const panel of this.panels) {
+          if (panel !== effect.except) {
+            panel.socket.send(text);
+          }
+        }
+      }
+    }
+    this.armLeaseTimer();
+  }
+
+  /** One timer for the nearest lease deadline; messages also apply deadlines on arrival. */
+  private armLeaseTimer(): void {
+    if (this.leaseTimer !== null) {
+      clearTimeout(this.leaseTimer);
+      this.leaseTimer = null;
+    }
+    const deadline = this.lease.nextDeadline();
+    if (deadline !== null) {
+      this.leaseTimer = setTimeout(
+        () => {
+          this.leaseTimer = null;
+          this.apply(this.lease.expire(this.device !== null));
+        },
+        Math.max(0, deadline - Date.now()),
+      );
+    }
   }
 
   /** Pi state is unknown from here until the first `status` of a new connection (03 §3). */

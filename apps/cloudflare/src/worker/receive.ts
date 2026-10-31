@@ -1,11 +1,14 @@
-import { HOPS, LIMITS, VALIDATORS } from "../generated/protocol";
+import { HOPS, LIMITS, VALIDATORS, type ProtocolErrorReason } from "../generated/protocol";
 import { parseStrict, StrictJsonError } from "./strict-json";
 
 /** The three ends of a connection in protocol/message-types.json. */
 export type Party = "panel" | "server" | "device";
 
-export type ErrorReason =
-  "invalid_message" | "wrong_role" | "frame_too_large" | "rate_limited" | "lease_mismatch";
+/** The reasons a receiver rule gives; the rest of `error_reason` belongs to the lease. */
+export type ErrorReason = Extract<
+  ProtocolErrorReason,
+  "invalid_message" | "wrong_role" | "frame_too_large" | "rate_limited" | "lease_mismatch"
+>;
 
 /** A message that passed every rule: an object with a known `type`, valid for its hop. */
 export interface Message {
