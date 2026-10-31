@@ -1,4 +1,6 @@
 import { env } from "cloudflare:workers";
+import { runInDurableObject } from "cloudflare:test";
+import type { CarObject } from "../../src/worker/car";
 import { expect } from "vitest";
 import { DEVICE_PATH, PANEL_PATH } from "../../src/worker/car";
 import { receive, type Message, type Party } from "../../src/worker/receive";
@@ -106,5 +108,10 @@ export class Car {
 
   device(): Promise<Peer> {
     return this.open(DEVICE_PATH, "device");
+  }
+
+  /** Runs `callback` inside this car's object, for states the sockets cannot order. */
+  inside<R>(callback: (instance: CarObject) => R | Promise<R>): Promise<R> {
+    return runInDurableObject(this.stub, callback);
   }
 }

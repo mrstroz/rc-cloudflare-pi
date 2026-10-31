@@ -92,6 +92,10 @@ export class CarObject extends DurableObject<Env> {
 
   /** Validation of docs/spec/03 §4; a rejected frame gets `error` on the same connection. */
   private onFrame(connection: Connection, data: string | ArrayBuffer): void {
+    // A replaced Pi connection still delivers frames sent before its close (03 §3).
+    if (connection.party === "device" && connection !== this.device) {
+      return;
+    }
     this.apply(this.lease.expire(this.device !== null));
     const verdict =
       typeof data === "string"

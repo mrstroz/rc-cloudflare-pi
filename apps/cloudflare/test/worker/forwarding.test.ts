@@ -139,3 +139,31 @@ describe("device_link", () => {
     expect(await tab.next()).toMatchObject({ type: "lease", state: "granted" });
   });
 });
+
+/** The private parts of CarObject this file reaches, for a frame the sockets cannot order. */
+interface CarInternals {
+  readonly device: object | null;
+  onFrame(connection: object, data: string): void;
+}
+
+describe("a replaced device connection", () => {
+  it("reaches nobody with a frame that arrives after the replacement", async () => {
+    const { car, driver } = await drivenCar();
+    const old = await car.inside((o) => (o as unknown as CarInternals).device);
+    const replacing = await car.device();
+    expect(await driver.next()).toEqual({ v: 1, type: "device_link", connected: false });
+    expect(await driver.next()).toEqual({ v: 1, type: "device_link", connected: true });
+
+    // A frame the old Pi sent before it saw the close, delivered after acceptDevice ran.
+    await car.inside((o) => {
+      if (old === null) {
+        throw new Error("no device connection before the replacement");
+      }
+      (o as unknown as CarInternals).onFrame(old, JSON.stringify({ v: 1, ...ARMED }));
+    });
+    expect(await driver.silentFor(200)).toBe(true);
+
+    replacing.send(ARMED);
+    expect(await driver.next()).toEqual({ v: 1, ...ARMED });
+  });
+});

@@ -22,7 +22,7 @@ Zły lub brakujący token urządzenia i nieznany `car_id` dają tę samą odpowi
 ## 3. Durable Object
 
 - Jeden DO na `car_id`. Najwyżej jedna aktualna dzierżawa kierowcy i jedno połączenie urządzenia.
-- Nowe uwierzytelnione połączenie urządzenia zastępuje poprzednie: DO zamyka stare kodem 4001 z powodem `replaced` i traktuje to jak rozłączenie urządzenia. Stan Pi jest nieznany do pierwszego `status` z nowego połączenia, a nowe połączenie Pi zaczyna rozbrojone ([05 §1](05-agent-pi.md#1-stany-agenta), [ADR-0012](../adr/0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md)).
+- Nowe uwierzytelnione połączenie urządzenia zastępuje poprzednie: DO zamyka stare kodem 4001 z powodem `replaced` i traktuje to jak rozłączenie urządzenia. Ramki, które dotrą starym połączeniem po zastąpieniu, DO pomija bez odpowiedzi. Stan Pi jest nieznany do pierwszego `status` z nowego połączenia, a nowe połączenie Pi zaczyna rozbrojone ([05 §1](05-agent-pi.md#1-stany-agenta), [ADR-0012](../adr/0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md)).
 - Standardowe WebSockety, bez Hibernation API ([ADR-0007](../adr/0007-standardowe-websockety-bez-hibernacji.md)).
 - Utrata instancji lub stanu dzierżawy kończy sterowanie. Panel musi połączyć się ponownie, a kierowca ponownie uzbroić auto. DO nie odtwarza pozwolenia na jazdę ze starej karty.
 - DO pokazuje panelowi stan potwierdzony przez Pi oraz to, czy urządzenie jest połączone (`device_link`, [02 §2](02-protokol-v1.md#2-typy-wiadomości)).
