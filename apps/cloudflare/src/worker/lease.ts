@@ -117,21 +117,27 @@ export class DriverLease<Tab> {
 
   /**
    * `takeover` (03 §6): the old lease ends at once (`lost`, taken over), then the grant takes
-   * the path of §5. A takeover while a grant is pending is refused, never queued.
+   * the path of §5. A takeover while a grant is pending is refused, never queued. The old owner
+   * hears `lost` after the `stop` and before `busy`, so it ends on „zajęta”.
    */
   takeover(tab: Tab, deviceConnected: boolean): Effect<Tab>[] {
     if (this.pending !== null) {
       return [{ to: "panel", tab, message: error("takeover_in_progress") }];
     }
-    const effects: Effect<Tab>[] = [];
+    const lostTo: Effect<Tab>[] = [];
     if (this.held !== null) {
       const { owner } = this.held;
       this.held = null;
       if (owner !== tab) {
-        effects.push({ to: "panel", tab: owner, message: lost("taken_over") });
+        lostTo.push({ to: "panel", tab: owner, message: lost("taken_over") });
       }
     }
-    return [...effects, ...this.grant(tab, deviceConnected)];
+    const granting = this.grant(tab, deviceConnected);
+    return [
+      ...granting.filter((effect) => effect.to === "device"),
+      ...lostTo,
+      ...granting.filter((effect) => effect.to !== "device"),
+    ];
   }
 
   /** A valid `heartbeat` or `drive` from the owner moves the deadline (03 §5). */

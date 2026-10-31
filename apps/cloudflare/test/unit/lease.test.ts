@@ -250,7 +250,12 @@ describe("takeover", () => {
   it("ends the old lease at once and grants through stop and stopped", () => {
     lease.hello("A", false);
     const effects = lease.takeover("B", true);
-    expect(effects[0]).toEqual({
+    expect(effects.map((e) => [e.to, e.message.type])).toEqual([
+      ["device", "stop"],
+      ["panel", "lease"],
+      ["others", "lease"],
+    ]);
+    expect(effects[1]).toEqual({
       to: "panel",
       tab: "A",
       message: { v: 1, type: "lease", state: "lost", reason: "taken_over" },
@@ -304,6 +309,15 @@ describe("takeover", () => {
         tab: "B",
         message: { v: 1, type: "error", reason: "takeover_in_progress", request_id: null },
       },
+    ]);
+  });
+
+  it("with the Pi offline tells the old owner lost before the grant", () => {
+    lease.hello("A", false);
+    expect(lease.takeover("B", false).map((e) => e.message)).toEqual([
+      { v: 1, type: "lease", state: "lost", reason: "taken_over" },
+      { v: 1, type: "lease", state: "granted", lease_id: "id2".padEnd(22, "0") },
+      { v: 1, type: "lease", state: "busy" },
     ]);
   });
 
