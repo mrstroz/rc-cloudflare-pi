@@ -33,7 +33,7 @@
       Gotowe, gdy: przykłady `device_link` przechodzą walidatory obu aplikacji.
       Panel pokazuje „Auto offline” ([04 §5](../spec/04-panel-sterowania.md#5-statusy)), a kontrakt v1 nie miał komunikatu o połączeniu Pi.
 
-- [ ] (=) **RC-28** Przekazywanie komend i odpowiedzi Pi, `stop` po wygaśnięciu i rozłączeniu
+- [x] (=) **RC-28** Przekazywanie komend i odpowiedzi Pi, `stop` po wygaśnięciu i rozłączeniu
       Spec: [03 §7](../spec/03-worker-i-durable-object.md#7-przekazywanie) · Zależy od: RC-27, RC-47
       Gotowe, gdy: test z atrapą urządzenia: `drive` spoza dzierżawy nie dociera do Pi, a rozłączenie kierowcy wysyła `stop`.
 

@@ -1,4 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
+import { goesToDriver, isForwarded, toDevice } from "./forward";
 import { DriverLease, type Effect } from "./lease";
 import { RateWindows, receive, type Message, type Party } from "./receive";
 
@@ -32,7 +33,8 @@ function connect(party: Connection["party"]): { client: WebSocket; connection: C
 
 /**
  * One instance per `car_id` (docs/spec/03 §3). State lives only in memory: standard
- * WebSockets without hibernation (ADR-0007), so losing the instance ends control.
+ * WebSockets without hibernation (ADR-0007), so losing the instance ends control. Beside the
+ * lease it keeps only the open connections; every message is forwarded at once or rejected.
  */
 export class CarObject extends DurableObject<Env> {
   private device: Connection | null = null;
@@ -54,12 +56,11 @@ export class CarObject extends DurableObject<Env> {
   private acceptPanel(): Response {
     const { client, connection } = connect("panel");
     this.panels.add(connection);
-    const forget = (): void => {
+    this.listen(connection, () => {
       if (this.panels.delete(connection)) {
         this.apply(this.lease.gone(connection, this.device !== null));
       }
-    };
-    this.listen(connection, forget);
+    });
     return new Response(null, { status: 101, webSocket: client });
   }
 
@@ -68,13 +69,24 @@ export class CarObject extends DurableObject<Env> {
     const previous = this.device;
     if (previous !== null) {
       previous.socket.close(CLOSE_REPLACED, "replaced");
-      this.onDeviceDisconnected(previous);
+      this.onDeviceGone(previous);
     }
     this.device = connection;
+    this.broadcast(deviceLink(true));
     this.listen(connection, () => {
-      this.onDeviceDisconnected(connection);
+      this.onDeviceGone(connection);
     });
     return new Response(null, { status: 101, webSocket: client });
+  }
+
+  /** Pi state is unknown from here until the first `status` of a new connection (03 §3). */
+  private onDeviceGone(connection: Connection): void {
+    if (this.device !== connection) {
+      return;
+    }
+    this.device = null;
+    this.broadcast(deviceLink(false));
+    this.apply(this.lease.deviceGone());
   }
 
   private listen(connection: Connection, onGone: () => void): void {
@@ -98,46 +110,70 @@ export class CarObject extends DurableObject<Env> {
             holdsLease: this.lease.holds(connection),
           })
         : ({ ok: false, reason: "invalid_message", requestId: null } as const);
-    if (verdict.ok) {
-      this.onMessage(connection, verdict.message);
-      return;
-    }
-    connection.socket.send(
-      JSON.stringify({
+    if (!verdict.ok) {
+      send(connection, {
         v: 1,
         type: "error",
         reason: verdict.reason,
         request_id: verdict.requestId,
-      }),
-    );
+      });
+    } else if (connection.party === "panel") {
+      this.fromPanel(connection, verdict.message);
+    } else {
+      this.fromDevice(verdict.message);
+    }
   }
 
-  /** Lease events of 03 §5; forwarding to the Pi and back comes with RC-28. */
-  private onMessage(connection: Connection, message: Message): void {
-    const deviceConnected = this.device !== null;
-    if (connection.party === "panel") {
-      if (message.type === "hello") {
-        this.apply(this.lease.hello(connection, deviceConnected));
-      } else if (message.type === "heartbeat" || message.type === "drive") {
-        this.lease.renew(connection);
-        this.armLeaseTimer();
-      }
-    } else if (message.type === "stopped") {
-      this.apply(this.lease.stopped(message.request_id as string | null));
+  /** 03 §5 and §7: lease events, and the driver's commands straight on to the Pi. */
+  private fromPanel(tab: Connection, message: Message): void {
+    if (message.type === "hello") {
+      send(tab, deviceLink(this.device !== null));
+      this.apply(this.lease.hello(tab, this.device !== null));
+      return;
+    }
+    const leaseId = this.lease.leaseIdOf(tab);
+    if (leaseId === null || !isForwarded(message.type)) {
+      return;
+    }
+    if (message.type === "heartbeat" || message.type === "drive") {
+      this.lease.renew(tab);
+      this.armLeaseTimer();
+    }
+    if (this.device !== null) {
+      send(this.device, toDevice(message.type, message, leaseId));
+    }
+  }
+
+  /** Answers and telemetry of the Pi go to the driver unchanged (03 §7). */
+  private fromDevice(message: Message): void {
+    const driver = [...this.panels].find((tab) => this.lease.holds(tab));
+    if (driver !== undefined && goesToDriver(message.type)) {
+      send(driver, message);
+    }
+    if (message.type === "stopped") {
+      const requestId = message.request_id;
+      this.apply(this.lease.stopped(typeof requestId === "string" ? requestId : null));
+    }
+  }
+
+  private broadcast(message: object): void {
+    for (const tab of this.panels) {
+      send(tab, message);
     }
   }
 
   private apply(effects: readonly Effect<Connection>[]): void {
     for (const effect of effects) {
-      const text = JSON.stringify(effect.message);
-      if (effect.to === "panel") {
-        effect.tab.socket.send(text);
-      } else if (effect.to === "device") {
-        this.device?.socket.send(text);
+      if (effect.to === "device") {
+        if (this.device !== null) {
+          send(this.device, effect.message);
+        }
+      } else if (effect.to === "panel") {
+        send(effect.tab, effect.message);
       } else {
-        for (const panel of this.panels) {
-          if (panel !== effect.except) {
-            panel.socket.send(text);
+        for (const tab of this.panels) {
+          if (tab !== effect.except) {
+            send(tab, effect.message);
           }
         }
       }
@@ -162,11 +198,22 @@ export class CarObject extends DurableObject<Env> {
       );
     }
   }
+}
 
-  /** Pi state is unknown from here until the first `status` of a new connection (03 §3). */
-  private onDeviceDisconnected(connection: Connection): void {
-    if (this.device === connection) {
-      this.device = null;
+function deviceLink(connected: boolean): object {
+  return { v: 1, type: "device_link", connected };
+}
+
+/**
+ * A socket closed by the peer throws on `send` until its close event has run; the close
+ * handler cleans up, so one dead connection must not stop the rest of the effects.
+ */
+function send(connection: Connection, message: object): void {
+  try {
+    connection.socket.send(JSON.stringify(message));
+  } catch (error) {
+    if (!(error instanceof TypeError)) {
+      throw error;
     }
   }
 }

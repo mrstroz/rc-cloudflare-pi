@@ -54,7 +54,7 @@ Dzierżawa należy do jednej karty (jednego połączenia WebSocket), nie do oper
 | 3 s bez `heartbeat` ani poprawnego `drive` od właściciela | Karta traci dzierżawę, `stop` do Pi, zwolnienie | „utracona” (wygasła) do właściciela, „wolna” do pozostałych |
 | Rozłączenie właściciela | `stop` do Pi, zwolnienie | „wolna” do pozostałych |
 
-Każde nadanie przechodzi tę samą drogę. Gdy Pi jest połączone, DO wysyła `stop` z nowym `request_id` i nadaje dzierżawę dopiero po `stopped` z tym `request_id`, czekając najwyżej 2 s. Bez `stopped` w tym czasie nadanie się nie udaje: nikt nie ma dzierżawy, a karta dostaje `error` (brak potwierdzenia STOP) i może ponowić przez `takeover`. Gdy Pi nie jest połączone, DO nadaje od razu, bo nowe połączenie Pi zaczyna rozbrojone; panel pokazuje wtedy auto jako offline, a DO nie deklaruje skutecznego STOP.
+Każde nadanie przechodzi tę samą drogę. Gdy Pi jest połączone, DO wysyła `stop` z nowym `request_id` i nadaje dzierżawę dopiero po `stopped` z tym `request_id`, czekając najwyżej 2 s. Bez `stopped` w tym czasie nadanie się nie udaje: nikt nie ma dzierżawy, a karta dostaje `error` (brak potwierdzenia STOP) i może ponowić przez `takeover`. Gdy Pi nie jest połączone, DO nadaje od razu, bo nowe połączenie Pi zaczyna rozbrojone; panel pokazuje wtedy auto jako offline, a DO nie deklaruje skutecznego STOP. Tak samo kończy się oczekujące nadanie, gdy Pi rozłączy się w trakcie.
 
 - Wolnej dzierżawy nie dziedziczy automatycznie żadna otwarta karta. Karta bierze ją przez `takeover`.
 - Karta, która straciła dzierżawę, zostaje połączona: DO odrzuca jej `arm`, `stop` i `drive`, a ona może wysłać `takeover`.
@@ -78,8 +78,9 @@ Gdy nadanie lub przejęcie już oczekuje, kolejny `takeover` dostaje `error` (pr
 
 - Komendy z aktualnej dzierżawy idą do Pi natychmiast. Nie ma trwałej kolejki, historii do odtworzenia ani ponawiania starych poleceń jazdy.
 - DO nie trzyma wiadomości we własnym stanie: każdą przekazuje od razu albo odrzuca. Nadmiar ponad limit częstotliwości dostaje `error`. Bufory runtime i TCP mogą opóźnić ramkę; zaległy `drive` odrzuca Pi po wieku tokenu ([02 §5](02-protokol-v1.md#5-token-świeżości)).
-- `heartbeat` idzie do Pi, jeśli jest połączone. Nie odświeża watchdoga ruchu.
-- `armed`, `control_token`, `stopped`, `status` i `error` od Pi idą do kierowcy bez zmian. DO nie podmienia tokenów ani nie odnawia ich terminów.
+- `heartbeat` kierowcy idzie do Pi, jeśli jest połączone. Nie odświeża watchdoga ruchu. `heartbeat` karty bez dzierżawy nie idzie dalej.
+- Wiadomość do Pi DO buduje od nowa z pól formy `client` i własnego `lease_id` ([02 §10](02-protokol-v1.md#10-pliki-w-protocol)). Gdy Pi nie jest połączone, komenda kierowcy przepada; panel widzi to w `device_link`.
+- `armed`, `control_token`, `stopped`, `status` i `error` od Pi idą do kierowcy bez zmian, tylko do karty z dzierżawą. Bez kierowcy DO ich nie przekazuje. DO nie podmienia tokenów ani nie odnawia ich terminów.
 - Wykryte rozłączenie kierowcy powoduje `stop`. Sesję ruchu unieważnia Pi; jego watchdog działa niezależnie, także gdy Cloudflare jeszcze nie wykrył zerwania.
 - Restart DO i reconnect nie wznawiają jazdy.
 

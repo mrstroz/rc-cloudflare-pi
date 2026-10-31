@@ -16,7 +16,10 @@ export type LeaseMessage =
   | { v: 1; type: "stop"; request_id: string; lease_id: string }
   | { v: 1; type: "error"; reason: "stop_unconfirmed" | "takeover_in_progress"; request_id: null };
 
-/** `others` goes to every open panel except `except`; `device` only when the Pi is connected. */
+/**
+ * `others` goes to every open panel except `except`; `device` only when the Pi is connected.
+ * A `stop` to the Pi comes first in every list, so a failed send to a tab cannot delay it.
+ */
 export type Effect<Tab> =
   | { readonly to: "panel"; readonly tab: Tab; readonly message: LeaseMessage }
   | { readonly to: "others"; readonly except: Tab | null; readonly message: LeaseMessage }
@@ -76,9 +79,9 @@ export class DriverLease<Tab> {
       const { owner, leaseId } = this.held;
       this.held = null;
       effects.push(
+        ...this.stopDevice(leaseId, deviceConnected),
         { to: "panel", tab: owner, message: lost("expired") },
         { to: "others", except: owner, message: FREE },
-        ...this.stopDevice(leaseId, deviceConnected),
       );
     }
     if (this.pending !== null && now >= this.pending.deadline) {
@@ -120,6 +123,19 @@ export class DriverLease<Tab> {
     return this.hold(requester, leaseId);
   }
 
+  /**
+   * The Pi went away during a pending grant. Its `stopped` will not come, and a new Pi connection
+   * starts disarmed, so the grant completes as with the Pi offline (03 §5).
+   */
+  deviceGone(): Effect<Tab>[] {
+    if (this.pending === null) {
+      return [];
+    }
+    const { requester, leaseId } = this.pending;
+    this.pending = null;
+    return this.hold(requester, leaseId);
+  }
+
   /** A tab closed. The owner's lease ends with `stop`; a requester's grant is cancelled. */
   gone(tab: Tab, deviceConnected: boolean): Effect<Tab>[] {
     if (this.pending?.requester === tab) {
@@ -131,8 +147,8 @@ export class DriverLease<Tab> {
     const { leaseId } = this.held;
     this.held = null;
     return [
-      { to: "others", except: tab, message: FREE },
       ...this.stopDevice(leaseId, deviceConnected),
+      { to: "others", except: tab, message: FREE },
     ];
   }
 

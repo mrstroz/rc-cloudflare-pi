@@ -144,8 +144,6 @@ describe("expiry", () => {
     expect(lease.expire(true)).toEqual([]);
     clock.ms = 1000 + LEASE_TIMEOUT_MS;
     expect(lease.expire(true)).toEqual([
-      { to: "panel", tab: "A", message: { v: 1, type: "lease", state: "lost", reason: "expired" } },
-      { to: "others", except: "A", message: { v: 1, type: "lease", state: "free" } },
       {
         to: "device",
         message: {
@@ -155,6 +153,8 @@ describe("expiry", () => {
           lease_id: "id1".padEnd(22, "0"),
         },
       },
+      { to: "panel", tab: "A", message: { v: 1, type: "lease", state: "lost", reason: "expired" } },
+      { to: "others", except: "A", message: { v: 1, type: "lease", state: "free" } },
     ]);
     expect(lease.holds("A")).toBe(false);
   });
@@ -192,11 +192,30 @@ describe("expiry", () => {
   });
 });
 
+describe("Pi leaving during a grant", () => {
+  it("completes the pending grant as with the Pi offline", () => {
+    lease.hello("A", true);
+    expect(lease.deviceGone()).toEqual([
+      {
+        to: "panel",
+        tab: "A",
+        message: { v: 1, type: "lease", state: "granted", lease_id: "id1".padEnd(22, "0") },
+      },
+    ]);
+    expect(lease.holds("A")).toBe(true);
+  });
+
+  it("changes nothing without a pending grant", () => {
+    lease.hello("A", false);
+    expect(lease.deviceGone()).toEqual([]);
+    expect(lease.holds("A")).toBe(true);
+  });
+});
+
 describe("owner closing", () => {
   it("frees the lease for the others and stops the Pi", () => {
     lease.hello("A", false);
     expect(lease.gone("A", true)).toEqual([
-      { to: "others", except: "A", message: { v: 1, type: "lease", state: "free" } },
       {
         to: "device",
         message: {
@@ -206,6 +225,7 @@ describe("owner closing", () => {
           lease_id: "id1".padEnd(22, "0"),
         },
       },
+      { to: "others", except: "A", message: { v: 1, type: "lease", state: "free" } },
     ]);
   });
 

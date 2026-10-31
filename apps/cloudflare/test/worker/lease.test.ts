@@ -1,12 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { Car } from "./peers";
+import { Car, type Peer } from "./peers";
+
+/** Sends hello and consumes the device_link that answers it first. */
+async function hello(tab: Peer): Promise<void> {
+  tab.send({ type: "hello" });
+  expect(await tab.next()).toMatchObject({ type: "device_link" });
+}
 
 const ID = /^[A-Za-z0-9_-]{22}$/;
 
 describe("lease in the DO", () => {
   it("is granted on hello at once while the Pi is offline", async () => {
     const tab = await new Car().panel();
-    tab.send({ type: "hello" });
+    await hello(tab);
     expect(await tab.next()).toMatchObject({
       type: "lease",
       state: "granted",
@@ -18,7 +24,7 @@ describe("lease in the DO", () => {
     const car = new Car();
     const device = await car.device();
     const tab = await car.panel();
-    tab.send({ type: "hello" });
+    await hello(tab);
 
     const stop = await device.next();
     expect(stop).toMatchObject({
@@ -42,7 +48,7 @@ describe("lease in the DO", () => {
     const car = new Car();
     const device = await car.device();
     const tab = await car.panel();
-    tab.send({ type: "hello" });
+    await hello(tab);
     const stop = await device.next();
 
     expect(await tab.next(2500)).toEqual({
@@ -60,9 +66,9 @@ describe("lease in the DO", () => {
     const car = new Car();
     const first = await car.panel();
     const second = await car.panel();
-    first.send({ type: "hello" });
+    await hello(first);
     await first.next();
-    second.send({ type: "hello" });
+    await hello(second);
     expect(await second.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     second.send({ type: "arm", request_id: "Zm9vYmFyYmF6cXV4MTIzNA" });
     expect(await second.next()).toMatchObject({ type: "error", reason: "lease_mismatch" });
@@ -73,13 +79,14 @@ describe("lease in the DO", () => {
     const device = await car.device();
     const owner = await car.panel();
     const other = await car.panel();
-    owner.send({ type: "hello" });
+    await hello(owner);
     const grantStop = await device.next();
     device.send({ type: "stopped", request_id: grantStop.request_id, cause: null });
     const granted = await owner.next();
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
     owner.send({ type: "heartbeat", heartbeat_seq: 1 });
+    expect(await device.next()).toMatchObject({ type: "heartbeat", lease_id: granted.lease_id });
     expect(await owner.silentFor(2800)).toBe(true);
 
     expect(await owner.next(500)).toEqual({
@@ -99,9 +106,10 @@ describe("lease in the DO", () => {
     const car = new Car();
     const owner = await car.panel();
     const other = await car.panel();
-    owner.send({ type: "hello" });
+    await hello(owner);
     await owner.next();
     const device = await car.device();
+    expect(await other.next()).toEqual({ v: 1, type: "device_link", connected: true });
     owner.close();
     expect(await other.next()).toEqual({ v: 1, type: "lease", state: "free" });
     expect(await device.next()).toMatchObject({ type: "stop" });
