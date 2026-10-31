@@ -53,6 +53,8 @@ Dzierżawa należy do jednej karty (jednego połączenia WebSocket), nie do oper
 | `takeover` | Przejęcie (§6) | jak w §6 |
 | 3 s bez `heartbeat` ani poprawnego `drive` od właściciela | Karta traci dzierżawę, `stop` do Pi, zwolnienie | „utracona” (wygasła) do właściciela, „wolna” do pozostałych |
 | Rozłączenie właściciela | `stop` do Pi, zwolnienie | „wolna” do pozostałych |
+| Brak `stopped` w 2 s od `stop` nadania | Nadanie się nie udaje | „wolna” do wszystkich kart, także do proszącej po jej `error` |
+| Rozłączenie karty, której nadanie oczekuje | Anulowanie nadania | „wolna” do pozostałych |
 
 Każde nadanie przechodzi tę samą drogę. Gdy Pi jest połączone, DO wysyła `stop` z nowym `request_id` i nadaje dzierżawę dopiero po `stopped` z tym `request_id`, czekając najwyżej 2 s. Bez `stopped` w tym czasie nadanie się nie udaje: nikt nie ma dzierżawy, a karta dostaje `error` (brak potwierdzenia STOP) i może ponowić przez `takeover`. Gdy Pi nie jest połączone, DO nadaje od razu, bo nowe połączenie Pi zaczyna rozbrojone; panel pokazuje wtedy auto jako offline, a DO nie deklaruje skutecznego STOP. Tak samo kończy się oczekujące nadanie, gdy Pi rozłączy się w trakcie.
 

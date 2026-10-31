@@ -88,6 +88,7 @@ describe("grant on hello", () => {
         tab: "A",
         message: { v: 1, type: "error", reason: "stop_unconfirmed", request_id: null },
       },
+      { to: "others", except: null, message: { v: 1, type: "lease", state: "free" } },
     ]);
     expect(lease.stopped(stopRequestId(effects))).toEqual([]);
     expect(lease.holds("A")).toBe(false);
@@ -95,7 +96,9 @@ describe("grant on hello", () => {
 
   it("is cancelled when the requesting tab closes", () => {
     const effects = lease.hello("A", true);
-    expect(lease.gone("A", true)).toEqual([]);
+    expect(lease.gone("A", true)).toEqual([
+      { to: "others", except: "A", message: { v: 1, type: "lease", state: "free" } },
+    ]);
     expect(lease.stopped(stopRequestId(effects))).toEqual([]);
     expect(lease.holds("A")).toBe(false);
   });
@@ -272,6 +275,7 @@ describe("takeover", () => {
         tab: "B",
         message: { v: 1, type: "error", reason: "stop_unconfirmed", request_id: null },
       },
+      { to: "others", except: null, message: { v: 1, type: "lease", state: "free" } },
     ]);
     expect(lease.owner()).toBeNull();
   });
@@ -314,7 +318,9 @@ describe("takeover", () => {
   it("is cancelled when the taking tab closes", () => {
     lease.hello("A", false);
     const effects = lease.takeover("B", true);
-    lease.gone("B", true);
+    expect(lease.gone("B", true)).toEqual([
+      { to: "others", except: "B", message: { v: 1, type: "lease", state: "free" } },
+    ]);
     expect(lease.stopped(stopRequestId(effects))).toEqual([]);
     expect(lease.owner()).toBeNull();
   });

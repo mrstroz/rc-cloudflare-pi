@@ -57,6 +57,7 @@ describe("takeover in the DO", () => {
       request_id: null,
     });
     for (const tab of [owner, taker]) {
+      expect(await tab.next()).toEqual({ v: 1, type: "lease", state: "free" });
       tab.send(ARM);
       expect(await tab.next()).toMatchObject({ type: "error", reason: "lease_mismatch" });
     }

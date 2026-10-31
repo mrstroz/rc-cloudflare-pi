@@ -57,6 +57,7 @@ describe("lease in the DO", () => {
       reason: "stop_unconfirmed",
       request_id: null,
     });
+    expect(await tab.next()).toEqual({ v: 1, type: "lease", state: "free" });
     device.send({ type: "stopped", request_id: stop.request_id, cause: null });
     tab.send({ type: "arm", request_id: "Zm9vYmFyYmF6cXV4MTIzNA" });
     expect(await tab.next()).toMatchObject({ type: "error", reason: "lease_mismatch" });
@@ -101,6 +102,18 @@ describe("lease in the DO", () => {
     owner.send({ type: "arm", request_id: "Zm9vYmFyYmF6cXV4MTIzNA" });
     expect(await owner.next()).toMatchObject({ type: "error", reason: "lease_mismatch" });
   }, 10_000);
+
+  it("tells a tab that got busy that the lease is free when the pending grant is cancelled", async () => {
+    const car = new Car();
+    await car.device();
+    const requester = await car.panel();
+    const other = await car.panel();
+    await hello(requester);
+    await hello(other);
+    expect(await other.next()).toEqual({ v: 1, type: "lease", state: "busy" });
+    requester.close();
+    expect(await other.next()).toEqual({ v: 1, type: "lease", state: "free" });
+  });
 
   it("frees the lease when the owner closes: free to the others, stop to the Pi", async () => {
     const car = new Car();

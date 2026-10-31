@@ -92,7 +92,11 @@ export class DriverLease<Tab> {
     if (this.pending !== null && now >= this.pending.deadline) {
       const { requester } = this.pending;
       this.pending = null;
-      effects.push({ to: "panel", tab: requester, message: error("stop_unconfirmed") });
+      // Nobody holds the lease now, so every tab, the requester too, may retry by takeover.
+      effects.push(
+        { to: "panel", tab: requester, message: error("stop_unconfirmed") },
+        { to: "others", except: null, message: FREE },
+      );
     }
     return effects;
   }
@@ -164,6 +168,7 @@ export class DriverLease<Tab> {
   gone(tab: Tab, deviceConnected: boolean): Effect<Tab>[] {
     if (this.pending?.requester === tab) {
       this.pending = null;
+      return [{ to: "others", except: tab, message: FREE }];
     }
     if (this.held?.owner !== tab) {
       return [];
