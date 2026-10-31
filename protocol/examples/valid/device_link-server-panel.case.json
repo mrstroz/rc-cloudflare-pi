@@ -1,0 +1,17 @@
+{
+  "case": "device_link-server-panel",
+  "covers": "ok",
+  "hop": {
+    "from": "server",
+    "to": "panel"
+  },
+  "frames": [
+    {
+      "t_ms": 0,
+      "frame": "{\"v\":1,\"type\":\"device_link\",\"connected\":true}"
+    }
+  ],
+  "expect": {
+    "reason": null
+  }
+}

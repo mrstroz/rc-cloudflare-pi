@@ -28,8 +28,13 @@
       Spec: [03 §5](../spec/03-worker-i-durable-object.md#5-dzierżawa-kierowcy) · ADR: [0005](../adr/0005-dzierzawa-kierowcy-i-jawne-przejecie.md) · Zależy od: RC-26
       Gotowe, gdy: testy pokrywają nadanie przy `hello` po `stopped`, wygaśnięcie po 3 s, wiadomość po terminie i stan „zajęta” dla drugiej karty.
 
+- [x] (^) **RC-47** Komunikat o połączeniu urządzenia w `protocol/`
+      Spec: [02 §2](../spec/02-protokol-v1.md#2-typy-wiadomości), [03 §3](../spec/03-worker-i-durable-object.md#3-durable-object) · Zależy od: RC-12
+      Gotowe, gdy: przykłady `device_link` przechodzą walidatory obu aplikacji.
+      Panel pokazuje „Auto offline” ([04 §5](../spec/04-panel-sterowania.md#5-statusy)), a kontrakt v1 nie miał komunikatu o połączeniu Pi.
+
 - [ ] (=) **RC-28** Przekazywanie komend i odpowiedzi Pi, `stop` po wygaśnięciu i rozłączeniu
-      Spec: [03 §7](../spec/03-worker-i-durable-object.md#7-przekazywanie) · Zależy od: RC-27
+      Spec: [03 §7](../spec/03-worker-i-durable-object.md#7-przekazywanie) · Zależy od: RC-27, RC-47
       Gotowe, gdy: test z atrapą urządzenia: `drive` spoza dzierżawy nie dociera do Pi, a rozłączenie kierowcy wysyła `stop`.
 
 - [ ] (=) **RC-29** Świadome przejęcie: potwierdzony STOP, limit 2 s, odrzucenie równoczesnego `takeover`

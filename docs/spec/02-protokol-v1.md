@@ -16,6 +16,7 @@ Wspólny kontrakt panelu, Durable Object i agenta. Schematy JSON i przykłady po
 |---|---|---|---|
 | `hello` | panel → DO, Pi → DO | `v` | Pierwsza wiadomość połączenia. Panel dostaje w odpowiedzi `lease` |
 | `lease` | DO → panel | stan, `lease_id`, powód | Dzierżawa nadana, utracona, zajęta przez inną kartę albo wolna ([03 §5](03-worker-i-durable-object.md#5-dzierżawa-kierowcy)) |
+| `device_link` | DO → panel | `connected` | Czy Pi jest połączone z DO: do karty po jej `hello` i do wszystkich kart przy każdym połączeniu i rozłączeniu Pi ([03 §3](03-worker-i-durable-object.md#3-durable-object)) |
 | `heartbeat` | panel → DO → Pi | `heartbeat_seq` | Co 1 s w widocznej karcie. Odnawia dzierżawę, służy do pomiaru obiegu. Nie jest komendą ruchu |
 | `takeover` | panel → DO | — | Świadome przejęcie sterowania albo wzięcie wolnej dzierżawy ([03 §6](03-worker-i-durable-object.md#6-przejęcie)) |
 | `arm` | panel → DO → Pi | `request_id` | Prośba o uzbrojenie przy neutralnych wejściach |

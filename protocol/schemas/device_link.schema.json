@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "device_link.schema.json",
+  "title": "device_link",
+  "description": "Czy Pi jest połączone z DO. Wysyłane karcie po jej hello i wszystkim kartom przy każdym połączeniu i rozłączeniu Pi.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "type",
+    "connected"
+  ],
+  "properties": {
+    "v": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "type": {
+      "const": "device_link"
+    },
+    "connected": {
+      "type": "boolean"
+    }
+  }
+}

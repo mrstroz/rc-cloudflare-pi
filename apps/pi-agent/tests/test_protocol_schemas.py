@@ -82,9 +82,9 @@ def errors_of(message: dict[str, Any], case: dict[str, Any]) -> list[str]:
     return schema_errors(json.dumps(message), case["hop"]["from"], case["hop"]["to"])
 
 
-def test_spec_table_has_twelve_types() -> None:
+def test_spec_table_has_thirteen_types() -> None:
     # Guards the parser of the table: a reformatted spec must not silently shrink the list.
-    assert len(spec_types()) == 12
+    assert len(spec_types()) == 13
 
 
 def test_spec_dialect_lists_twenty_keywords() -> None:

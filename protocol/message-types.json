@@ -20,6 +20,12 @@
       "schema": "lease.schema.json"
     },
     {
+      "type": "device_link",
+      "from": "server",
+      "to": "panel",
+      "schema": "device_link.schema.json"
+    },
+    {
       "type": "heartbeat",
       "from": "panel",
       "to": "server",
