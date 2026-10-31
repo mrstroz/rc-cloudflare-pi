@@ -41,7 +41,7 @@
       Spec: [03 §6](../spec/03-worker-i-durable-object.md#6-przejęcie) · Zależy od: RC-28
       Gotowe, gdy: testy z atrapą urządzenia: bez `stopped` w 2 s nikt nie ma dzierżawy, a drugi `takeover` w trakcie pierwszego dostaje `error`.
 
-- [ ] (=) **RC-30** Panel: suwaki, klawiatura i zerowanie
+- [x] (=) **RC-30** Panel: suwaki, klawiatura i zerowanie
       Spec: [04 §1–§2](../spec/04-panel-sterowania.md#1-wejścia) · Zależy od: RC-23
       Gotowe, gdy: test komponentu: ukrycie karty i utrata fokusu zerują oba koła i wysyłają `stop`.
       Zamyka kwestię 12 w 00 §9 (wartość zadawana klawiszem).

@@ -128,7 +128,7 @@ Numery kwestii są stałe, bo plan się do nich odwołuje. Rozstrzygnięta kwest
 | 9 | Jaka sieć i jakie miejsce pierwszej jazdy? | Wi-Fi; LTE | Decyzja właściciela projektu przed próbą P22 |
 | 10 | Podwozie, koła i obciążenie? | — | Potwierdzenie dwóch niezależnych napędów na złożonym aucie |
 | 11 | Czy `/dev/watchdog0` działa i jaki timeout system faktycznie stosuje? | — | Sprawdzenie na docelowym OS (P21) |
-| 12 | Jaką wartość zadaje wciśnięty klawisz? | ±1 ograniczane limitem na Pi; stała z ustawień panelu | Pierwsza próba klawiatury na symulatorze |
+| 12 | Jaką wartość zadaje wciśnięty klawisz? | Rozstrzygnięta 2026-10-31: ±1 ograniczane profilem jazdy na Pi, [04 §1](04-panel-sterowania.md#1-wejścia) | Pierwsza próba klawiatury na symulatorze |
 | 13 | Jakie limity rozmiaru i częstotliwości wiadomości stosuje DO? | Rozstrzygnięta: `protocol/limits.json`, wartości i reguły w [02 §10](02-protokol-v1.md#10-pliki-w-protocol) | Schematy w `protocol/` (RC-12) |
 | 14 | Czy dodać zewnętrzne 10 kΩ ENA–GND i ENB–GND? | Z rezystorami; bez | Próba P04: start, reset i odłączenie Pi bez ruchu kół |
 | 15 | Jak agent kończy pracę przy błędzie trwałym (odrzucony token, zła konfiguracja, błąd helpera), skoro `systemd` restartuje go co 1 s? | Kod wyjścia z `RestartPreventExitStatus`; długi odstęp ponowień w procesie | Projekt usługi `systemd` i próba z błędnym tokenem na Pi |
