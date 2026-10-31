@@ -44,6 +44,7 @@ describe("grant on hello", () => {
         tab: "A",
         message: { v: 1, type: "lease", state: "granted", lease_id: "id1".padEnd(22, "0") },
       },
+      { to: "others", except: "A", message: { v: 1, type: "lease", state: "busy" } },
     ]);
     expect(lease.holds("A")).toBe(true);
   });
@@ -60,6 +61,7 @@ describe("grant on hello", () => {
           lease_id: "id1".padEnd(22, "0"),
         },
       },
+      { to: "others", except: "A", message: { v: 1, type: "lease", state: "busy" } },
     ]);
     expect(lease.holds("A")).toBe(false);
 
@@ -312,6 +314,7 @@ describe("takeover", () => {
         tab: "A",
         message: { v: 1, type: "lease", state: "granted", lease_id: "id1".padEnd(22, "0") },
       },
+      { to: "others", except: "A", message: { v: 1, type: "lease", state: "busy" } },
     ]);
   });
 
@@ -329,7 +332,7 @@ describe("takeover", () => {
     lease.hello("A", false);
     const effects = lease.takeover("A", true);
     expect(effects.filter((e) => e.to === "panel")).toEqual([]);
-    expect(effects).toHaveLength(1);
+    expect(effects.map((e) => e.to)).toEqual(["device", "others"]);
     expect(lease.stopped(stopRequestId(effects))).toHaveLength(1);
     expect(lease.owner()).toBe("A");
   });

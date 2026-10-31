@@ -184,11 +184,13 @@ export class DriverLease<Tab> {
   /**
    * Every grant takes this path (03 §5): with the Pi connected, `stop` first and the lease only
    * after its `stopped`; with the Pi offline at once, since a new Pi connection starts disarmed.
+   * The other tabs learn the lease is busy as soon as the grant starts.
    */
   private grant(tab: Tab, deviceConnected: boolean): Effect<Tab>[] {
     const leaseId = this.clock.newId();
+    const busy: Effect<Tab> = { to: "others", except: tab, message: BUSY };
     if (!deviceConnected) {
-      return this.hold(tab, leaseId);
+      return [...this.hold(tab, leaseId), busy];
     }
     const stopRequestId = this.clock.newId();
     this.pending = {
@@ -197,7 +199,7 @@ export class DriverLease<Tab> {
       stopRequestId,
       deadline: this.clock.now() + STOP_CONFIRM_TIMEOUT_MS,
     };
-    return [{ to: "device", message: stop(stopRequestId, leaseId) }];
+    return [{ to: "device", message: stop(stopRequestId, leaseId) }, busy];
   }
 
   private hold(tab: Tab, leaseId: string): Effect<Tab>[] {

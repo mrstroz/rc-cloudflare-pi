@@ -30,6 +30,7 @@ describe("takeover in the DO", () => {
       state: "lost",
       reason: "taken_over",
     });
+    expect(await owner.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     const stop = await device.next();
     expect(stop).toMatchObject({ type: "stop" });
 
@@ -48,6 +49,7 @@ describe("takeover in the DO", () => {
     const { device, owner, taker } = await contested();
     taker.send({ type: "takeover" });
     expect(await owner.next()).toMatchObject({ type: "lease", state: "lost" });
+    expect(await owner.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     await device.next();
 
     expect(await taker.next(2500)).toEqual({
@@ -64,10 +66,29 @@ describe("takeover in the DO", () => {
     expect(await device.silentFor(100)).toBe(true);
   });
 
+  it("tells a tab that last heard free that the lease is busy once another tab takes it", async () => {
+    const car = new Car();
+    const owner = await car.panel();
+    const watcher = await car.panel();
+    const taker = await car.panel();
+    owner.send({ type: "hello" });
+    await owner.nextOf("lease");
+    owner.close();
+    expect(await watcher.nextOf("lease")).toMatchObject({ state: "busy" });
+    expect(await watcher.nextOf("lease")).toMatchObject({ state: "free" });
+    expect(await taker.nextOf("lease")).toMatchObject({ state: "busy" });
+    expect(await taker.nextOf("lease")).toMatchObject({ state: "free" });
+
+    taker.send({ type: "takeover" });
+    expect(await taker.next()).toMatchObject({ type: "lease", state: "granted" });
+    expect(await watcher.next()).toEqual({ v: 1, type: "lease", state: "busy" });
+  });
+
   it("answers a second takeover during the first with error", async () => {
     const { device, owner, taker } = await contested();
     taker.send({ type: "takeover" });
-    await owner.next();
+    await owner.next(); // lost
+    expect(await owner.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     const stop = await device.next();
 
     owner.send({ type: "takeover" });

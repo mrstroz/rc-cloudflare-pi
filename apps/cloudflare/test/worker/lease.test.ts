@@ -69,6 +69,8 @@ describe("lease in the DO", () => {
     const second = await car.panel();
     await hello(first);
     await first.next();
+    // Opened before the grant, the second tab already heard about it.
+    expect(await second.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     await hello(second);
     expect(await second.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     second.send({ type: "arm", request_id: "Zm9vYmFyYmF6cXV4MTIzNA" });
@@ -84,6 +86,7 @@ describe("lease in the DO", () => {
     const grantStop = await device.next();
     device.send({ type: "stopped", request_id: grantStop.request_id, cause: null });
     const granted = await owner.next();
+    expect(await other.next()).toEqual({ v: 1, type: "lease", state: "busy" });
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
     owner.send({ type: "heartbeat", heartbeat_seq: 1 });
@@ -109,6 +112,7 @@ describe("lease in the DO", () => {
     const requester = await car.panel();
     const other = await car.panel();
     await hello(requester);
+    expect(await other.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     await hello(other);
     expect(await other.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     requester.close();
@@ -121,6 +125,7 @@ describe("lease in the DO", () => {
     const other = await car.panel();
     await hello(owner);
     await owner.next();
+    expect(await other.next()).toEqual({ v: 1, type: "lease", state: "busy" });
     const device = await car.device();
     expect(await other.next()).toEqual({ v: 1, type: "device_link", connected: true });
     owner.close();
