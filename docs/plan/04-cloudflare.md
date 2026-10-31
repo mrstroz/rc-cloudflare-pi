@@ -8,7 +8,7 @@
 
 ## Zadania
 
-- [ ] (^) **RC-23** Szkielet `apps/cloudflare/`: Vue 3 + Vite, Worker, Durable Object, Wrangler, testy, typy, lint
+- [x] (^) **RC-23** Szkielet `apps/cloudflare/`: Vue 3 + Vite, Worker, Durable Object, Wrangler, testy, typy, lint
       Spec: [01 §3](../spec/01-architektura.md#3-stack), [03 §1](../spec/03-worker-i-durable-object.md#1-worker)
       Gotowe, gdy: `wrangler dev` serwuje pusty panel, a polecenia testów, typów i lintera są dopisane do definicji ukończenia.
 

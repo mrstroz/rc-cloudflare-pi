@@ -23,7 +23,7 @@ Raspberry Pi (agent) ──WSS──┘
 | Path | Contents | State |
 |---|---|---|
 | `apps/pi-agent/` | Python 3.13 agent: L298N adapter, GPIO helper, wheel diagnostics, config loader | E1 in progress; the WSS agent (E3) is not written yet |
-| `apps/cloudflare/` | TypeScript Worker, Durable Object, Vue 3 panel | Does not exist yet; RC-23 creates it and its commands |
+| `apps/cloudflare/` | TypeScript Worker, Durable Object, Vue 3 panel (pnpm, Wrangler, Vitest) | E4 in progress; skeleton serves an empty panel |
 | `protocol/` | The v1 contract shared by both apps: JSON schemas, valid/invalid examples, token test vectors, `limits.json` | E2 done; see `protocol/README.md` |
 
 A contract change updates the schema and the examples in `protocol/` in the same commit, and both apps' validators must pass the examples. The Python reference reader of `protocol/` lives in `apps/pi-agent/tests/protocol_support.py`.
@@ -75,6 +75,20 @@ Run from `apps/pi-agent/`. Set up the venv as in `apps/pi-agent/README.md`. On t
 ```
 
 All four checks (pytest, ruff check, ruff format, mypy) must pass for a task to be done. `tests/conftest.py` sets the GPIO Zero mock pin factory at import time, so tests never drive real pins, also on the Pi. JSON files in `protocol/` use the canonical form given in `protocol/README.md`.
+
+## Commands (`apps/cloudflare/`)
+
+Run from `apps/cloudflare/` after `pnpm install`. Node 22, pnpm 11.
+
+```sh
+pnpm test                       # builds the panel, then Vitest: worker project in workerd, panel project in happy-dom
+pnpm exec vitest run --project worker test/worker/assets.test.ts   # one file
+pnpm typecheck                  # wrangler types --check, then vue-tsc --build
+pnpm lint                       # eslint (type-checked) and prettier --check
+pnpm dev                        # builds the panel, wrangler dev on localhost:8787
+```
+
+All three checks (test, typecheck, lint) must pass for a task to be done. After a `wrangler.jsonc` change run `pnpm exec wrangler types` and commit `worker-configuration.d.ts`.
 
 ## Raspberry Pi
 
