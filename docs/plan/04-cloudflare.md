@@ -58,7 +58,7 @@
       Spec: [04 §3](../spec/04-panel-sterowania.md#3-aktywacja-i-stop), [02 §4](../spec/02-protokol-v1.md#4-arm-i-stop) · Zależy od: RC-31
       Gotowe, gdy: test komponentu: `armed` po STOP lub z obcym `request_id` nie zmienia statusu i nie uruchamia wysyłania `drive`.
 
-- [ ] (=) **RC-43** Panel: pomijanie taktu przy zatorze WebSocketu
+- [x] (=) **RC-43** Panel: pomijanie taktu przy zatorze WebSocketu
       Spec: [04 §4](../spec/04-panel-sterowania.md#4-wysyłanie) · Zależy od: RC-31
       Gotowe, gdy: test: przy `bufferedAmount > 0` takt `drive` jest pominięty, a `stop` wysłany.
 

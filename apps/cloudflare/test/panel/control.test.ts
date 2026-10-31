@@ -259,3 +259,37 @@ it("ignores a frame that is not JSON", () => {
   expect(control.status).toBe("ready");
   warn.mockRestore();
 });
+
+describe("congested WebSocket (04 §4, RC-43)", () => {
+  it("skips the drive tick while bufferedAmount > 0 and sends the current state on the next one", () => {
+    armedTab();
+    socket.bufferedAmount = 120;
+    wheels = { left: 0.3, right: 0.3 };
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS * 3);
+    expect(socket.ofType("drive")).toEqual([]);
+
+    socket.bufferedAmount = 0;
+    wheels = { left: -0.2, right: 0.9 };
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS);
+    expect(socket.ofType("drive")).toEqual([
+      expect.objectContaining({ seq: 1, left: -0.2, right: 0.9 }),
+    ]);
+  });
+
+  it("still sends stop while bufferedAmount > 0", () => {
+    armedTab();
+    socket.bufferedAmount = 120;
+    control.stop();
+    expect(socket.last("stop")).toMatchObject({ type: "stop" });
+  });
+
+  it("skips the heartbeat tick while bufferedAmount > 0", () => {
+    readyTab();
+    socket.bufferedAmount = 1;
+    vi.advanceTimersByTime(HEARTBEAT_PERIOD_MS * 2);
+    expect(socket.ofType("heartbeat")).toEqual([]);
+    socket.bufferedAmount = 0;
+    vi.advanceTimersByTime(HEARTBEAT_PERIOD_MS);
+    expect(socket.ofType("heartbeat").map((h) => h.heartbeat_seq)).toEqual([1]);
+  });
+});

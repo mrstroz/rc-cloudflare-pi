@@ -11,7 +11,7 @@ import { newId } from "../../shared/ids";
 export const DRIVE_PERIOD_MS = 50;
 export const HEARTBEAT_PERIOD_MS = 1000;
 
-/** What the controller needs from a WebSocket; `bufferedAmount` is used from RC-43 on. */
+/** What the controller needs from a WebSocket. */
 export interface PanelSocket {
   send(text: string): void;
   readonly bufferedAmount: number;
@@ -253,7 +253,7 @@ export class DriveControl {
 
   /** Every 50 ms the full state of both wheels with the newest token (04 §4). */
   private drive(): void {
-    if (this.session === null) {
+    if (this.session === null || this.congested()) {
       return;
     }
     this.session.seq += 1;
@@ -270,7 +270,7 @@ export class DriveControl {
   }
 
   private heartbeat(): void {
-    if (this.lease !== "granted" || !this.clock.visible()) {
+    if (this.lease !== "granted" || !this.clock.visible() || this.congested()) {
       return;
     }
     this.heartbeatSeq += 1;
@@ -278,6 +278,14 @@ export class DriveControl {
       this.samples.sentHeartbeat(this.leaseId, this.heartbeatSeq, this.clock.now());
     }
     this.send({ type: "heartbeat", heartbeat_seq: this.heartbeatSeq });
+  }
+
+  /**
+   * A frame still waiting in the WebSocket buffer: this tick is skipped instead of queueing
+   * another one, and the next tick sends the current state (04 §4). `stop` ignores this.
+   */
+  private congested(): boolean {
+    return this.socket.bufferedAmount > 0;
   }
 
   private endSession(): void {
