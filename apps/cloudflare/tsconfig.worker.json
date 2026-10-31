@@ -10,6 +10,8 @@
     "src/worker",
     "src/shared",
     "src/generated",
-    "test/worker"
+    "test/worker",
+    "src/panel/control.ts",
+    "src/panel/inputs.ts"
   ]
 }

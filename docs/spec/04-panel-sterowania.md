@@ -38,7 +38,7 @@ Po każdym `stop` panel czeka na nowe świadome uzbrojenie. Nic nie wznawia jazd
 
 - W uzbrojonej sesji panel co 50 ms wysyła pełny stan obu kół, także gdy wejścia się nie zmieniają.
 - Każda ramka powstaje z aktualnego stanu wejść i zawiera najnowszy otrzymany token. Panel nie podmienia tokenu w zaległej ramce i po odzyskaniu łączności nie wysyła zaległej sekwencji.
-- W widocznej karcie panel co 1 s wysyła `heartbeat` z rosnącym `heartbeat_seq`, także bez jazdy.
+- W widocznej karcie z dzierżawą panel co 1 s wysyła `heartbeat` z rosnącym `heartbeat_seq`, także bez jazdy. Karta bez dzierżawy go nie wysyła, bo DO i tak by go nie przekazał ([03 §7](03-worker-i-durable-object.md#7-przekazywanie)).
 - Gdy `bufferedAmount` WebSocketu jest większy od zera, panel pomija bieżący takt `drive` lub `heartbeat` zamiast dokładać ramkę do kolejki; następny takt wysyła aktualny stan. `stop` panel wysyła zawsze.
 
 ## 5. Statusy
@@ -52,7 +52,7 @@ Po każdym `stop` panel czeka na nowe świadome uzbrojenie. Nic nie wznawia jazd
 | Zatrzymane | Pi rozbrojone po sesji ruchu; panel pokazuje przyczynę z telemetrii |
 | Błąd | `error` od DO lub Pi, którego nie rozwiązuje ponowne uzbrojenie |
 
-Osobno panel pokazuje stan własnego połączenia z DO i świeżość ostatniej telemetrii auta.
+Osobno panel pokazuje stan własnego połączenia z DO i świeżość ostatniej telemetrii auta. Telemetrię dostaje tylko karta z dzierżawą; karta bez niej zna połączenie auta (`device_link`) i stan dzierżawy. Po zerwaniu połączenia panel łączy się ponownie po 1 s, zawsze bez dzierżawy i rozbrojony.
 
 ## 6. Estymata obiegu
 

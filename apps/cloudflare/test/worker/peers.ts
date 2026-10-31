@@ -29,6 +29,13 @@ export class Peer {
     });
   }
 
+  /** Also hands every raw frame from the DO to `listener`, after the contract check. */
+  onMessage(listener: (frame: string) => void): void {
+    this.socket.addEventListener("message", (event) => {
+      listener(event.data as string);
+    });
+  }
+
   send(message: object): void {
     this.socket.send(JSON.stringify({ v: 1, ...message }));
   }
@@ -50,6 +57,16 @@ export class Peer {
       };
       this.waiters.push(waiter);
     });
+  }
+
+  /** The next message of `type`, skipping others (e.g. the panel's periodic heartbeat). */
+  async nextOf(type: string, timeoutMs = 1000): Promise<Message> {
+    for (;;) {
+      const message = await this.next(timeoutMs);
+      if (message.type === type) {
+        return message;
+      }
+    }
   }
 
   /** Resolves true when nothing arrives within `ms`. */

@@ -46,7 +46,7 @@
       Gotowe, gdy: test komponentu: ukrycie karty i utrata fokusu zerują oba koła i wysyłają `stop`.
       Zamyka kwestię 12 w 00 §9 (wartość zadawana klawiszem).
 
-- [ ] (=) **RC-31** Panel: aktywacja, STOP, `drive` co 50 ms, heartbeat i statusy
+- [x] (=) **RC-31** Panel: aktywacja, STOP, `drive` co 50 ms, heartbeat i statusy
       Spec: [04 §3–§5](../spec/04-panel-sterowania.md#3-aktywacja-i-stop) · Zależy od: RC-28, RC-30
       Gotowe, gdy: z atrapą urządzenia panel uzbraja auto, wysyła `drive` z najnowszym tokenem i pokazuje przyczynę zatrzymania.
 
