@@ -55,6 +55,11 @@ export class DriverLease<Tab> {
     return this.held?.owner === tab;
   }
 
+  /** The tab holding the lease, which the Pi's answers go to. */
+  owner(): Tab | null {
+    return this.held?.owner ?? null;
+  }
+
   /** The current `lease_id`, for messages the DO forwards to the Pi. */
   leaseIdOf(tab: Tab): string | null {
     return this.holds(tab) ? (this.held?.leaseId ?? null) : null;
@@ -104,6 +109,25 @@ export class DriverLease<Tab> {
       return [{ to: "panel", tab, message: BUSY }];
     }
     return this.grant(tab, deviceConnected);
+  }
+
+  /**
+   * `takeover` (03 §6): the old lease ends at once (`lost`, taken over), then the grant takes
+   * the path of §5. A takeover while a grant is pending is refused, never queued.
+   */
+  takeover(tab: Tab, deviceConnected: boolean): Effect<Tab>[] {
+    if (this.pending !== null) {
+      return [{ to: "panel", tab, message: error("takeover_in_progress") }];
+    }
+    const effects: Effect<Tab>[] = [];
+    if (this.held !== null) {
+      const { owner } = this.held;
+      this.held = null;
+      if (owner !== tab) {
+        effects.push({ to: "panel", tab: owner, message: lost("taken_over") });
+      }
+    }
+    return [...effects, ...this.grant(tab, deviceConnected)];
   }
 
   /** A valid `heartbeat` or `drive` from the owner moves the deadline (03 §5). */

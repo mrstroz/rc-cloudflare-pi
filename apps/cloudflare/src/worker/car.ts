@@ -131,6 +131,10 @@ export class CarObject extends DurableObject<Env> {
       this.apply(this.lease.hello(tab, this.device !== null));
       return;
     }
+    if (message.type === "takeover") {
+      this.apply(this.lease.takeover(tab, this.device !== null));
+      return;
+    }
     const leaseId = this.lease.leaseIdOf(tab);
     if (leaseId === null || !isForwarded(message.type)) {
       return;
@@ -146,8 +150,8 @@ export class CarObject extends DurableObject<Env> {
 
   /** Answers and telemetry of the Pi go to the driver unchanged (03 §7). */
   private fromDevice(message: Message): void {
-    const driver = [...this.panels].find((tab) => this.lease.holds(tab));
-    if (driver !== undefined && goesToDriver(message.type)) {
+    const driver = this.lease.owner();
+    if (driver !== null && goesToDriver(message.type)) {
       send(driver, message);
     }
     if (message.type === "stopped") {

@@ -37,7 +37,7 @@
       Spec: [03 §7](../spec/03-worker-i-durable-object.md#7-przekazywanie) · Zależy od: RC-27, RC-47
       Gotowe, gdy: test z atrapą urządzenia: `drive` spoza dzierżawy nie dociera do Pi, a rozłączenie kierowcy wysyła `stop`.
 
-- [ ] (=) **RC-29** Świadome przejęcie: potwierdzony STOP, limit 2 s, odrzucenie równoczesnego `takeover`
+- [x] (=) **RC-29** Świadome przejęcie: potwierdzony STOP, limit 2 s, odrzucenie równoczesnego `takeover`
       Spec: [03 §6](../spec/03-worker-i-durable-object.md#6-przejęcie) · Zależy od: RC-28
       Gotowe, gdy: testy z atrapą urządzenia: bez `stopped` w 2 s nikt nie ma dzierżawy, a drugi `takeover` w trakcie pierwszego dostaje `error`.
 

@@ -72,7 +72,7 @@ Uzasadnienie wartości i wariantów: [ADR-0005](../adr/0005-dzierzawa-kierowcy-i
 2. Nadanie dzierżawy przejmującemu drogą z §5: `stop`, `stopped`, `lease` „nadana”.
 3. Osobne uzbrojenie przy neutralnych wejściach.
 
-Gdy nadanie lub przejęcie już oczekuje, kolejny `takeover` dostaje `error` (przejęcie w toku); DO go nie kolejkuje. Brak `stopped` kończy przejęcie tak samo jak każde nadanie z §5. Rozłączenie przejmującego anuluje przejęcie.
+Gdy nadanie lub przejęcie już oczekuje, kolejny `takeover` dostaje `error` (przejęcie w toku); DO go nie kolejkuje. Brak `stopped` kończy przejęcie tak samo jak każde nadanie z §5. Rozłączenie przejmującego anuluje przejęcie. `takeover` od karty, która już ma dzierżawę, przechodzi tę samą drogę bez `lease` „utracona” do niej samej.
 
 ## 7. Przekazywanie
 

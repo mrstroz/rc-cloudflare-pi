@@ -240,3 +240,91 @@ describe("owner closing", () => {
     expect(lease.holds("A")).toBe(true);
   });
 });
+
+describe("takeover", () => {
+  it("ends the old lease at once and grants through stop and stopped", () => {
+    lease.hello("A", false);
+    const effects = lease.takeover("B", true);
+    expect(effects[0]).toEqual({
+      to: "panel",
+      tab: "A",
+      message: { v: 1, type: "lease", state: "lost", reason: "taken_over" },
+    });
+    expect(lease.holds("A")).toBe(false);
+    expect(lease.holds("B")).toBe(false);
+    expect(lease.stopped(stopRequestId(effects))).toEqual([
+      {
+        to: "panel",
+        tab: "B",
+        message: { v: 1, type: "lease", state: "granted", lease_id: "id2".padEnd(22, "0") },
+      },
+    ]);
+    expect(lease.owner()).toBe("B");
+  });
+
+  it("leaves nobody with the lease when stopped does not come within 2 s", () => {
+    lease.hello("A", false);
+    lease.takeover("B", true);
+    clock.ms = STOP_CONFIRM_TIMEOUT_MS;
+    expect(lease.expire(true)).toEqual([
+      {
+        to: "panel",
+        tab: "B",
+        message: { v: 1, type: "error", reason: "stop_unconfirmed", request_id: null },
+      },
+    ]);
+    expect(lease.owner()).toBeNull();
+  });
+
+  it("refuses a second takeover while one is pending, without queueing it", () => {
+    lease.takeover("A", true);
+    expect(lease.takeover("B", true)).toEqual([
+      {
+        to: "panel",
+        tab: "B",
+        message: { v: 1, type: "error", reason: "takeover_in_progress", request_id: null },
+      },
+    ]);
+    clock.ms = STOP_CONFIRM_TIMEOUT_MS;
+    lease.expire(true);
+    expect(lease.owner()).toBeNull();
+  });
+
+  it("refuses a takeover while a grant from hello is pending", () => {
+    lease.hello("A", true);
+    expect(lease.takeover("B", true)).toEqual([
+      {
+        to: "panel",
+        tab: "B",
+        message: { v: 1, type: "error", reason: "takeover_in_progress", request_id: null },
+      },
+    ]);
+  });
+
+  it("takes a free lease", () => {
+    expect(lease.takeover("A", false)).toEqual([
+      {
+        to: "panel",
+        tab: "A",
+        message: { v: 1, type: "lease", state: "granted", lease_id: "id1".padEnd(22, "0") },
+      },
+    ]);
+  });
+
+  it("is cancelled when the taking tab closes", () => {
+    lease.hello("A", false);
+    const effects = lease.takeover("B", true);
+    lease.gone("B", true);
+    expect(lease.stopped(stopRequestId(effects))).toEqual([]);
+    expect(lease.owner()).toBeNull();
+  });
+
+  it("by the owner itself regrants without telling it that it lost the lease", () => {
+    lease.hello("A", false);
+    const effects = lease.takeover("A", true);
+    expect(effects.filter((e) => e.to === "panel")).toEqual([]);
+    expect(effects).toHaveLength(1);
+    expect(lease.stopped(stopRequestId(effects))).toHaveLength(1);
+    expect(lease.owner()).toBe("A");
+  });
+});
