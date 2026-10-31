@@ -48,8 +48,13 @@ export class WheelInputs {
     return true;
   }
 
+  /** Releasing the last key of a wheel zeroes that wheel, its slider included (04 §2). */
   releaseKey(code: string): void {
+    const key = KEYS[code];
     this.held.delete(code);
+    if (key !== undefined && ![...this.held].some((held) => KEYS[held]?.wheel === key.wheel)) {
+      this.slider[key.wheel] = 0;
+    }
   }
 
   zeroAll(): void {

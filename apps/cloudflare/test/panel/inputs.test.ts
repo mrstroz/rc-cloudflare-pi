@@ -22,13 +22,22 @@ describe("WheelInputs (04 §1)", () => {
     expect(inputs.wheel("left")).toBe(0);
   });
 
-  it("a held key overrides the slider of its wheel, release returns to the slider", () => {
+  it("a held key overrides the slider of its wheel, and releasing it zeroes the wheel", () => {
     const inputs = new WheelInputs();
     inputs.setSlider("right", 30);
     inputs.pressKey("ArrowUp");
     expect(inputs.wheel("right")).toBe(1);
     inputs.releaseKey("ArrowUp");
-    expect(inputs.wheel("right")).toBe(0.3);
+    expect(inputs.wheel("right")).toBe(0);
+  });
+
+  it("releasing one of two keys of a wheel keeps the other, and leaves the other wheel alone", () => {
+    const inputs = new WheelInputs();
+    inputs.setSlider("left", 40);
+    inputs.pressKey("ArrowUp");
+    inputs.pressKey("ArrowDown");
+    inputs.releaseKey("ArrowUp");
+    expect(inputs.wheels).toEqual({ left: 0.4, right: -1 });
   });
 
   it("clamps the slider to -100…100 % and treats non-numbers as zero", () => {

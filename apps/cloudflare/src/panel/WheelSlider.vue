@@ -8,6 +8,7 @@ function onInput(event: Event): void {
   props.inputs.setSlider(props.wheel, Number((event.target as HTMLInputElement).value));
 }
 
+/** Pointer Events cover mouse, pen and touch, so no separate touch handlers are needed. */
 function onRelease(): void {
   props.inputs.releaseSlider(props.wheel);
 }
@@ -25,9 +26,7 @@ function onRelease(): void {
       :aria-label="label"
       @input="onInput"
       @pointerup="onRelease"
-      @touchend="onRelease"
       @pointercancel="emit('cancel')"
-      @touchcancel="emit('cancel')"
     />
     <output>{{ Math.round(inputs.wheel(wheel) * 100) }}%</output>
   </label>
