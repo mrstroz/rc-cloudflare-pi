@@ -3,7 +3,7 @@ import prettier from "eslint-config-prettier";
 import pluginVue from "eslint-plugin-vue";
 
 export default defineConfigWithVueTs(
-  { ignores: ["dist/", ".wrangler/", "worker-configuration.d.ts"] },
+  { ignores: ["dist/", ".wrangler/", "src/generated/", "worker-configuration.d.ts"] },
   pluginVue.configs["flat/recommended"],
   vueTsConfigs.strictTypeChecked,
   vueTsConfigs.stylisticTypeChecked,

@@ -20,7 +20,7 @@
       Spec: [03 §2](../spec/03-worker-i-durable-object.md#2-uwierzytelnienie) · Zależy od: RC-23 · Blokada: [00 §9, kwestia 1](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie)
       Gotowe, gdy: WebSocket kierowcy bez sesji operatora albo z obcego `Origin` jest odrzucany.
 
-- [ ] (=) **RC-26** Walidacja wiadomości w DO według `protocol/`
+- [x] (=) **RC-26** Walidacja wiadomości w DO według `protocol/`
       Spec: [03 §4](../spec/03-worker-i-durable-object.md#4-walidacja) · Zależy od: RC-12, RC-24
       Gotowe, gdy: wszystkie przykłady z `protocol/` dają w teście Workera oczekiwany wynik, także dla wektorów tokenu, a walidatory są kompilowane przy buildzie (Ajv standalone).
 

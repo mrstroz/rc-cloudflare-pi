@@ -7,11 +7,12 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "vite build",
+    "gen": "node scripts/gen-protocol.ts",
+    "build": "pnpm gen && vite build",
     "dev": "pnpm build && node scripts/dev.ts",
     "test": "pnpm build && vitest run",
-    "typecheck": "wrangler types --check && vue-tsc --build",
-    "lint": "eslint . && prettier --check .",
+    "typecheck": "pnpm gen && wrangler types --check && vue-tsc --build",
+    "lint": "pnpm gen && eslint . && prettier --check .",
     "format": "prettier --write ."
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@vitejs/plugin-vue": "6.0.10",
     "@vue/eslint-config-typescript": "14.9.0",
     "@vue/test-utils": "2.5.1",
+    "ajv": "8.20.0",
     "eslint": "10.13.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-vue": "10.12.0",

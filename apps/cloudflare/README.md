@@ -20,7 +20,7 @@ pnpm install
 | Lint i format | `pnpm lint` |
 | Lokalny serwer na `localhost:8787` | `cp .dev.vars.example .dev.vars`, potem `pnpm dev` |
 
-`pnpm test` i `pnpm dev` najpierw budują panel do `dist/client`, bo Worker serwuje go przez Workers Static Assets. `pnpm typecheck` sprawdza też, czy `worker-configuration.d.ts` odpowiada `wrangler.jsonc`; po zmianie konfiguracji: `pnpm exec wrangler types`.
+Każde polecenie najpierw uruchamia `pnpm gen`: kompiluje schematy z `protocol/` do walidatorów Ajv standalone w `src/generated/` (poza repozytorium), bo Workers nie pozwalają kompilować schematów w runtime ([02 §10](../../docs/spec/02-protokol-v1.md#10-pliki-w-protocol)). `pnpm test` i `pnpm dev` budują też panel do `dist/client`, bo Worker serwuje go przez Workers Static Assets. `pnpm typecheck` sprawdza też, czy `worker-configuration.d.ts` odpowiada `wrangler.jsonc`; po zmianie konfiguracji: `pnpm exec wrangler types`.
 
 ## Logowanie lokalnie
 

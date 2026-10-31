@@ -3,7 +3,13 @@
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.tmp/worker.tsbuildinfo",
     "lib": ["ESNext"],
-    "types": ["@cloudflare/vitest-plugin/types"]
+    "types": ["@cloudflare/vitest-plugin/types", "vite/client"]
   },
-  "include": ["worker-configuration.d.ts", "src/worker", "src/shared", "test/worker"]
+  "include": [
+    "worker-configuration.d.ts",
+    "src/worker",
+    "src/shared",
+    "src/generated",
+    "test/worker"
+  ]
 }

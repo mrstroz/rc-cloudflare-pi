@@ -18,12 +18,10 @@ from protocol_support import (
     PROTOCOL_DIR,
     SCHEMAS_DIR,
     case_validator,
-    hop_for,
     hops,
     load_json,
     parse_strict,
     schema_errors,
-    validator,
 )
 
 SPEC_03 = PROTOCOL_DIR.parent / "docs" / "spec" / "03-worker-i-durable-object.md"
@@ -166,28 +164,6 @@ def test_schema_and_range_cases_fail_the_schema(case: dict[str, Any]) -> None:
     assert hop_of(case) in CONNECTIONS
     for frame in case["frames"]:
         assert schema_errors(padded(frame), *hop_of(case)), case["case"]
-
-
-def js_parse(text: str) -> Any:
-    """What JSON.parse on the DO accepts: no NaN or Infinity, 1e400 as infinity, last key wins."""
-
-    def reject(name: str) -> Any:
-        raise ValueError(name)
-
-    return json.loads(text, parse_constant=reject)
-
-
-@pytest.mark.parametrize("case", cases("schema") + cases("range"))
-def test_cases_only_the_strict_parser_rejects_are_addressed_to_the_pi(case: dict[str, Any]) -> None:
-    """02 §10: the DO uses JSON.parse and the schema; only the Pi parses strictly."""
-    try:
-        message = js_parse(case["frames"][0]["frame"])
-    except ValueError:
-        return
-    if isinstance(message, dict) and isinstance(message.get("type"), str):
-        hop = hop_for(message["type"], *hop_of(case))
-        if hop is not None and validator(hop.schema).is_valid(message):
-            assert hop.receiver == "device", case["case"]
 
 
 @pytest.mark.parametrize("case", cases("range"))

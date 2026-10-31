@@ -88,7 +88,7 @@ pnpm lint                       # eslint (type-checked) and prettier --check
 pnpm dev                        # builds the panel, wrangler dev on localhost:8787; prints a CF_Authorization cookie (ADR-0013)
 ```
 
-All three checks (test, typecheck, lint) must pass for a task to be done. After a `wrangler.jsonc` change run `pnpm exec wrangler types` and commit `worker-configuration.d.ts`.
+All three checks (test, typecheck, lint) must pass for a task to be done. After a `wrangler.jsonc` change run `pnpm exec wrangler types` and commit `worker-configuration.d.ts`. Each script first runs `pnpm gen`, which compiles `protocol/` into `src/generated/` (Ajv standalone validators, hops, limits; gitignored). The Worker's protocol case runner is `test/worker/protocol-cases.test.ts`; it and `apps/pi-agent/tests/test_protocol_*.py` must both pass after a contract change.
 
 ## Raspberry Pi
 
