@@ -371,15 +371,9 @@
 <text x="2574" y="629" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" fill="#172b3b" text-anchor="middle">−</text>
 <text x="2338" y="854" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#c22d3c" text-anchor="middle">+</text>
 <text x="2597" y="854" font-family="DejaVu Sans, sans-serif" font-size="36" font-weight="700" fill="#172b3b" text-anchor="middle">−</text>
-<polyline points="2338,826 2338,1233 2130,1233" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-<polyline points="2338,826 2338,1233 2130,1233" fill="none" stroke="#273846" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-<polyline points="2338,826 2338,1233 2130,1233" fill="none" stroke="#c22d3c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-<polyline points="2040,1233 1539,1233 1539,1055" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-<polyline points="2040,1233 1539,1233 1539,1055" fill="none" stroke="#273846" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-<polyline points="2040,1233 1539,1233 1539,1055" fill="none" stroke="#c22d3c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="2040" y="1204" width="90" height="58" rx="8" fill="#25333e" stroke="#111e27" stroke-width="3"/>
-<rect x="2056" y="1216" width="58" height="34" rx="5" fill="#b83743" stroke="#6c1723" stroke-width="2"/>
-<text x="2180" y="1290" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#172b3b" text-anchor="middle">WYŁĄCZNIK NAPĘDU</text>
+<polyline points="2338,826 2338,1233 1539,1233 1539,1055" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2338,826 2338,1233 1539,1233 1539,1055" fill="none" stroke="#273846" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="2338,826 2338,1233 1539,1233 1539,1055" fill="none" stroke="#c22d3c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
 <polyline points="2597,826 2690,826 2690,1320 1609,1320 1609,1055" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
 <polyline points="2597,826 2690,826 2690,1320 1609,1320 1609,1055" fill="none" stroke="#273846" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
 <polyline points="2597,826 2690,826 2690,1320 1609,1320 1609,1055" fill="none" stroke="#172b3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>

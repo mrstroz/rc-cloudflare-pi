@@ -46,7 +46,7 @@
       Spec: [07 §4](../spec/07-sprzet-i-naped.md#4-zasilanie) · Zależy od: RC-05
       Gotowe, gdy: P06 zaliczona, a kwestia 5 w 00 §9 jest zamknięta.
 
-- [ ] (v) **RC-46** Rysunki połączeń bez wyłącznika napędu
+- [x] (v) **RC-46** Rysunki połączeń bez wyłącznika napędu
       Spec: [07 §4](../spec/07-sprzet-i-naped.md#4-zasilanie) · ADR: [0011](../adr/0011-osobne-zasilanie-pi-i-napedu.md)
       Gotowe, gdy: `pi4b-l298n-polaczenia.svg` i `.png` oraz `pi4b-l298n-prompt.txt` nie rysują ani nie opisują wyłącznika; plus 4×AAA idzie prosto na `+12V`.
 
