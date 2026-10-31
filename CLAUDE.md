@@ -23,7 +23,7 @@ Raspberry Pi (agent) ──WSS──┘
 | Path | Contents | State |
 |---|---|---|
 | `apps/pi-agent/` | Python 3.13 agent: L298N adapter, GPIO helper, wheel diagnostics, config loader | E1 in progress; the WSS agent (E3) is not written yet |
-| `apps/cloudflare/` | TypeScript Worker, Durable Object, Vue 3 panel (pnpm, Wrangler, Vitest) | E4 in progress; skeleton serves an empty panel |
+| `apps/cloudflare/` | TypeScript Worker, Durable Object, Vue 3 panel (pnpm, Wrangler, Vitest) | E4 done locally (Worker, DO, panel, tests); not deployed, Access placeholders |
 | `protocol/` | The v1 contract shared by both apps: JSON schemas, valid/invalid examples, token test vectors, `limits.json` | E2 done; see `protocol/README.md` |
 
 A contract change updates the schema and the examples in `protocol/` in the same commit, and both apps' validators must pass the examples. The Python reference reader of `protocol/` lives in `apps/pi-agent/tests/protocol_support.py`.
