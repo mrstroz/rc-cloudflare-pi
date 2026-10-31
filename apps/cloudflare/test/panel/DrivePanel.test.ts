@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 import { reactive } from "vue";
 import DrivePanel from "../../src/panel/DrivePanel.vue";
-import { WheelInputs } from "../../src/panel/inputs";
+import { WheelInputs } from "../../src/panel/core/inputs";
 
 function setup() {
   const inputs = reactive(new WheelInputs()) as WheelInputs;

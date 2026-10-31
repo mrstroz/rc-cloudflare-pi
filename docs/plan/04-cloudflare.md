@@ -50,7 +50,7 @@
       Spec: [04 §3–§5](../spec/04-panel-sterowania.md#3-aktywacja-i-stop) · Zależy od: RC-28, RC-30
       Gotowe, gdy: z atrapą urządzenia panel uzbraja auto, wysyła `drive` z najnowszym tokenem i pokazuje przyczynę zatrzymania.
 
-- [ ] (=) **RC-32** Estymata obiegu w panelu i log próbek
+- [x] (=) **RC-32** Estymata obiegu w panelu i log próbek
       Spec: [04 §6](../spec/04-panel-sterowania.md#6-estymata-obiegu), [02 §7](../spec/02-protokol-v1.md#7-estymata-obiegu) · Zależy od: RC-31
       Gotowe, gdy: test: obcy identyfikator, brak wpisu i wynik ujemny dają „brak pomiaru”.
 

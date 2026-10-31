@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { DriveControl } from "../../src/panel/control";
+import { DriveControl } from "../../src/panel/core/control";
 import { Car } from "./peers";
 
 /** Waits until `check` holds, giving the DO and the sockets turns in between. */

@@ -4,9 +4,9 @@
 
 | Pole | Wartość |
 |---|---|
-| **Etap** | E1. Pi lokalnie: w toku, 5 z 10. E4 Cloudflare: w toku, 10 z 13 |
-| **Ostatnio ukończone** | RC-31 aktywacja, `drive`, heartbeat i statusy w panelu (2026-10-31) |
-| **Następne** | Bez sprzętu: E4 [RC-32](04-cloudflare.md), E3 [RC-13](03-agent-pi.md). Czekają na pomiary przy aucie: RC-02 (oznaczenia silników, ogniwa, powerbank), potem RC-06, RC-07 |
+| **Etap** | E1. Pi lokalnie: w toku, 5 z 10. E4 Cloudflare: w toku, 11 z 13 |
+| **Ostatnio ukończone** | RC-32 estymata obiegu i log próbek w panelu (2026-10-31) |
+| **Następne** | Bez sprzętu: E4 [RC-42, RC-43](04-cloudflare.md), E3 [RC-13](03-agent-pi.md). Czekają na pomiary przy aucie: RC-02 (oznaczenia silników, ogniwa, powerbank), potem RC-06, RC-07 |
 
 Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego trzeba zajrzeć na początku sesji.
 
@@ -17,7 +17,7 @@ Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego 
 | **E1** | [01-pi-test-lokalny](01-pi-test-lokalny.md) | Python: test Pi → L298N → silniki (MVP-A) | Oba koła kręcą się z lokalnego skryptu; profil jazdy zmierzony | 5/10 |
 | **E2** | [02-protokol-v1](02-protokol-v1.md) | Wspólne: kontrakt v1 w `protocol/` | Schematy, przykłady i wektory tokenu dla obu aplikacji | 3/3 |
 | **E3** | [03-agent-pi](03-agent-pi.md) | Python: agent z WSS, sesją, tokenami, watchdogiem i `systemd` | Agent jako usługa na Pi; testy protokołu i utraty kontroli w symulacji | 0/11 |
-| **E4** | [04-cloudflare](04-cloudflare.md) | Cloudflare: Worker, Durable Object, panel | Panel steruje atrapą urządzenia lokalnie, z dzierżawą i ochroną dostępu | 10/13 |
+| **E4** | [04-cloudflare](04-cloudflare.md) | Cloudflare: Worker, Durable Object, panel | Panel steruje atrapą urządzenia lokalnie, z dzierżawą i ochroną dostępu | 11/13 |
 | **E5** | [05-integracja-i-proby](05-integracja-i-proby.md) | Oba: wdrożenie, profil czasowy, próby odbiorowe | Jazda przez docelowe łącze; MVP zamknięte | 0/10 |
 | **E6** | [06-wygoda-i-powtarzalnosc](06-wygoda-i-powtarzalnosc.md) | Etap 2 briefu: wygoda i powtarzalność | Dwa palce, widoczne opóźnienia, regulacja mocy, dostrojone parametry | — |
 | **E7** | [07-nice-to-have](07-nice-to-have.md) | Etap 3 briefu: rozszerzenia | Zależnie od wybranej funkcji | — |

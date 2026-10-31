@@ -1,7 +1,7 @@
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import App from "../../src/panel/App.vue";
-import { DRIVE_PERIOD_MS } from "../../src/panel/control";
+import { DRIVE_PERIOD_MS } from "../../src/panel/core/control";
 
 /** Stands in for the browser WebSocket; the test plays the DO and the Pi. */
 class FakeWebSocket extends EventTarget {

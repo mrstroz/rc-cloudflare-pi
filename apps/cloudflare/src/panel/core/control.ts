@@ -1,4 +1,6 @@
 import type { Wheels } from "./inputs";
+import { RoundTrip, type RoundTripSample, type StatusSample } from "./rtt";
+import { newId } from "../../shared/ids";
 
 /**
  * The panel's side of docs/spec/04 §3–§5 for one WebSocket. It shows what the Pi confirmed and
@@ -37,14 +39,6 @@ interface Incoming {
   readonly [field: string]: unknown;
 }
 
-function newId(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(16));
-  return btoa(String.fromCharCode(...bytes))
-    .replaceAll("+", "-")
-    .replaceAll("/", "_")
-    .replace(/=+$/, "");
-}
-
 function text(value: unknown): string | null {
   return typeof value === "string" ? value : null;
 }
@@ -62,6 +56,9 @@ export class DriveControl {
   error: string | null = null;
   lastStatusAt: number | null = null;
   lostReason: string | null = null;
+  /** The latest round-trip estimate (02 §7); null shows "brak pomiaru". */
+  roundTrip: RoundTripSample | null = null;
+  private readonly samples = new RoundTrip();
   private heartbeatSeq = 0;
   private driveTimer: ReturnType<typeof setInterval> | null = null;
   private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
@@ -187,6 +184,9 @@ export class DriveControl {
   private onLease(message: Incoming): void {
     const state = message.state;
     if (state === "granted") {
+      if (this.leaseId !== text(message.lease_id)) {
+        this.samples.reset();
+      }
       this.lease = "granted";
       this.leaseId = text(message.lease_id);
       this.lostReason = null;
@@ -214,6 +214,7 @@ export class DriveControl {
       return;
     }
     this.pendingArm = null;
+    this.samples.reset();
     this.session = { sessionId, token, seq: 0 };
     this.driveTimer = setInterval(() => {
       this.drive();
@@ -222,6 +223,11 @@ export class DriveControl {
 
   private onStatus(message: Incoming): void {
     this.lastStatusAt = this.clock.now();
+    this.roundTrip = this.samples.fromStatus(message as unknown as StatusSample, this.lastStatusAt);
+    if (this.roundTrip !== null) {
+      // 04 §6: v1 keeps the samples in the browser log, the source of the timing profile.
+      console.info("rc-rtt", this.roundTrip.source, Math.round(this.roundTrip.ms));
+    }
     if (message.state === "disarmed" && this.session !== null) {
       this.endSession();
       this.stopCause = text(message.stop_cause);
@@ -244,6 +250,7 @@ export class DriveControl {
       return;
     }
     this.session.seq += 1;
+    this.samples.sentDrive(this.session.sessionId, this.session.seq, this.clock.now());
     const { left, right } = this.wheels();
     this.send({
       type: "drive",
@@ -260,10 +267,16 @@ export class DriveControl {
       return;
     }
     this.heartbeatSeq += 1;
+    if (this.leaseId !== null) {
+      this.samples.sentHeartbeat(this.leaseId, this.heartbeatSeq, this.clock.now());
+    }
     this.send({ type: "heartbeat", heartbeat_seq: this.heartbeatSeq });
   }
 
   private endSession(): void {
+    if (this.session !== null) {
+      this.samples.reset();
+    }
     this.session = null;
     if (this.driveTimer !== null) {
       clearInterval(this.driveTimer);

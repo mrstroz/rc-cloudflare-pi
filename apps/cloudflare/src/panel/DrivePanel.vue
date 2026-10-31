@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from "vue";
-import type { WheelInputs } from "./inputs";
+import type { WheelInputs } from "./core/inputs";
 import WheelSlider from "./WheelSlider.vue";
 
 /**

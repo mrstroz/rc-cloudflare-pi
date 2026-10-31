@@ -1,5 +1,5 @@
-import { DriveControl } from "./control";
-import type { Wheels } from "./inputs";
+import { DriveControl } from "./core/control";
+import type { Wheels } from "./core/inputs";
 
 export const RECONNECT_DELAY_MS = 1000;
 

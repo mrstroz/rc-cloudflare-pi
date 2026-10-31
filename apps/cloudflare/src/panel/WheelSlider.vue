@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Wheel, WheelInputs } from "./inputs";
+import type { Wheel, WheelInputs } from "./core/inputs";
 
 const props = defineProps<{ inputs: WheelInputs; wheel: Wheel; label: string }>();
 const emit = defineEmits<{ cancel: [] }>();

@@ -2,6 +2,7 @@ import { DurableObject } from "cloudflare:workers";
 import { goesToDriver, isForwarded, toDevice } from "./forward";
 import { DriverLease, type Effect } from "./lease";
 import { RateWindows, receive, type Message, type Party } from "./receive";
+import { newId } from "../shared/ids";
 
 /** Paths on which the Worker hands an authenticated connection to the object. */
 export const DEVICE_PATH = "/device";
@@ -15,14 +16,6 @@ interface Connection {
   readonly socket: WebSocket;
   readonly party: Exclude<Party, "server">;
   readonly rates: RateWindows;
-}
-
-function newId(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(16));
-  return btoa(String.fromCharCode(...bytes))
-    .replaceAll("+", "-")
-    .replaceAll("/", "_")
-    .replace(/=+$/, "");
 }
 
 function connect(party: Connection["party"]): { client: WebSocket; connection: Connection } {

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { DRIVE_PERIOD_MS, DriveControl, HEARTBEAT_PERIOD_MS } from "../../src/panel/control";
-import type { Wheels } from "../../src/panel/inputs";
+import { DRIVE_PERIOD_MS, DriveControl, HEARTBEAT_PERIOD_MS } from "../../src/panel/core/control";
+import type { Wheels } from "../../src/panel/core/inputs";
 
 const SESSION = "kQ3v9XbT2mWc7ZyH4nPdLe";
 const TOKEN_1 = "4200.kF7FLu2kWOb_gvVlpETLkCxjMa91_w7RYdLoyLNS5Rw";
@@ -22,6 +22,7 @@ class FakeSocket {
 }
 
 let socket: FakeSocket;
+let nowMs: number;
 let wheels: Wheels;
 let control: DriveControl;
 
@@ -48,7 +49,8 @@ beforeEach(() => {
   vi.useFakeTimers();
   socket = new FakeSocket();
   wheels = { left: 0, right: 0 };
-  control = new DriveControl(socket, () => wheels, { now: () => Date.now(), visible: () => true });
+  nowMs = 0;
+  control = new DriveControl(socket, () => wheels, { now: () => nowMs, visible: () => true });
 });
 
 afterEach(() => {
@@ -210,5 +212,41 @@ describe("sending (04 §4)", () => {
     vi.advanceTimersByTime(HEARTBEAT_PERIOD_MS * 2);
     expect(socket.ofType("drive")).toEqual([]);
     expect(socket.ofType("heartbeat")).toEqual([]);
+  });
+});
+
+describe("round-trip estimate (04 §6)", () => {
+  const status = {
+    type: "status",
+    state: "disarmed",
+    session_id: null,
+    last_seq: null,
+    seq_age_ms: null,
+    lease_id: LEASE,
+    last_heartbeat_seq: 1,
+    heartbeat_age_ms: 30,
+    stop_cause: null,
+  };
+
+  it("measures from heartbeats before arming and shows no measurement otherwise", () => {
+    readyTab();
+    nowMs = 1000;
+    vi.advanceTimersByTime(HEARTBEAT_PERIOD_MS);
+    nowMs = 1100;
+    deliver(status);
+    expect(control.roundTrip).toEqual({ ms: 70, source: "heartbeat" });
+    deliver(status);
+    expect(control.roundTrip).toBeNull();
+    deliver({ ...status, lease_id: "AAAAAAAAAAAAAAAAAAAAAA" });
+    expect(control.roundTrip).toBeNull();
+  });
+
+  it("measures from drive in a session", () => {
+    armedTab();
+    nowMs = 2000;
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS);
+    nowMs = 2060;
+    deliver({ ...status, state: "armed", session_id: SESSION, last_seq: 1, seq_age_ms: 10 });
+    expect(control.roundTrip).toEqual({ ms: 50, source: "drive" });
   });
 });

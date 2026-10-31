@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { WheelInputs } from "../../src/panel/inputs";
+import { WheelInputs } from "../../src/panel/core/inputs";
 
 describe("WheelInputs (04 §1)", () => {
   it("maps W/S to the left wheel and ↑/↓ to the right, ±1", () => {

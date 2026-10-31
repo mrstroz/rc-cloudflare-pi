@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, reactive, ref, shallowRef } from "vue";
 import { carIdFromLocation, connectPanel, panelSocketUrl } from "./connection";
-import type { DriveControl, PanelStatus } from "./control";
+import type { DriveControl, PanelStatus } from "./core/control";
 import DrivePanel from "./DrivePanel.vue";
-import { WheelInputs } from "./inputs";
+import { WheelInputs } from "./core/inputs";
 
 // reactive() drops the private members from the type; the instance keeps them.
 const inputs = reactive(new WheelInputs()) as WheelInputs;
@@ -61,6 +61,14 @@ const detail = computed(() => {
   <main>
     <header>
       <p class="link">Połączenie: {{ control === null ? "rozłączone, ponawiam" : "otwarte" }}</p>
+      <p class="rtt">
+        Obieg:
+        {{
+          control?.roundTrip == null
+            ? "brak pomiaru"
+            : `${String(Math.round(control.roundTrip.ms))} ms (${control.roundTrip.source})`
+        }}
+      </p>
       <p class="telemetry">
         Telemetria auta: {{ telemetryAge === null ? "brak" : `${String(telemetryAge)} ms temu` }}
       </p>
