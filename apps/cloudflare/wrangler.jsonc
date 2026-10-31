@@ -11,6 +11,8 @@
   "durable_objects": {
     "bindings": [{ "name": "CAR", "class_name": "CarObject" }],
   },
+  "vars": { "CAR_ID": "car-1" },
+  "secrets": { "required": ["DEVICE_TOKEN"] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["CarObject"] }],
   "observability": { "enabled": true },
 }

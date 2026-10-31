@@ -13,16 +13,16 @@ Część Cloudflare po stronie serwera. DO pilnuje, kto może wysyłać komendy;
 | Klient | Mechanizm |
 |---|---|
 | Panel i WebSocket kierowcy | Ten sam mechanizm logowania operatora dla strony i WebSocketu; dodatkowo sprawdzenie nagłówka `Origin` |
-| Agent Pi | Token urządzenia przypisany do `car_id`, przesyłany w nagłówku handshake. Nigdy w URL ani we frontendzie |
+| Agent Pi | Token urządzenia przypisany do `car_id`, przesyłany w nagłówku handshake `Authorization: Bearer <token>`. Nigdy w URL ani we frontendzie |
 
 Mechanizm logowania operatora nie jest wybrany ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 1). Panel nie jest udostępniany w internecie przed tą decyzją.
 
-Zły token urządzenia kończy połączenie odpowiedzią, którą agent odróżnia od chwilowej utraty sieci ([05 §2](05-agent-pi.md#2-połączenie)).
+Zły lub brakujący token urządzenia i nieznany `car_id` dają tę samą odpowiedź HTTP 401 przed upgrade, więc agent odróżnia je od chwilowej utraty sieci ([05 §2](05-agent-pi.md#2-połączenie)), a odpowiedź nie zdradza, które `car_id` istnieją. Worker sprawdza token przed `car_id` i porównuje go w stałym czasie. W wersji 1 jest jedno auto: `car_id` i token stoją w zmiennej i sekrecie Workera ([01 §5](01-architektura.md#5-konfiguracja-i-sekrety)).
 
 ## 3. Durable Object
 
 - Jeden DO na `car_id`. Najwyżej jedna aktualna dzierżawa kierowcy i jedno połączenie urządzenia.
-- Nowe uwierzytelnione połączenie urządzenia zastępuje poprzednie: DO zamyka stare i traktuje to jak rozłączenie urządzenia. Stan Pi jest nieznany do pierwszego `status` z nowego połączenia, a nowe połączenie Pi zaczyna rozbrojone ([05 §1](05-agent-pi.md#1-stany-agenta), [ADR-0012](../adr/0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md)).
+- Nowe uwierzytelnione połączenie urządzenia zastępuje poprzednie: DO zamyka stare kodem 4001 z powodem `replaced` i traktuje to jak rozłączenie urządzenia. Stan Pi jest nieznany do pierwszego `status` z nowego połączenia, a nowe połączenie Pi zaczyna rozbrojone ([05 §1](05-agent-pi.md#1-stany-agenta), [ADR-0012](../adr/0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md)).
 - Standardowe WebSockety, bez Hibernation API ([ADR-0007](../adr/0007-standardowe-websockety-bez-hibernacji.md)).
 - Utrata instancji lub stanu dzierżawy kończy sterowanie. Panel musi połączyć się ponownie, a kierowca ponownie uzbroić auto. DO nie odtwarza pozwolenia na jazdę ze starej karty.
 - DO pokazuje panelowi stan potwierdzony przez Pi oraz to, czy urządzenie jest połączone.

@@ -6,7 +6,12 @@ export default defineConfig({
   test: {
     projects: [
       {
-        plugins: [cloudflareTest({ wrangler: { configPath: "./wrangler.jsonc" } })],
+        plugins: [
+          cloudflareTest({
+            wrangler: { configPath: "./wrangler.jsonc" },
+            miniflare: { bindings: { DEVICE_TOKEN: "test-device-token" } },
+          }),
+        ],
         test: { name: "worker", include: ["test/worker/**/*.test.ts"] },
       },
       {

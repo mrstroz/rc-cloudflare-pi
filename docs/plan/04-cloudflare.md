@@ -12,7 +12,7 @@
       Spec: [01 §3](../spec/01-architektura.md#3-stack), [03 §1](../spec/03-worker-i-durable-object.md#1-worker)
       Gotowe, gdy: `wrangler dev` serwuje pusty panel, a polecenia testów, typów i lintera są dopisane do definicji ukończenia.
 
-- [ ] (^) **RC-24** Połączenie urządzenia: token, kierowanie do DO po `car_id`, zastępowanie starszego połączenia
+- [x] (^) **RC-24** Połączenie urządzenia: token, kierowanie do DO po `car_id`, zastępowanie starszego połączenia
       Spec: [03 §2–§3](../spec/03-worker-i-durable-object.md#2-uwierzytelnienie) · ADR: [0012](../adr/0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md) · Zależy od: RC-23
       Gotowe, gdy: test Workera odrzuca zły token urządzenia, a drugie poprawne połączenie zamyka pierwsze.
 
