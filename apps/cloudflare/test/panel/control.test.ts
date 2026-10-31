@@ -198,6 +198,32 @@ describe("sending (04 §4)", () => {
     expect(control.canTakeOver).toBe(true);
   });
 
+  it("ends the session and a pending arm on a grant with a new lease_id", () => {
+    armedTab();
+    deliver({ type: "lease", state: "granted", lease_id: "Yc4pQw8ZtLm2Nv6Rb0Xs9A" });
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS * 4);
+    expect(socket.ofType("drive")).toEqual([]);
+    expect(control.status).toBe("ready");
+
+    control.arm();
+    const requestId = socket.last("arm")?.request_id;
+    deliver({ type: "lease", state: "granted", lease_id: LEASE });
+    expect(control.pendingArm).toBeNull();
+    deliver({
+      type: "armed",
+      request_id: requestId,
+      session_id: SESSION,
+      freshness_token: TOKEN_1,
+    });
+    expect(control.status).toBe("ready");
+  });
+
+  it("keeps the session on a repeated grant with the same lease_id", () => {
+    armedTab();
+    deliver({ type: "lease", state: "granted", lease_id: LEASE });
+    expect(control.status).toBe("active");
+  });
+
   it("ends the session when the Pi goes offline", () => {
     armedTab();
     deliver({ type: "device_link", connected: false });

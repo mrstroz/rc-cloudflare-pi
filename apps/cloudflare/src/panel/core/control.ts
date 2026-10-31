@@ -190,7 +190,10 @@ export class DriveControl {
   private onLease(message: Incoming): void {
     const state = message.state;
     if (state === "granted") {
+      // A new lease_id means the DO stopped the Pi for this grant: arming starts over (04 §3).
       if (this.leaseId !== text(message.lease_id)) {
+        this.pendingArm = null;
+        this.endSession();
         this.samples.reset();
       }
       this.lease = "granted";
