@@ -82,10 +82,10 @@ Run from `apps/cloudflare/` after `pnpm install`. Node 22, pnpm 11.
 
 ```sh
 pnpm test                       # builds the panel, then Vitest: worker project in workerd, panel project in happy-dom
-pnpm exec vitest run --project worker test/worker/assets.test.ts   # one file
+pnpm exec vitest run --project worker test/worker/device.test.ts   # one file
 pnpm typecheck                  # wrangler types --check, then vue-tsc --build
 pnpm lint                       # eslint (type-checked) and prettier --check
-pnpm dev                        # builds the panel, wrangler dev on localhost:8787
+pnpm dev                        # builds the panel, wrangler dev on localhost:8787; prints a CF_Authorization cookie (ADR-0013)
 ```
 
 All three checks (test, typecheck, lint) must pass for a task to be done. After a `wrangler.jsonc` change run `pnpm exec wrangler types` and commit `worker-configuration.d.ts`.

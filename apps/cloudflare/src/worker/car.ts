@@ -1,7 +1,8 @@
 import { DurableObject } from "cloudflare:workers";
 
-/** Path on which the Worker hands an authenticated device connection to the object. */
+/** Paths on which the Worker hands an authenticated connection to the object. */
 export const DEVICE_PATH = "/device";
+export const PANEL_PATH = "/panel";
 
 /** Close code for a device connection replaced by a newer one (ADR-0012). */
 export const CLOSE_REPLACED = 4001;
@@ -12,12 +13,29 @@ export const CLOSE_REPLACED = 4001;
  */
 export class CarObject extends DurableObject<Env> {
   private device: WebSocket | null = null;
+  private readonly panels = new Set<WebSocket>();
 
   override fetch(request: Request): Response {
-    if (new URL(request.url).pathname === DEVICE_PATH) {
-      return this.acceptDevice();
+    switch (new URL(request.url).pathname) {
+      case DEVICE_PATH:
+        return this.acceptDevice();
+      case PANEL_PATH:
+        return this.acceptPanel();
+      default:
+        return new Response(null, { status: 404 });
     }
-    return new Response(null, { status: 404 });
+  }
+
+  private acceptPanel(): Response {
+    const { 0: client, 1: server } = new WebSocketPair();
+    server.accept();
+    this.panels.add(server);
+    const forget = (): void => {
+      this.panels.delete(server);
+    };
+    server.addEventListener("close", forget);
+    server.addEventListener("error", forget);
+    return new Response(null, { status: 101, webSocket: client });
   }
 
   private acceptDevice(): Response {

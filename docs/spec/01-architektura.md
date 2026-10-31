@@ -52,7 +52,7 @@ Repozytorium zawiera wyłącznie wzory konfiguracji, bez sekretów.
 | Gdzie | Parametry |
 |---|---|
 | Pi (plik poza repozytorium) | URL Workera, `car_id`, token urządzenia, piny, odwrócenie kierunku każdego koła, profil jazdy ([07 §5](07-sprzet-i-naped.md#5-profil-jazdy-i-kalibracja)), częstotliwość PWM, przerwa przy zmianie kierunku, profil czasowy ([02 §8](02-protokol-v1.md#8-budżet-świeżości-i-parametry-czasowe)) |
-| Cloudflare (sekrety Workera) | Token urządzenia dla `car_id`, dane mechanizmu logowania operatora |
+| Cloudflare (Worker) | Sekret: token urządzenia dla `car_id`. Zmienne: `car_id`, domena zespołu i `aud` aplikacji Cloudflare Access, dozwolone `Origin` panelu |
 | Tylko pamięć Pi | Klucz HMAC i dane sesji ruchu. Nie trafiają na dysk ani do panelu |
 
 Token urządzenia nie trafia do URL ani do kodu frontendu ([03 §2](03-worker-i-durable-object.md#2-uwierzytelnienie)).

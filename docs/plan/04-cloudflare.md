@@ -4,7 +4,7 @@
 
 **Koniec etapu:** lokalnie (`wrangler dev`) z atrapą urządzenia panel uzbraja auto, wysyła `drive` z suwaków i klawiatury, a STOP, ukrycie karty, wygaśnięcie dzierżawy i drugi kierowca zachowują się według [03](../spec/03-worker-i-durable-object.md) i [04](../spec/04-panel-sterowania.md).
 
-**Zależności zewnętrzne:** decyzja o mechanizmie logowania operatora ([00 §9](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 1). Sprzęt niepotrzebny.
+**Zależności zewnętrzne:** brak; kwestia 1 w [00 §9](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie) (logowanie operatora) jest rozstrzygnięta. Sprzęt niepotrzebny.
 
 ## Zadania
 
@@ -16,7 +16,7 @@
       Spec: [03 §2–§3](../spec/03-worker-i-durable-object.md#2-uwierzytelnienie) · ADR: [0012](../adr/0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md) · Zależy od: RC-23
       Gotowe, gdy: test Workera odrzuca zły token urządzenia, a drugie poprawne połączenie zamyka pierwsze.
 
-- [ ] (=) **RC-25** Uwierzytelnienie operatora panelu i WebSocketu kierowcy, sprawdzenie `Origin`
+- [x] (=) **RC-25** Uwierzytelnienie operatora panelu i WebSocketu kierowcy, sprawdzenie `Origin`
       Spec: [03 §2](../spec/03-worker-i-durable-object.md#2-uwierzytelnienie) · Zależy od: RC-23 · Blokada: [00 §9, kwestia 1](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie)
       Gotowe, gdy: WebSocket kierowcy bez sesji operatora albo z obcego `Origin` jest odrzucany.
 
@@ -59,4 +59,4 @@
 
 ## Uwagi
 
-E4 nie potrzebuje sprzętu i może iść równolegle z E1. Brief wymaga tylko, żeby wynik E1 był znany przed ukończeniem aplikacji Cloudflare; RC-25 i tak czeka na decyzję o logowaniu.
+E4 nie potrzebuje sprzętu i może iść równolegle z E1. Brief wymaga tylko, żeby wynik E1 był znany przed ukończeniem aplikacji Cloudflare.

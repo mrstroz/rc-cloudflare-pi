@@ -4,9 +4,9 @@
 
 | Pole | Wartość |
 |---|---|
-| **Etap** | E1. Pi lokalnie: w toku, 5 z 10. E4 Cloudflare: w toku, 2 z 12 |
-| **Ostatnio ukończone** | RC-24 połączenie urządzenia z DO (2026-10-31) |
-| **Następne** | Bez sprzętu: E4 [RC-25](04-cloudflare.md), E3 [RC-13](03-agent-pi.md). Czekają na pomiary przy aucie: RC-02 (oznaczenia silników, ogniwa, powerbank), potem RC-06, RC-07 |
+| **Etap** | E1. Pi lokalnie: w toku, 5 z 10. E4 Cloudflare: w toku, 3 z 12 |
+| **Ostatnio ukończone** | RC-25 Cloudflare Access i `Origin` dla panelu (2026-10-31) |
+| **Następne** | Bez sprzętu: E4 [RC-26](04-cloudflare.md), E3 [RC-13](03-agent-pi.md). Czekają na pomiary przy aucie: RC-02 (oznaczenia silników, ogniwa, powerbank), potem RC-06, RC-07 |
 
 Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego trzeba zajrzeć na początku sesji.
 
@@ -17,7 +17,7 @@ Tę tabelę zastępuje ten, kto kończy zadanie. To jedyne miejsce, do którego 
 | **E1** | [01-pi-test-lokalny](01-pi-test-lokalny.md) | Python: test Pi → L298N → silniki (MVP-A) | Oba koła kręcą się z lokalnego skryptu; profil jazdy zmierzony | 5/10 |
 | **E2** | [02-protokol-v1](02-protokol-v1.md) | Wspólne: kontrakt v1 w `protocol/` | Schematy, przykłady i wektory tokenu dla obu aplikacji | 3/3 |
 | **E3** | [03-agent-pi](03-agent-pi.md) | Python: agent z WSS, sesją, tokenami, watchdogiem i `systemd` | Agent jako usługa na Pi; testy protokołu i utraty kontroli w symulacji | 0/11 |
-| **E4** | [04-cloudflare](04-cloudflare.md) | Cloudflare: Worker, Durable Object, panel | Panel steruje atrapą urządzenia lokalnie, z dzierżawą i ochroną dostępu | 2/12 |
+| **E4** | [04-cloudflare](04-cloudflare.md) | Cloudflare: Worker, Durable Object, panel | Panel steruje atrapą urządzenia lokalnie, z dzierżawą i ochroną dostępu | 3/12 |
 | **E5** | [05-integracja-i-proby](05-integracja-i-proby.md) | Oba: wdrożenie, profil czasowy, próby odbiorowe | Jazda przez docelowe łącze; MVP zamknięte | 0/10 |
 | **E6** | [06-wygoda-i-powtarzalnosc](06-wygoda-i-powtarzalnosc.md) | Etap 2 briefu: wygoda i powtarzalność | Dwa palce, widoczne opóźnienia, regulacja mocy, dostrojone parametry | — |
 | **E7** | [07-nice-to-have](07-nice-to-have.md) | Etap 3 briefu: rozszerzenia | Zależnie od wybranej funkcji | — |
@@ -44,7 +44,6 @@ E6 i E7 dostaną zadania dopiero po E5: ich parametry wynikają z pomiarów MVP.
 | Powerbank nie utrzymuje Pi przy rozruchu obu silników | Próba P06 z wybranym portem i kablem | RC-09, E1 |
 | Helper nie wyłącza PWM wybranego backendu po `SIGKILL` | Próba helpera przed projektowaniem usługi | RC-04, E1 |
 | Obieg przez docelowe łącze nie mieści się w akceptowalnym TTL | Pomiar z heartbeatów przy rozbrojonym napędzie, pierwszy po wdrożeniu | RC-35, E5 |
-| Brak decyzji o logowaniu operatora blokuje udostępnienie panelu | Kwestia 1 w [00 §9](../spec/00-przeglad-i-zakres.md#9-otwarte-kwestie) do rozstrzygnięcia przed RC-25 | E4 |
 
 ## Czego w planie nie ma
 

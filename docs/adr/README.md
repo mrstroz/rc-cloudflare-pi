@@ -10,7 +10,7 @@ Każdy plik zapisuje jedną decyzję: kontekst, wybór, konsekwencje i odrzucone
 - Statusy: **Propozycja** → **Zaakceptowany** → **Zastąpiony** / **Odrzucony**. **Otwarty** oznacza decyzję świadomie odłożoną, z wypisanymi wariantami i kryterium rozstrzygnięcia.
 - ADR zapisuje decyzję i jej powody. Jak działa funkcja, opisuje `docs/spec/`.
 
-Decyzje 0001–0011 pochodzą z [briefu](../BRIEF.md) i [triage](../TRIAGE.md) z 2026-10-24, decyzja 0012 z przeglądu planu z tego samego dnia.
+Decyzje 0001–0011 pochodzą z [briefu](../BRIEF.md) i [triage](../TRIAGE.md) z 2026-10-24, decyzja 0012 z przeglądu planu z tego samego dnia, decyzja 0013 z rozstrzygnięcia kwestii 1 przy RC-25.
 
 ## Rejestr
 
@@ -28,5 +28,6 @@ Decyzje 0001–0011 pochodzą z [briefu](../BRIEF.md) i [triage](../TRIAGE.md) z
 | [0010](0010-stop-jako-wybieg.md) | STOP jako wybieg (enable = 0), bez aktywnego hamowania | Zaakceptowany | 2026-10-24 |
 | [0011](0011-osobne-zasilanie-pi-i-napedu.md) | Osobne zasilanie Pi i napędu, logika L298N z 5 V Pi | Zaakceptowany | 2026-10-24 |
 | [0012](0012-nowsze-polaczenie-urzadzenia-zastepuje-starsze.md) | Nowsze połączenie urządzenia zastępuje starsze | Zaakceptowany | 2026-10-24 |
+| [0013](0013-cloudflare-access-dla-operatora.md) | Cloudflare Access uwierzytelnia operatora, Worker sprawdza JWT | Zaakceptowany | 2026-10-31 |
 
 Szablon: [`template.md`](template.md).

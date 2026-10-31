@@ -12,12 +12,12 @@ Część Cloudflare po stronie serwera. DO pilnuje, kto może wysyłać komendy;
 
 | Klient | Mechanizm |
 |---|---|
-| Panel i WebSocket kierowcy | Ten sam mechanizm logowania operatora dla strony i WebSocketu; dodatkowo sprawdzenie nagłówka `Origin` |
+| Panel i WebSocket kierowcy | Cloudflare Access; Worker sprawdza JWT Access z nagłówka `Cf-Access-Jwt-Assertion` albo cookie `CF_Authorization` dla strony i WebSocketu. WebSocket dodatkowo wymaga nagłówka `Origin` z listy `ALLOWED_ORIGINS` |
 | Agent Pi | Token urządzenia przypisany do `car_id`, przesyłany w nagłówku handshake `Authorization: Bearer <token>`. Nigdy w URL ani we frontendzie |
 
-Mechanizm logowania operatora nie jest wybrany ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 1). Panel nie jest udostępniany w internecie przed tą decyzją.
+Bez ważnego JWT strona i WebSocket kierowcy dostają 401, obcy lub brakujący `Origin` daje 403, a nieznany `car_id` przy ważnej sesji 404. Klucze, `iss` i `aud`: [ADR-0013](../adr/0013-cloudflare-access-dla-operatora.md).
 
-Zły lub brakujący token urządzenia i nieznany `car_id` dają tę samą odpowiedź HTTP 401 przed upgrade, więc agent odróżnia je od chwilowej utraty sieci ([05 §2](05-agent-pi.md#2-połączenie)), a odpowiedź nie zdradza, które `car_id` istnieją. Worker sprawdza token przed `car_id` i porównuje go w stałym czasie. W wersji 1 jest jedno auto: `car_id` i token stoją w zmiennej i sekrecie Workera ([01 §5](01-architektura.md#5-konfiguracja-i-sekrety)).
+Zły lub brakujący token urządzenia i nieznany `car_id` dają tę samą odpowiedź HTTP 401 przed upgrade, więc agent odróżnia je od chwilowej utraty sieci ([05 §2](05-agent-pi.md#2-połączenie)). Worker sprawdza token przed `car_id` i porównuje go w stałym czasie, więc odpowiedź nie zdradza, które `car_id` istnieją. W wersji 1 jest jedno auto: `car_id` i token stoją w zmiennej i sekrecie Workera ([01 §5](01-architektura.md#5-konfiguracja-i-sekrety)).
 
 ## 3. Durable Object
 
