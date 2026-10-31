@@ -54,7 +54,7 @@
       Spec: [04 §6](../spec/04-panel-sterowania.md#6-estymata-obiegu), [02 §7](../spec/02-protokol-v1.md#7-estymata-obiegu) · Zależy od: RC-31
       Gotowe, gdy: test: obcy identyfikator, brak wpisu i wynik ujemny dają „brak pomiaru”.
 
-- [ ] (=) **RC-42** Panel: anulowanie oczekującej aktywacji i ignorowanie spóźnionego `armed`
+- [x] (=) **RC-42** Panel: anulowanie oczekującej aktywacji i ignorowanie spóźnionego `armed`
       Spec: [04 §3](../spec/04-panel-sterowania.md#3-aktywacja-i-stop), [02 §4](../spec/02-protokol-v1.md#4-arm-i-stop) · Zależy od: RC-31
       Gotowe, gdy: test komponentu: `armed` po STOP lub z obcym `request_id` nie zmienia statusu i nie uruchamia wysyłania `drive`.
 

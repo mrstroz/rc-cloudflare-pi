@@ -250,3 +250,12 @@ describe("round-trip estimate (04 §6)", () => {
     expect(control.roundTrip).toEqual({ ms: 50, source: "drive" });
   });
 });
+
+it("ignores a frame that is not JSON", () => {
+  readyTab();
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+  control.receive("not json");
+  expect(warn).toHaveBeenCalledOnce();
+  expect(control.status).toBe("ready");
+  warn.mockRestore();
+});

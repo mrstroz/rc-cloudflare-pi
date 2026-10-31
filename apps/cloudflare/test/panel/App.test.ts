@@ -1,5 +1,5 @@
 import { flushPromises, mount } from "@vue/test-utils";
-import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "../../src/panel/App.vue";
 import { DRIVE_PERIOD_MS } from "../../src/panel/core/control";
 
@@ -87,4 +87,93 @@ it("sends stop when the STOP button is pressed", async () => {
   await wrapper.find("button.stop").trigger("click");
   expect(socket?.sent.at(-1)).toMatchObject({ type: "stop" });
   wrapper.unmount();
+});
+
+describe("pending activation (04 §3, RC-42)", () => {
+  async function pendingArm() {
+    const wrapper = mount(App, { attachTo: document.body });
+    const socket = FakeWebSocket.last;
+    if (socket === null) {
+      throw new Error("App opened no WebSocket");
+    }
+    socket.dispatchEvent(new Event("open"));
+    socket.deliver({ type: "device_link", connected: true });
+    socket.deliver({ type: "lease", state: "granted", lease_id: "r8JfA0sUo5GxN1tVqBhY6w" });
+    await flushPromises();
+    await wrapper.find("button:not(.stop)").trigger("click");
+    const arm = socket.sent.find((m) => m.type === "arm");
+    if (arm === undefined) {
+      throw new Error("no arm sent");
+    }
+    return { wrapper, socket, requestId: arm.request_id };
+  }
+
+  function armedFor(socket: FakeWebSocket, requestId: unknown): void {
+    socket.deliver({
+      type: "armed",
+      request_id: requestId,
+      session_id: "kQ3v9XbT2mWc7ZyH4nPdLe",
+      freshness_token: "4200.kF7FLu2kWOb_gvVlpETLkCxjMa91_w7RYdLoyLNS5Rw",
+    });
+  }
+
+  it.each([
+    [
+      "STOP",
+      async (w: Awaited<ReturnType<typeof pendingArm>>["wrapper"]) =>
+        w.find("button.stop").trigger("click"),
+    ],
+    [
+      "a hidden tab",
+      () => {
+        Object.defineProperty(document, "visibilityState", {
+          configurable: true,
+          get: () => "hidden",
+        });
+        document.dispatchEvent(new Event("visibilitychange"));
+      },
+    ],
+    [
+      "lost focus",
+      () => {
+        window.dispatchEvent(new FocusEvent("blur"));
+      },
+    ],
+  ])("ignores armed that arrives after %s cancelled the activation", async (_name, cancel) => {
+    const { wrapper, socket, requestId } = await pendingArm();
+    await cancel(wrapper);
+    expect(socket.sent.at(-1)).toMatchObject({ type: "stop" });
+
+    armedFor(socket, requestId);
+    await flushPromises();
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS * 4);
+    expect(wrapper.find('[role="status"]').text()).toContain("Gotowe");
+    expect(socket.sent.filter((m) => m.type === "drive")).toEqual([]);
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      get: () => "visible",
+    });
+    wrapper.unmount();
+  });
+
+  it("ignores armed with another request_id", async () => {
+    const { wrapper, socket } = await pendingArm();
+    armedFor(socket, "AAAAAAAAAAAAAAAAAAAAAA");
+    await flushPromises();
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS * 4);
+    expect(wrapper.find('[role="status"]').text()).toContain("Gotowe");
+    expect(wrapper.find('[role="status"]').text()).toContain("aktywacja oczekuje");
+    expect(socket.sent.filter((m) => m.type === "drive")).toEqual([]);
+    wrapper.unmount();
+  });
+
+  it("cancels the activation when the lease is lost; the DO sends the stop", async () => {
+    const { wrapper, socket, requestId } = await pendingArm();
+    socket.deliver({ type: "lease", state: "lost", reason: "taken_over" });
+    armedFor(socket, requestId);
+    await flushPromises();
+    vi.advanceTimersByTime(DRIVE_PERIOD_MS * 4);
+    expect(socket.sent.filter((m) => m.type === "drive" || m.type === "stop")).toEqual([]);
+    wrapper.unmount();
+  });
 });

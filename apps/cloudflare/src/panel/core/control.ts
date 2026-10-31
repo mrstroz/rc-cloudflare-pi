@@ -148,7 +148,13 @@ export class DriveControl {
   }
 
   receive(frame: string): void {
-    const message = JSON.parse(frame) as Incoming;
+    let message: Incoming;
+    try {
+      message = JSON.parse(frame) as Incoming;
+    } catch {
+      console.warn("rc-panel: frame from the DO is not JSON", frame);
+      return;
+    }
     switch (message.type) {
       case "device_link":
         this.deviceConnected = message.connected === true;
@@ -223,6 +229,7 @@ export class DriveControl {
 
   private onStatus(message: Incoming): void {
     this.lastStatusAt = this.clock.now();
+    // The DO validated the frame against status.schema.json before forwarding it.
     this.roundTrip = this.samples.fromStatus(message as unknown as StatusSample, this.lastStatusAt);
     if (this.roundTrip !== null) {
       // 04 §6: v1 keeps the samples in the browser log, the source of the timing profile.
