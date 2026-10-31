@@ -12,6 +12,7 @@ Panel w wersji 1: dwa suwaki, klawiatura, aktywacja, STOP i minimalne statusy. P
 - Wartość dodatnia oznacza jazdę do przodu, ujemna do tyłu, zero wyłącza napęd koła. Do protokołu idzie zakres -1…1 ([02 §3](02-protokol-v1.md#3-komenda-drive)).
 - Klawiatura pozwala sprawdzić oba kanały jednocześnie na komputerze bez obsługi dwóch palców. Wciśnięty klawisz zadaje ±1; moc ogranicza profil jazdy na Pi ([00 §9](00-przeglad-i-zakres.md#9-otwarte-kwestie), kwestia 12).
 - Koło z wciśniętym klawiszem słucha klawiszy, a bez niego swojego suwaka. Przeciwne klawisze jednego koła się znoszą.
+- Suwak przyjmuje tylko wskaźnik: mysz, dotyk lub pióro. Klawisze nie przesuwają suwaka z fokusem, bo wartości ustawionej klawiszem nic nie wyzerowałoby po puszczeniu.
 
 ## 2. Zerowanie i rozbrojenie
 

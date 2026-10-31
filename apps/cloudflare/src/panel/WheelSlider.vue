@@ -8,6 +8,27 @@ function onInput(event: Event): void {
   props.inputs.setSlider(props.wheel, Number((event.target as HTMLInputElement).value));
 }
 
+/**
+ * Keys that move a focused range input. The slider takes pointer input only (04 §1): nothing
+ * would spring a key-set value back to zero, and ↑/↓ already drive the right wheel.
+ */
+const SLIDER_KEYS: ReadonlySet<string> = new Set([
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "Home",
+  "End",
+  "PageUp",
+  "PageDown",
+]);
+
+function onKeyDown(event: KeyboardEvent): void {
+  if (SLIDER_KEYS.has(event.key)) {
+    event.preventDefault();
+  }
+}
+
 /** Pointer Events cover mouse, pen and touch, so no separate touch handlers are needed. */
 function onRelease(): void {
   props.inputs.releaseSlider(props.wheel);
@@ -25,6 +46,7 @@ function onRelease(): void {
       :value="inputs.sliderPercent(wheel)"
       :aria-label="label"
       @input="onInput"
+      @keydown="onKeyDown"
       @pointerup="onRelease"
       @pointercancel="emit('cancel')"
     />

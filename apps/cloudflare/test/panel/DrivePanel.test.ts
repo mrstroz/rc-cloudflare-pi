@@ -76,6 +76,27 @@ describe("DrivePanel zeroing (04 §2)", () => {
     expect(inputs.wheels).toEqual({ left: 0, right: -0.4 });
   });
 
+  it("keeps the keyboard from moving a focused slider; ↑ still drives the right wheel by key", () => {
+    const { inputs, wrapper } = setup();
+    const slider = wrapper.find('input[aria-label^="Prawe"]').element as HTMLInputElement;
+    slider.focus();
+    const press = (type: "keydown" | "keyup", key: string, code: string): KeyboardEvent => {
+      const event = new KeyboardEvent(type, { key, code, bubbles: true, cancelable: true });
+      slider.dispatchEvent(event);
+      return event;
+    };
+    for (const key of ["Home", "End", "PageUp", "PageDown", "ArrowLeft", "ArrowRight"]) {
+      expect(press("keydown", key, key).defaultPrevented, key).toBe(true);
+    }
+    expect(press("keydown", "Tab", "Tab").defaultPrevented).toBe(false);
+
+    expect(press("keydown", "ArrowUp", "ArrowUp").defaultPrevented).toBe(true);
+    expect(inputs.wheels).toEqual({ left: 0, right: 1 });
+    press("keyup", "ArrowUp", "ArrowUp");
+    expect(inputs.wheels).toEqual({ left: 0, right: 0 });
+    expect(inputs.sliderPercent("right")).toBe(0);
+  });
+
   it("stops listening when unmounted", () => {
     const { inputs, wrapper } = setup();
     wrapper.unmount();
